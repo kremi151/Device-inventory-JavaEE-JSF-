@@ -128,6 +128,10 @@ public class UserSession implements Serializable{
 		return user != null && user.hasPermission("devicetypes.add");
 	}
 	
+	public boolean canSubmitInterventions() {
+		return user != null && user.hasPermission("interventions.add");
+	}
+	
 	public static UserSession getCurrentSession() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		return context.getApplication().evaluateExpressionGet(context, "#{usession}", UserSession.class);

@@ -44,6 +44,7 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			itgroup.addPermission("devices.add");
 			itgroup.addPermission("devices.modify");
 			itgroup.addPermission("devices.remove");
+			itgroup.addPermission("interventions.add");
 			
 			admingroup.addPermission("devices.view");
 			admingroup.addPermission("devices.add");
@@ -55,6 +56,7 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			admingroup.addPermission("devicetypes.remove");
 			admingroup.addPermission("users.view");//TODO: Perm
 			admingroup.addPermission("users.modify");//TODO: Perm
+			admingroup.addPermission("interventions.add");
 			
 			um.update(itgroup);
 			um.update(admingroup);
