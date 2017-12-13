@@ -59,6 +59,10 @@
 					        </f:facet>
 						</b:modal>
 					</b:form>
+					
+					<b:form id="addInterventionForm" rendered="">
+					
+					</b:form>
 				
 					<h1>#{device.name} <b:button value="Delete" icon="trash" size="sm" onclick="$('.removeDeviceModal').modal();" rendered="#{canRemove}" /></h1><h2>#{device.type.name}</h2><p>Owner: #{device.owner.firstName} #{device.owner.lastName}</p>
 					<script type="text/javascript">
@@ -78,9 +82,9 @@
 						</b:panel>
 						<b:panel id="panelInterventions" title="Interventions">
 							<b:dataTable value="#{vdevice.getInterventions(device)}" var="intv">
-								<b:dataTableColumn value="#{intv.date}" label="Date" />
-								<b:dataTableColumn value="#{intv.user.firstName} #{intv.user.lastName}" label="Responsible" /> 
-								<b:dataTableColumn label="Content">
+								<b:dataTableColumn value="#{intv.date}" label="Date" style="width:15%;"/>
+								<b:dataTableColumn value="#{intv.user.firstName} #{intv.user.lastName}" label="Responsible" style="width:15%;" /> 
+								<b:dataTableColumn label="Content" style="width:70%;">
 									<p><strong>#{intv.title}</strong></p>
 									<p>#{intv.message}</p>
 								</b:dataTableColumn>
