@@ -21,12 +21,12 @@ public class PostInterventionController implements Serializable{
 	 */
 	private static final long serialVersionUID = 3193130332317095597L;
 	
-	@NotNull
-	@Size(min=8, max=128)
+	@NotNull(message="A title must be provided")
+	@Size(min=8, max=128, message="Title must be between {min} and {max} characters long")
 	private String title;
 	
-	@NotNull
-	@Size(min=10)
+	@NotNull(message="A message must be provided")
+	@Size(min=10, message="Message must be at least {min} characters long")
 	private String message;
 	
 	@NotNull
