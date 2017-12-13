@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html 
+   xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:b="http://bootsfaces.net/ui"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:ui="http://java.sun.com/jsf/facelets" >
+    <h:head>
+        <title>Create new device</title>
+        <meta charset="utf-8"/>
+        <script type="text/javascript">
+        	function userSelected(userId){
+        		$('.selectUserModal').modal('hide');
+        		$('.ownerInputTextClass').val(userId);
+        	}
+        </script>
+    </h:head>
+    <h:body>
+	    <ui:insert name="navbar" >
+			<ui:include src="navbar.xhtml" />
+		</ui:insert> 
+    	<b:container style="margin-top:70px">
+    		<c:set var="canAdd" value="#{usession.canAddDevices()}" scope="request" />
+    		<ui:fragment rendered="#{canAdd}">
+	    		<b:modal title="Select owner" class="selectUserModal">
+	    			<ui:include src="selectuser_fragment.xhtml">
+	    				<ui:param name="resultListener" value="userSelected" />
+	    			</ui:include>
+	    		</b:modal>
+	    		<h1>Create new device</h1>
+    			<b:form id="createDeviceForm">
+    				<b:messages />
+    				<b:inputText value="#{createdevice.name}" label="Name:"/>
+	    			<b:selectOneMenu value="#{createdevice.type}" label="Type:">
+	    				<f:selectItems value="#{createdevice.types}" var="devType" itemLabel="#{devType.name}" itemValue="#{devType}"/>
+	    			</b:selectOneMenu>
+	    			<b:inputText class="ownerInputTextClass" value="#{createdevice.username}" label="Owned by:" onclick="$('.selectUserModal').modal();" placeholder="Enter the username of the owner"/>
+	    			<b:commandButton value="Create" look="primary" action="#{createdevice.create}"/> <b:button value="Cancel" outcome="alldevices.xhtml"/>
+    			</b:form>
+			</ui:fragment>
+			<b:alert severity="danger" rendered="#{not canAdd}">Permission denied</b:alert>
+    	</b:container>
+    </h:body>
+</html>

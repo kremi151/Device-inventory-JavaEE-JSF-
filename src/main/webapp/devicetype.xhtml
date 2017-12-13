@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html 
+   xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:b="http://bootsfaces.net/ui"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:ui="http://java.sun.com/jsf/facelets" >
+    <h:head>
+        <title>Device type</title>
+        <meta charset="utf-8"/>
+        <script type="text/javascript">
+	    	function preparePropertyRemoval(id, name, origin){
+	    		document.getElementById('remPropModalPropName').innerText = name;
+	    		var origins = document.getElementsByClassName('remPropModalPropOrigin');
+	    		for(var i = 0 ; i &lt; origins.length ; i++){
+	    			origins[i].innerText = origin;
+	    		}
+	    		document.getElementById('remPropForm:propId').value = id;
+	    	}
+        </script>
+    </h:head>
+    <h:body>
+	    <ui:insert name="navbar" >
+			<ui:include src="navbar.xhtml" />
+		</ui:insert>
+		<b:container style="margin-top:70px">
+			<c:set var="canView" value="#{usession.canViewDeviceTypes()}" scope="request" />
+			<ui:fragment rendered="#{canView}">
+				<ui:fragment rendered="#{param['id'] != null}">
+					<c:set var="devType" value="#{devtype.fetchDeviceType(param['id'])}" scope="request" />
+					<c:set var="canModify" value="#{usession.canModifyDeviceType()}" scope="request" />
+					<script type="text/javascript">document.title = "#{devType.name}";</script>
+		    		
+		    		<b:form id="remDevTypeForm" rendered="#{usession.canRemoveDeviceTypes()}">
+		    			<b:modal id="remdevtype" class="remDeviceTypeModal" title="Delete device type">
+		    				<h:outputText value="You are going to delete the device type &quot;#{devType.name}&quot;. Do you want to continue?" />
+		    				<f:facet name="footer">
+								<b:commandButton value="Yes" action="#{rmdevtype.deleteDeviceType}" >
+						    		<f:param name="id" value="#{param['id']}" />
+						    	</b:commandButton>
+							    <b:button value="No" look="primary" dismiss="modal" />
+						    </f:facet>
+		    			</b:modal>
+		    		</b:form>
+					
+					<b:form id="addPropForm" rendered="#{canModify}">
+		    			<b:modal id="addprop" class="addDevicePropertyModal" title="Create new property">
+		    				<b:panelGrid colSpans="12">
+		    					<b:inputText id="name" label="Name" required="true" value="#{nprop.name}"/>
+						    	<b:message for="@previous" />
+							    <b:selectOneMenu value="#{nprop.type}" required="true" label="Type:">
+							        <f:selectItems value="#{nprop.propertyTypes}" var="t" itemLabel="#{t.description}" itemValue="#{t}" />
+						        </b:selectOneMenu>
+		    				</b:panelGrid>
+			    			<f:facet name="footer">
+						    	<b:commandButton value="Create" look="primary" action="#{nprop.createProperty()}">
+						    		<f:param name="id" value="#{param['id']}" />
+						    	</b:commandButton>
+						        <b:button value="Cancel" dismiss="modal" />
+							</f:facet>
+		    			</b:modal>
+		    		</b:form>
+		    		
+		    		<b:form id="remPropForm" rendered="#{canModify}">
+			    		<b:modal id="remprop" class="remDevPropModalClass" title="Delete property">
+			    			<h:inputHidden id="propId" value="#{rprop.propId}"/>
+			    			<p>You are going to delete the property &quot;<span id="remPropModalPropName">.zzZ</span>&quot; from device type &quot;<span class="remPropModalPropOrigin">.zzZ</span>&quot;</p>
+			   				<p>This will remove the property also from device subtypes of &quot;<span class="remPropModalPropOrigin">.zzZ</span>&quot;. Do you wish to continue?</p>
+			   				<f:facet name="footer">
+								<b:commandButton value="Yes" action="#{rprop.remove()}" >
+						    		<f:param name="id" value="#{param['id']}" />
+						    	</b:commandButton>
+							    <b:button value="No" look="primary" dismiss="modal" />
+						    </f:facet>
+			    		</b:modal>
+		    		</b:form>
+					
+					<h1>#{devType.name} <b:button value="Back" outcome="devicetypes.xhtml" size="sm"/> <b:button value="Delete" icon="trash" rendered="#{usession.canRemoveDeviceTypes()}" onclick="$('.remDeviceTypeModal').modal();" size="sm"/></h1>
+					<b:messages />
+					<b:panel title="Properties">
+						<b:form>
+							<b:dataTable value="#{devtype.fetchProperties(devType)}" var="prop">
+								<b:dataTableColumn value="#{prop.name}" label="Name" />
+								<b:dataTableColumn value="#{prop.type.description}" label="Type" />
+								<b:dataTableColumn value="#{prop.deviceType.name}" label="Origin" />
+								<b:dataTableColumn orderable="false" searchable="false" label="">
+									<b:button value="Delete" icon="trash" onclick="preparePropertyRemoval(#{prop.id}, '#{prop.name}', '#{prop.deviceType.name}');$('.remDevPropModalClass').modal();" disabled="#{not canModify}" size="sm" />
+								</b:dataTableColumn>
+							</b:dataTable>
+						</b:form>
+						<b:button value="Add new property" onclick="$('.addDevicePropertyModal').modal();" rendered="#{canModify}" look="primary" size="lg"/>
+					</b:panel>
+		    	</ui:fragment>
+		    	<ui:fragment rendered="#{param['id'] == null}">
+		    		<b:alert severity="warning">No device type specified</b:alert>
+		    	</ui:fragment>
+			</ui:fragment>
+			<b:alert severity="danger" rendered="#{not canView}">Permission denied</b:alert>
+		</b:container>
+    </h:body>
+</html>

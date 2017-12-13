@@ -1,0 +1,24 @@
+<ui:fragment
+	xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:b="http://bootsfaces.net/ui"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:ui="http://java.sun.com/jsf/facelets">
+   
+	<ui:fragment rendered="#{resultListener != null}">
+		<b:form id="userSelectForm">
+			<b:inputText value="#{selectuser.filter}" label="Filter:" onchange="userSelectFormUserTableWidget.DataTable().destroy();" update="userTable" />
+			<b:dataTable value="#{selectuser.displayingUsers}" var="user" id="userTable" searching="false">
+				<b:dataTableColumn value="#{user.userId}" label="Username" />
+				<b:dataTableColumn value="#{user.firstName}" label="First name" />
+				<b:dataTableColumn value="#{user.lastName}" label="Last name" />
+				<b:dataTableColumn label="" orderable="false">
+					<b:button value="Select" size="sm" onclick="#{resultListener}('#{user.userId}')"/>
+				</b:dataTableColumn>
+			</b:dataTable>
+		</b:form>
+	</ui:fragment>
+	<b:alert severity="danger" rendered="#{resultListener == null}">Invalid parameter</b:alert>
+
+</ui:fragment>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html 
+   xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:b="http://bootsfaces.net/ui"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:ui="http://java.sun.com/jsf/facelets" >
+    <h:head>
+        <title>Create new account</title>
+        <meta charset="utf-8"/>
+    </h:head>
+    <h:body>
+	    <ui:insert name="navbar" >
+			<ui:include src="navbar.xhtml" />
+		</ui:insert> 
+		<b:container style="margin-top:70px">
+			<b:jumbotron style="background:#F5F5F5;">
+				<ui:fragment rendered="#{!empty ucreation.message}">
+					<div class="alert alert-danger">
+						#{ucreation.message}
+					</div>
+				</ui:fragment>
+		        <ui:fragment rendered="#{!usession.loggedIn}">
+		        	<h:form id="registerForm">
+					    <b:inputText id="username" label="Username" required="true" value="#{ucreation.username}"/>
+					    <b:message for="@previous" />
+					    <b:inputText id="firstName" label="First name" required="true" value="#{ucreation.firstName}"/>
+					    <b:message for="@previous" />
+					    <b:inputText id="lastName" label="Last name" required="true" value="#{ucreation.lastName}"/>
+					    <b:message for="@previous" />
+					    <b:inputSecret id="password1" label="Password" binding="#{modelPassword}"  required="true" value="#{ucreation.password}"/>
+					    <b:message for="@previous" />
+					    <b:inputSecret id="password2" label="Repeat password" required="true" value="#{ucreation.vpassword}">
+					    	<f:validator validatorId="equalsValidator" />
+	    					<f:attribute name="other" value="#{modelPassword.value}" />
+	    					<f:attribute name="message" value="Passwords are not identical" />
+					    </b:inputSecret>
+					    <b:message for="@previous" />
+					    
+					    <b:commandButton value="Create account" look="primary" action="#{ucreation.register}"/>
+					</h:form>
+		        </ui:fragment>
+		        <ui:fragment rendered="#{usession.loggedIn}">
+		        	<h1>You are already logged in</h1>
+		        </ui:fragment>
+			</b:jumbotron>
+        </b:container>
+    </h:body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html 
+   xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:b="http://bootsfaces.net/ui"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:ui="http://java.sun.com/jsf/facelets" >
+    <h:head>
+        <title>Start Page</title>
+        <meta charset="utf-8"/>
+    </h:head>
+    <h:body>
+	    <ui:insert name="navbar" >
+			<ui:include src="navbar.xhtml" />
+		</ui:insert> 
+		<b:container style="margin-top:70px">
+			<b:jumbotron>
+		        <center><h1>Hello!</h1>
+		        <h2>This page is currently under construction</h2>
+		        <h3>You visited this page at #{test.getTimeStamp()}</h3></center>
+	        </b:jumbotron>
+		</b:container>
+    </h:body>
+</html>

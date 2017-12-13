@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html 
+   xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:b="http://bootsfaces.net/ui"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:ui="http://java.sun.com/jsf/facelets" >
+    <h:head>
+        <title>My devices</title>
+        <meta charset="utf-8"/>
+    </h:head>
+    <h:body>
+	    <ui:insert name="navbar" >
+			<ui:include src="navbar.xhtml" />
+		</ui:insert> 
+		<b:container style="margin-top:70px">
+			<ui:fragment rendered="#{usession.loggedIn}">
+				<h1>My devices</h1>
+				<b:dataTable value="#{mydevices.myDevices}" var="device">
+					<b:dataTableColumn value="#{device.name}" label="Name"/>
+					<b:dataTableColumn value="#{device.type.name}" label="Type"/>
+					<b:dataTableColumn label="" orderable="false">
+						<b:button value="View" icon-awesome="fa-eye" outcome="device.xhtml" size="sm">
+							<f:param name="devid" value="#{device.id}" />
+						</b:button>
+					</b:dataTableColumn>
+				</b:dataTable>
+			</ui:fragment>
+			<b:alert severity="danger" rendered="#{not usession.loggedIn}">Permission denied</b:alert>
+		</b:container>
+    </h:body>
+</html>
