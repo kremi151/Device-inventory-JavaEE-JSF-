@@ -45,6 +45,10 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			itgroup.addPermission("devices.modify");
 			itgroup.addPermission("devices.remove");
 			itgroup.addPermission("interventions.add");
+			itgroup.addPermission("consumables.view");
+			itgroup.addPermission("consumables.add");
+			itgroup.addPermission("consumables.modify");
+			itgroup.addPermission("consumables.remove");
 			
 			admingroup.addPermission("devices.view");
 			admingroup.addPermission("devices.add");
@@ -57,6 +61,14 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			admingroup.addPermission("users.view");//TODO: Perm
 			admingroup.addPermission("users.modify");//TODO: Perm
 			admingroup.addPermission("interventions.add");
+			admingroup.addPermission("consumables.view");
+			admingroup.addPermission("consumables.add");//TODO: Perm
+			admingroup.addPermission("consumables.modify");//TODO: Perm
+			admingroup.addPermission("consumables.remove");//TODO: Perm
+			admingroup.addPermission("consumabletypes.view");
+			admingroup.addPermission("consumabletypes.add");//TODO: Perm
+			admingroup.addPermission("consumabletypes.modify");//TODO: Perm
+			admingroup.addPermission("consumabletypes.remove");//TODO: Perm
 			
 			um.update(itgroup);
 			um.update(admingroup);

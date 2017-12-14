@@ -116,8 +116,12 @@ public class UserSession implements Serializable{
 		return user != null && user.hasPermission("devicetypes.view");
 	}
 	
-	public boolean canShowManagementMenu() {
-		return user != null && (user.hasPermission("devices.view") || user.hasPermission("devicetypes.view"));
+	public boolean canListConsumables() {
+		return user != null && user.hasPermission("consumables.view");
+	}
+	
+	public boolean canViewConsumableTypes() {
+		return user != null && user.hasPermission("consumabletypes.view");
 	}
 	
 	public boolean canModifyDeviceType() {

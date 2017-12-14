@@ -2,6 +2,7 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:b="http://bootsfaces.net/ui"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:h="http://java.sun.com/jsf/html">
 	<b:navBar
 	      brand="Device inventory" 
@@ -10,9 +11,19 @@
 	      fixed="top"
 	      sticky="true" >
 	     <b:navbarLinks>
-	         <b:dropMenu value="IT Management" rendered="#{usession.canShowManagementMenu()}" iconAwesome="fa-lock">
-	             <b:navLink value="Manage device types" outcome="devicetypes.xhtml" iconAwesome="fa-puzzle-piece" rendered="#{usession.canViewDeviceTypes()}"></b:navLink>
-	             <b:navLink value="Manage devices" outcome="alldevices.xhtml" iconAwesome="fa-laptop" rendered="#{usession.canListDevices()}"></b:navLink>
+			<c:set var="viewDevices" value="#{usession.canListDevices()}" />
+			<c:set var="viewDeviceTypes" value="#{usession.canViewDeviceTypes()}" />
+			<c:set var="viewConsumables" value="#{usession.canListConsumables()}" />
+			<c:set var="viewConsumableTypes" value="#{usession.canViewConsumableTypes()}" />
+	         <b:dropMenu value="IT Management" rendered="#{viewDevices or viewDeviceTypes or viewConsumables or viewConsumableTypes}" iconAwesome="fa-lock">
+	             <b:dropMenu value="Devices" iconAwesome="fa-laptop" rendered="#{viewDevices or viewDeviceTypes}">
+                 	<b:navLink value="Device types" outcome="devicetypes.xhtml" iconAwesome="fa-list-ul " rendered="#{viewDeviceTypes}"></b:navLink>
+	             	<b:navLink value="Devices" outcome="alldevices.xhtml" iconAwesome="fa-list-ul " rendered="#{viewDevices}"></b:navLink>
+                 </b:dropMenu>
+                 <b:dropMenu value="Consumables" iconAwesome="fa-puzzle-piece" rendered="#{viewConsumables or viewConsumableTypes}">
+                 	<b:navLink value="Consumable types" outcome="devicetypes.xhtml" iconAwesome="fa-list-ul " rendered="#{viewConsumableTypes}"></b:navLink>
+	             	<b:navLink value="Consumables" outcome="alldevices.xhtml" iconAwesome="fa-list-ul " rendered="#{viewConsumables}"></b:navLink>
+                 </b:dropMenu>
 	         </b:dropMenu>
 	     </b:navbarLinks>
 	     
