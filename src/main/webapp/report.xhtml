@@ -49,15 +49,15 @@
 						<p>#{report.message}</p>
 						<p><i>#{report.user.firstName} #{report.user.lastName}</i> - #{report.date}</p>
 					</b:jumbotron>
+					<c:set var="interventions" value="#{reportc.getInterventions(report)}" />
 					<ui:fragment rendered="#{interventions.size() > 0}">
 						<b:panel title="Interventions" collapsed="true">
-							<c:set var="interventions" value="#{reportc.getInterventions(report)}" />
-								<ui:repeat var="intv" value="#{interventions}">
-									<b:well>
-										<p>#{intv.message}</p>
-										<p><i>#{intv.responsible.firstName} #{intv.responsible.lastName}</i> - #{intv.date}</p>
-									</b:well>
-								</ui:repeat>
+							<ui:repeat var="intv" value="#{interventions}">
+								<b:well>
+									<p>#{intv.message}</p>
+									<p><i>#{intv.responsible.firstName} #{intv.responsible.lastName}</i> - #{intv.date}</p>
+								</b:well>
+							</ui:repeat>
 						</b:panel>
 					</ui:fragment>
 					<b:alert severity="info" rendered="#{interventions.size() == 0}">No interventions found</b:alert>
