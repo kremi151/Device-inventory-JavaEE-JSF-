@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html 
+   xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:b="http://bootsfaces.net/ui"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:ui="http://java.sun.com/jsf/facelets" >
+    <h:head>
+        <title>Report</title>
+        <meta charset="utf-8"/>
+    </h:head>
+    <h:body>
+	    <ui:insert name="navbar" >
+			<ui:include src="navbar.xhtml" />
+		</ui:insert> 
+		<b:container style="margin-top:70px">
+			<c:set var="report" value="#{reportc.fetchReport(param['id'])}" />
+			<ui:fragment rendered="#{report != null}">
+				<c:set var="canRead" value="#{usession.canReadDevice(report.device)}" scope="request" />
+				<ui:fragment rendered="#{canRead}">
+					<c:set var="canIntervene" value="#{usession.canSubmitInterventions()}" scope="request" />
+					
+					<b:form id="addInterventionForm" rendered="#{canIntervene}">
+						<b:modal class="addInterventionModal" title="Publish new intervention">
+							<h:inputHidden id="reportId" value="#{reportc.reportId}" />
+							<script type="text/javascript">document.getElementById("addInterventionForm:reportId").value = #{report.id};</script>
+							<b:inputText id="intvMsg" value="#{reportc.interventionMessage}" label="Message:" />
+							<b:selectOneMenu value="#{reportc.newReportStatus}" label="Type:" required="true">
+			    				<f:selectItems value="#{reportc.reportStatuses}" var="s" itemLabel="#{s.description}" itemValue="#{s}"/>
+			    			</b:selectOneMenu>
+							<f:facet name="footer">
+					            <b:button value="Cancel" look="primary" dismiss="modal" />
+					            <b:commandButton value="Post" action="#{reportc.intervene}" >
+			        				<f:param name="id" value="#{report.id}" />
+			        			</b:commandButton>
+					        </f:facet>
+						</b:modal>
+					</b:form>
+					
+					<b:button value="Back to #{report.device.name}" icon-awesome="fa-laptop" outcome="device.xhtml">
+						<f:param name="devid" value="#{report.device.id}" />
+					</b:button>
+					<b:button value="Intervene" onclick="$('.addInterventionModal').modal();" icon-awesome="fa-wrench" rendered="#{canIntervene}" />
+					<b:messages />
+					<b:jumbotron style="margin-top:1em;">
+						<p><strong>#{report.title}</strong> <b:label value="#{report.status.description}" severity="#{report.status.bsSeverity}" style="margin-left:1em;" /></p>
+						<p>#{report.message}</p>
+						<p><i>#{report.user.firstName} #{report.user.lastName}</i></p>
+					</b:jumbotron>
+					<b:panel title="Interventions" collapsed="true">
+						<c:set var="interventions" value="#{reportc.getInterventions(report)}" />
+						<ui:fragment rendered="#{interventions.size() > 0}">
+							<ui:repeat var="intv" value="#{interventions}">
+								<b:well>
+									<p>#{intv.message}</p>
+									<p><i>#{intv.responsible.firstName} #{intv.responsible.lastName}</i></p>
+								</b:well>
+							</ui:repeat>
+						</ui:fragment>
+						<b:alert severity="info" rendered="#{interventions.size() == 0}">No interventions found</b:alert>
+					</b:panel>
+				</ui:fragment>
+				<b:alert severity="danger" rendered="#{not canRead}">You do not have access to this information</b:alert>
+			</ui:fragment>
+			<b:alert severity="warning" rendered="#{report == null}">Unknown report</b:alert>
+		</b:container>
+    </h:body>
+</html>

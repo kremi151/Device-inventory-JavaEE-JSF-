@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 import lu.mkremer.javaeega.devices.Device;
 import lu.mkremer.javaeega.devices.DeviceProperty;
 import lu.mkremer.javaeega.devices.DevicePropertyValue;
-import lu.mkremer.javaeega.intervention.Intervention;
+import lu.mkremer.javaeega.intervention.Report;
 import lu.mkremer.javaeega.managers.DeviceManager;
 import lu.mkremer.javaeega.util.MessageHelper;
 
@@ -131,8 +131,8 @@ public class ViewDeviceController implements Serializable{
 		}
 	}
 	
-	public List<Intervention> getInterventions(Device device){
-		List<Intervention> res = dm.getInterventionsForDevice(device);
+	public List<Report> getReports(Device device){
+		List<Report> res = dm.getReportsForDevice(device);
 		res.sort((a, b) -> a.getDate().compareTo(b.getDate()));
 		return res;
 	}

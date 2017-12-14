@@ -11,6 +11,7 @@
 		<class>lu.mkremer.javaeega.devices.DeviceType</class>
 		<class>lu.mkremer.javaeega.devices.DeviceProperty</class>
 		<class>lu.mkremer.javaeega.devices.DevicePropertyValue</class>
+		<class>lu.mkremer.javaeega.intervention.Report</class>
 		<class>lu.mkremer.javaeega.intervention.Intervention</class>
 		<class>lu.mkremer.javaeega.consumables.Consumable</class>
 		<class>lu.mkremer.javaeega.consumables.ConsumableType</class>

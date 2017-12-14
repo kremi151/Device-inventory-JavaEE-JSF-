@@ -11,6 +11,8 @@ import lu.mkremer.javaeega.devices.Device;
 import lu.mkremer.javaeega.devices.DeviceProperty;
 import lu.mkremer.javaeega.devices.DevicePropertyType;
 import lu.mkremer.javaeega.devices.DeviceType;
+import lu.mkremer.javaeega.intervention.Report;
+import lu.mkremer.javaeega.intervention.ReportStatus;
 import lu.mkremer.javaeega.managers.DeviceManager;
 import lu.mkremer.javaeega.managers.UserManager;
 import lu.mkremer.javaeega.users.User;
@@ -107,8 +109,8 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			dm.addOrModifyDeviceProperty(device1, propStorage, "0,25");
 			dm.addOrModifyDeviceProperty(device1, propRAM, "0,0125");
 			
-			dm.addInterventionToDevice(device1, userIT, "Outdated operating system", "The operating should perhaps be updated. The current one is outdated and slow.");
-			dm.addInterventionToDevice(device1, userAdmin, "Re: Outdated operating system", "I considered your request, but I decided to stay at Windows 3.1 because it still works.");
+			Report report1 = dm.createReportOnDevice(device1, userIT, "Outdated operating system", "The operating should perhaps be updated. The current one is outdated and slow.");
+			dm.interventOnReport(report1, userAdmin, "I considered your request, but I decided to stay at Windows 3.1 because it still works.", ReportStatus.UNSOLVABLE);
 			
 			//TODO: Add some default entries to be added before the actual submission of the project
 			System.out.println("### Done ###");

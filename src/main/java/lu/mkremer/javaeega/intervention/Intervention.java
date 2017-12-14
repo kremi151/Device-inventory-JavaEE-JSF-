@@ -3,7 +3,6 @@ package lu.mkremer.javaeega.intervention;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,47 +11,50 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import lu.mkremer.javaeega.devices.Device;
 import lu.mkremer.javaeega.users.User;
 
 @Entity
 public class Intervention {
-
+	
 	@Id
 	@GeneratedValue
 	private long id;
+
+	@ManyToOne(optional = false)//TODO: Cascading
+	private Report report;
 	
-	@Basic(optional=false)
+	@ManyToOne(optional = false)//TODO: Cascading
+	private User responsible;
+	
+	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date = Calendar.getInstance().getTime();
 	
-	@ManyToOne(optional=false)//TODO: Cascading
-	private Device device;
-	
-	@ManyToOne(optional=false)//TODO: Cascading
-	private User user;
-
-	@Column(nullable=false)
-	private String title;
-	
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String message;
 	
 	public Intervention() {}
 	
-	public Intervention(Device device, User user, String title, String message) {
-		this.device = device;
-		this.user = user;
-		this.title = title;
+	public Intervention(Report report, User responsible, String message) {
+		this.report = report;
+		this.responsible = responsible;
 		this.message = message;
 	}
 
-	public long getId() {
-		return id;
+	public Report getReport() {
+		return report;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setReport(Report report) {
+		this.report = report;
+	}
+
+	public User getResponsible() {
+		return responsible;
+	}
+
+	public void setResponsible(User responsible) {
+		this.responsible = responsible;
 	}
 
 	public Date getDate() {
@@ -63,30 +65,6 @@ public class Intervention {
 		this.date = date;
 	}
 
-	public Device getDevice() {
-		return device;
-	}
-
-	public void setDevice(Device device) {
-		this.device = device;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
 	public String getMessage() {
 		return message;
 	}
@@ -94,5 +72,8 @@ public class Intervention {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
+
+	public long getId() {
+		return id;
+	}
 }

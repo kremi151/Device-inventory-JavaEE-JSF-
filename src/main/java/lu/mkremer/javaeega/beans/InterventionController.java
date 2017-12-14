@@ -12,9 +12,9 @@ import lu.mkremer.javaeega.devices.Device;
 import lu.mkremer.javaeega.managers.DeviceManager;
 import lu.mkremer.javaeega.util.MessageHelper;
 
-@ManagedBean(name="postintv")
+@ManagedBean(name="intervention")
 @ViewScoped
-public class PostInterventionController implements Serializable{
+public class InterventionController implements Serializable{
 
 	/**
 	 * 
@@ -23,11 +23,11 @@ public class PostInterventionController implements Serializable{
 	
 	@NotNull(message="A title must be provided")
 	@Size(min=8, max=128, message="Title must be between {min} and {max} characters long")
-	private String title;
+	private String reportTitle;
 	
 	@NotNull(message="A message must be provided")
 	@Size(min=10, message="Message must be at least {min} characters long")
-	private String message;
+	private String reportMessage;
 	
 	@NotNull
 	private long devId;
@@ -35,20 +35,20 @@ public class PostInterventionController implements Serializable{
 	@EJB
 	private DeviceManager dm;
 
-	public String getTitle() {
-		return title;
+	public String getReportTitle() {
+		return reportTitle;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setReportTitle(String reportTitle) {
+		this.reportTitle = reportTitle;
 	}
 
-	public String getMessage() {
-		return message;
+	public String getReportMessage() {
+		return reportMessage;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setReportMessage(String reportMessage) {
+		this.reportMessage = reportMessage;
 	}
 
 	public long getDevId() {
@@ -59,19 +59,14 @@ public class PostInterventionController implements Serializable{
 		this.devId = devId;
 	}
 	
-	public void post() {
+	public void report() {
 		UserSession session = UserSession.getCurrentSession();
-		if(session.canSubmitInterventions()) {
-			Device device = dm.getDeviceById(devId);
-			if(device != null) {
-				dm.addInterventionToDevice(device, session.getUser(), title, message);
-			}else {
-				MessageHelper.throwDangerMessage("Device was not found");
-			}
+		Device device = dm.getDeviceById(devId);
+		if(device != null && session.canModifyDevice(device)) {
+			dm.createReportOnDevice(device, session.getUser(), reportTitle, reportMessage);
 		}else {
 			MessageHelper.throwDangerMessage("You are not allowed to do this");
 		}
-		
 	}
 
 }

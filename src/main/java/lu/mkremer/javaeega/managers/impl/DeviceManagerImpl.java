@@ -17,6 +17,8 @@ import lu.mkremer.javaeega.devices.DevicePropertyValue;
 import lu.mkremer.javaeega.devices.DevicePropertyValueKey;
 import lu.mkremer.javaeega.devices.DeviceType;
 import lu.mkremer.javaeega.intervention.Intervention;
+import lu.mkremer.javaeega.intervention.Report;
+import lu.mkremer.javaeega.intervention.ReportStatus;
 import lu.mkremer.javaeega.managers.DeviceManager;
 import lu.mkremer.javaeega.users.User;
 
@@ -205,15 +207,34 @@ public class DeviceManagerImpl implements DeviceManager{
 	}
 
 	@Override
-	public List<Intervention> getInterventionsForDevice(Device device) {
-		return em.createQuery("select i from Intervention i where device_id = :id", Intervention.class).setParameter("id", device.getId()).getResultList();
+	public List<Report> getReportsForDevice(Device device) {
+		return em.createQuery("select r from Report r where device_id = :id", Report.class).setParameter("id", device.getId()).getResultList();
 	}
 
 	@Override
-	public Intervention addInterventionToDevice(Device device, User user, String title, String message) {
-		Intervention intv = new Intervention(device, user, title, message);
+	public Report createReportOnDevice(Device device, User user, String title, String message) {
+		Report report = new Report(device, user, title, message);
+		em.persist(report);
+		return report;
+	}
+
+	@Override
+	public Intervention interventOnReport(Report report, User responsible, String message, ReportStatus newStatus) {
+		report.setStatus(newStatus);
+		em.merge(report);
+		Intervention intv = new Intervention(report, responsible, message);
 		em.persist(intv);
 		return intv;
+	}
+
+	@Override
+	public Report findReportById(long id) {
+		return em.find(Report.class, id);
+	}
+
+	@Override
+	public List<Intervention> getInterventionsForReport(Report report) {
+		return em.createQuery("select i from Intervention i where report_id = :id", Intervention.class).setParameter("id", report.getId()).getResultList();
 	}
 
 }

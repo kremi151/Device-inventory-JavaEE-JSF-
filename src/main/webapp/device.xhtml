@@ -29,7 +29,6 @@
 				<c:set var="canRead" value="#{usession.canReadDevice(device)}" scope="request" />
 				<c:set var="canModify" value="#{usession.canModifyDevice(device)}" scope="request" />
 				<c:set var="canRemove" value="#{usession.canRemoveDevice(device)}" scope="request" />
-				<c:set var="canIntervent" value="#{usession.canSubmitInterventions()}" scope="request" />
 				
 				<ui:fragment rendered="#{canRead}">
 					<b:form id="modifyPropertyForm" rendered="#{canModify}">
@@ -38,6 +37,7 @@
 							<p>Type: <strong><span id="modifyPropertyModalType"></span></strong></p>
 							<h:inputHidden id="propId" value="#{vdevice.propId}" />
 							<h:inputHidden id="devId" value="#{vdevice.devId}" />
+							<script type="text/javascript">document.getElementById("modifyPropertyForm:devId").value = #{param['devid']};</script>
 							<b:inputText id="propValue" value="#{vdevice.propValue}" label="Value:" />
 							<f:facet name="footer">
 					            <b:button value="Cancel" dismiss="modal" />
@@ -51,6 +51,7 @@
 					<b:form id="removeDeviceForm" rendered="#{canRemove}">
 						<b:modal class="removeDeviceModal" title="Delete device">
 							<h:inputHidden id="devId" value="#{vdevice.devId}" />
+							<script type="text/javascript">document.getElementById("removeDeviceForm:devId").value = #{param['devid']};</script>
 							<h:outputText value="The device #{device.name} of type #{device.type.name} owned by #{device.owner.firstName} #{device.owner.lastName} will be removed from the system. Do you want to continue?" />
 							<f:facet name="footer">
 					            <b:button value="No" look="primary" dismiss="modal" />
@@ -61,24 +62,23 @@
 						</b:modal>
 					</b:form>
 					
-					<b:form id="addInterventionForm" rendered="#{canIntervent}">
-						<b:modal class="addInterventionModal" title="Post new intervention">
-							<h:inputHidden id="devId" value="#{postintv.devId}" />
-							<b:inputText id="intvTitle" value="#{postintv.title}" label="Title" />
-							<b:inputText id="intvMsg" value="#{postintv.message}" label="Message" />
+					<b:form id="addReportForm">
+						<b:modal class="addReportModal" title="Report issue">
+							<h:inputHidden id="devId" value="#{intervention.devId}" />
+							<script type="text/javascript">document.getElementById("addReportForm:devId").value = #{param['devid']};</script>
+							<b:inputText id="reportTitle" value="#{intervention.reportTitle}" label="Title:" />
+							<b:inputText id="reportMsg" value="#{intervention.reportMessage}" label="Message:" />
 							<f:facet name="footer">
 					            <b:button value="Cancel" look="primary" dismiss="modal" />
-					            <b:commandButton value="Post" action="#{postintv.post}" >
+					            <b:commandButton value="Post" action="#{intervention.report}" >
 			        				<f:param name="devid" value="#{param['devid']}" />
 			        			</b:commandButton>
 					        </f:facet>
 						</b:modal>
 					</b:form>
 				
-					<h1>#{device.name} <b:button value="Delete" icon="trash" size="sm" onclick="$('.removeDeviceModal').modal();" rendered="#{canRemove}" /></h1><h2>#{device.type.name}</h2><p>Owner: #{device.owner.firstName} #{device.owner.lastName}</p>
+					<h1>#{device.name} <b:button value="Report issue" onclick="$('.addReportModal').modal();" icon-awesome="fa-warning" size="sm" /> <b:button value="Delete" icon="trash" size="sm" onclick="$('.removeDeviceModal').modal();" rendered="#{canRemove}" /></h1><h2>#{device.type.name}</h2><p>Owner: #{device.owner.firstName} #{device.owner.lastName}</p>
 					<script type="text/javascript">document.title = '#{device.name}';</script>
-					<ui:fragment rendered="#{canRemove}"><script type="text/javascript">document.getElementById("removeDeviceForm:devId").value = #{param['devid']};</script></ui:fragment>
-					<ui:fragment rendered="#{canIntervent}"><script type="text/javascript">document.getElementById("addInterventionForm:devId").value = #{param['devid']};</script></ui:fragment>
 					<b:messages />
 					<b:accordion expanded-panels="panelProps">
 						<b:panel id="panelProps" title="Properties">
@@ -90,14 +90,18 @@
 			        			</b:dataTableColumn>
 			        		</b:dataTable>
 						</b:panel>
-						<b:panel id="panelInterventions" title="Interventions">
-							<b:button value="Add intervention" onclick="$('.addInterventionModal').modal();" icon="plus" size="sm" rendered="#{canIntervent}"/>
-							<b:dataTable value="#{vdevice.getInterventions(device)}" var="intv">
-								<b:dataTableColumn value="#{intv.date}" label="Date" style="width:15%;"/>
-								<b:dataTableColumn value="#{intv.user.firstName} #{intv.user.lastName}" label="Responsible" style="width:15%;" /> 
-								<b:dataTableColumn label="Content" style="width:70%;">
-									<p><strong>#{intv.title}</strong></p>
-									<p>#{intv.message}</p>
+						<b:panel id="panelReports" title="Reports">
+							<b:dataTable value="#{vdevice.getReports(device)}" var="report">
+								<b:dataTableColumn value="#{report.date}" label="Date" />
+								<b:dataTableColumn value="#{report.user.firstName} #{report.user.lastName}" label="Reporter" />
+								<b:dataTableColumn label="Content" style="width:45%;">
+									<p><b:label value="#{report.status.description}" severity="#{report.status.bsSeverity}" /> <strong>#{report.title}</strong></p>
+									<p>#{report.message}</p>
+								</b:dataTableColumn>
+								<b:dataTableColumn style="width:6%;" label="" orderable="false">
+									<b:button value="View" outcome="report.xhtml" icon-awesome="fa-eye">
+										<f:param name="id" value="#{report.id}" />
+									</b:button>
 								</b:dataTableColumn>
 							</b:dataTable>
 						</b:panel>

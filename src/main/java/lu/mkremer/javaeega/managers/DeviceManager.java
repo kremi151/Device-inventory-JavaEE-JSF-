@@ -10,6 +10,8 @@ import lu.mkremer.javaeega.devices.DevicePropertyType;
 import lu.mkremer.javaeega.devices.DevicePropertyValue;
 import lu.mkremer.javaeega.devices.DeviceType;
 import lu.mkremer.javaeega.intervention.Intervention;
+import lu.mkremer.javaeega.intervention.Report;
+import lu.mkremer.javaeega.intervention.ReportStatus;
 import lu.mkremer.javaeega.users.User;
 
 @Local
@@ -36,7 +38,10 @@ public interface DeviceManager {
 	boolean removeDeviceTypeById(long id);
 	boolean doesDeviceTypeExist(long id);
 	boolean removeDevice(Device device);
-	List<Intervention> getInterventionsForDevice(Device device);
-	Intervention addInterventionToDevice(Device device, User user, String title, String message);
+	List<Report> getReportsForDevice(Device device);
+	List<Intervention> getInterventionsForReport(Report report);
+	Report createReportOnDevice(Device device, User user, String title, String message);
+	Report findReportById(long id);
+	Intervention interventOnReport(Report report, User responsible, String message, ReportStatus newStatus);
 	
 }
