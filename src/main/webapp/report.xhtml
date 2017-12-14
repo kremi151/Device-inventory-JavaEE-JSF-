@@ -19,6 +19,7 @@
 			<ui:fragment rendered="#{report != null}">
 				<c:set var="canRead" value="#{usession.canReadDevice(report.device)}" scope="request" />
 				<ui:fragment rendered="#{canRead}">
+					<script type="text/javascript">document.title = "#{report.title} / #{report.device.name}";</script>
 					<c:set var="canIntervene" value="#{usession.canSubmitInterventions()}" scope="request" />
 					
 					<b:form id="addInterventionForm" rendered="#{canIntervene}">
@@ -30,8 +31,8 @@
 			    				<f:selectItems value="#{reportc.reportStatuses}" var="s" itemLabel="#{s.description}" itemValue="#{s}"/>
 			    			</b:selectOneMenu>
 							<f:facet name="footer">
-					            <b:button value="Cancel" look="primary" dismiss="modal" />
-					            <b:commandButton value="Post" action="#{reportc.intervene}" >
+					            <b:button value="Cancel" dismiss="modal" />
+					            <b:commandButton value="Post" look="primary" action="#{reportc.intervene}" >
 			        				<f:param name="id" value="#{report.id}" />
 			        			</b:commandButton>
 					        </f:facet>
@@ -41,12 +42,12 @@
 					<b:button value="Back to #{report.device.name}" icon-awesome="fa-laptop" outcome="device.xhtml">
 						<f:param name="devid" value="#{report.device.id}" />
 					</b:button>
-					<b:button value="Intervene" onclick="$('.addInterventionModal').modal();" icon-awesome="fa-wrench" rendered="#{canIntervene}" />
+					<b:button value="Intervene" onclick="$('.addInterventionModal').modal();" icon-awesome="fa-wrench" rendered="#{canIntervene}" style="margin-left:1em;" />
 					<b:messages />
 					<b:jumbotron style="margin-top:1em;">
-						<p><strong>#{report.title}</strong> <b:label value="#{report.status.description}" severity="#{report.status.bsSeverity}" style="margin-left:1em;" /></p>
+						<p><strong>#{report.title}</strong><b:label value="#{report.status.description}" severity="#{report.status.bsSeverity}" style="margin-left:1em;" /></p>
 						<p>#{report.message}</p>
-						<p><i>#{report.user.firstName} #{report.user.lastName}</i></p>
+						<p><i>#{report.user.firstName} #{report.user.lastName}</i> - #{report.date}</p>
 					</b:jumbotron>
 					<b:panel title="Interventions" collapsed="true">
 						<c:set var="interventions" value="#{reportc.getInterventions(report)}" />
@@ -54,7 +55,7 @@
 							<ui:repeat var="intv" value="#{interventions}">
 								<b:well>
 									<p>#{intv.message}</p>
-									<p><i>#{intv.responsible.firstName} #{intv.responsible.lastName}</i></p>
+									<p><i>#{intv.responsible.firstName} #{intv.responsible.lastName}</i> - #{intv.date}</p>
 								</b:well>
 							</ui:repeat>
 						</ui:fragment>
