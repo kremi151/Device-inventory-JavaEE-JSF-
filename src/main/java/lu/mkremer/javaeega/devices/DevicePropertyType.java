@@ -9,7 +9,7 @@ public enum DevicePropertyType implements Serializable{
 	UNUMBER("Positive number", "^[0-9]+$"),
 	FLOAT("Floating point number", "^[\\-]?[0-9]+(,[0-9]+)?$"),
 	UFLOAT("Positive floating point number", "^[0-9]+(,[0-9]+)?$"),
-	SERIAL_NUMER("Serial number", "^[0-9a-zA-Z]+[0-9a-zA-Z\\-]{6,}[0-9a-zA-Z]+$"),
+	SERIAL_NUMER("Serial number", "^([0-9a-zA-Z]+[-])*([0-9a-zA-Z]+)$"),
 	MAC_ADDRESS("MAC Address", "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$");
 	
 	private final String description, regex;
