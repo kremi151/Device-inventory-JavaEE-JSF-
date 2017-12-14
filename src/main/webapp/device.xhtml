@@ -29,6 +29,7 @@
 				<c:set var="canRead" value="#{usession.canReadDevice(device)}" scope="request" />
 				<c:set var="canModify" value="#{usession.canModifyDevice(device)}" scope="request" />
 				<c:set var="canRemove" value="#{usession.canRemoveDevice(device)}" scope="request" />
+				<c:set var="canReport" value="#{usession.canReportOnDevice(device)}" scope="request" />
 				
 				<ui:fragment rendered="#{canRead}">
 					<b:form id="modifyPropertyForm" rendered="#{canModify}">
@@ -62,22 +63,22 @@
 						</b:modal>
 					</b:form>
 					
-					<b:form id="addReportForm">
+					<b:form id="addReportForm" rendered="#{canReport}">
 						<b:modal class="addReportModal" title="Report issue">
-							<h:inputHidden id="devId" value="#{intervention.devId}" />
+							<h:inputHidden id="devId" value="#{vdevice.devId}" />
 							<script type="text/javascript">document.getElementById("addReportForm:devId").value = #{param['devid']};</script>
-							<b:inputText id="reportTitle" value="#{intervention.reportTitle}" label="Title:" />
-							<b:inputText id="reportMsg" value="#{intervention.reportMessage}" label="Message:" />
+							<b:inputText id="reportTitle" value="#{vdevice.reportTitle}" label="Title:" />
+							<b:inputText id="reportMsg" value="#{vdevice.reportMessage}" label="Message:" />
 							<f:facet name="footer">
-					            <b:button value="Cancel" look="primary" dismiss="modal" />
-					            <b:commandButton value="Post" action="#{intervention.report}" >
+					            <b:button value="Cancel" dismiss="modal" />
+					            <b:commandButton value="Post" look="primary" action="#{vdevice.report}" >
 			        				<f:param name="devid" value="#{param['devid']}" />
 			        			</b:commandButton>
 					        </f:facet>
 						</b:modal>
 					</b:form>
 				
-					<h1>#{device.name} <b:button value="Report issue" onclick="$('.addReportModal').modal();" icon-awesome="fa-warning" size="sm" /> <b:button value="Delete" icon="trash" size="sm" onclick="$('.removeDeviceModal').modal();" rendered="#{canRemove}" /></h1><h2>#{device.type.name}</h2><p>Owner: #{device.owner.firstName} #{device.owner.lastName}</p>
+					<h1>#{device.name} <b:button value="Report issue" onclick="$('.addReportModal').modal();" icon-awesome="fa-warning" size="sm" rendered="#{canReport}" /> <b:button value="Delete" icon="trash" size="sm" onclick="$('.removeDeviceModal').modal();" rendered="#{canRemove}" /></h1><h2>#{device.type.name}</h2><p>Owner: #{device.owner.firstName} #{device.owner.lastName}</p>
 					<script type="text/javascript">document.title = '#{device.name}';</script>
 					<b:messages />
 					<b:accordion expanded-panels="panelProps">

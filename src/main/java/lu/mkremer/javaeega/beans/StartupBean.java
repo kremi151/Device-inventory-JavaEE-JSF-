@@ -22,7 +22,7 @@ import lu.mkremer.javaeega.users.UserGroup;
 @Startup
 public class StartupBean {//TODO: Run it with some default values before submission
 	
-	private final static boolean INIT_DEFAULT_VALUES = true;
+	private final static boolean INIT_DEFAULT_VALUES = false;
 	
 	@EJB
 	private UserManager um;

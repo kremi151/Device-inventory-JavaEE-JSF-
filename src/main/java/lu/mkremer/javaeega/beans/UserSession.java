@@ -100,6 +100,10 @@ public class UserSession implements Serializable{
 		return device != null && user != null && user.hasPermission("devices.modify");
 	}
 	
+	public boolean canReportOnDevice(Device device) {
+		return canReadDevice(device);
+	}
+	
 	public boolean canRemoveDevice(Device device) {
 		return device != null && user != null && user.hasPermission("devices.remove");
 	}

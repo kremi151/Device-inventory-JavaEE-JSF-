@@ -40,6 +40,14 @@ public class ViewDeviceController implements Serializable{
 	
 	@NotNull
 	private long devId;
+	
+	@NotNull(message="A title must be provided")
+	@Size(min=8, max=128, message="Title must be between {min} and {max} characters long")
+	private String reportTitle;
+	
+	@NotNull(message="A message must be provided")
+	@Size(min=10, message="Message must be at least {min} characters long")
+	private String reportMessage;
 
 	public String getPropValue() {
 		return propValue;
@@ -67,6 +75,22 @@ public class ViewDeviceController implements Serializable{
 
 	public Device getDeviceById(long devId) {
 		return dm.getDeviceById(devId);
+	}
+
+	public String getReportTitle() {
+		return reportTitle;
+	}
+
+	public void setReportTitle(String reportTitle) {
+		this.reportTitle = reportTitle;
+	}
+
+	public String getReportMessage() {
+		return reportMessage;
+	}
+
+	public void setReportMessage(String reportMessage) {
+		this.reportMessage = reportMessage;
 	}
 
 	public List<DevicePropertyValue> getPropertiesForDevice(Device device){
@@ -128,6 +152,16 @@ public class ViewDeviceController implements Serializable{
 		}else {
 			MessageHelper.throwDangerMessage("You are not allowed to do this");
 			return null;
+		}
+	}
+	
+	public void report() {
+		UserSession session = UserSession.getCurrentSession();
+		Device device = dm.getDeviceById(devId);
+		if(device != null && session.canReportOnDevice(device)) {
+			dm.createReportOnDevice(device, session.getUser(), reportTitle, reportMessage);
+		}else {
+			MessageHelper.throwDangerMessage("You are not allowed to do this");
 		}
 	}
 	
