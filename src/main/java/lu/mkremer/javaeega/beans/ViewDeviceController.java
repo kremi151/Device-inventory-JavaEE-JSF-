@@ -103,7 +103,7 @@ public class ViewDeviceController implements Serializable{
 			List<DeviceProperty> devTypeProps = dm.getPropertiesForDeviceType(device.getType());
 			for(DeviceProperty prop : devTypeProps) {
 				if(!tmpMap.containsKey(prop)) {
-					tmpMap.put(prop, new DevicePropertyValue(null, prop, "?"));//The created value will not be persisted in the database, it will only be used in JSF
+					tmpMap.put(prop, new DevicePropertyValue(device, prop, "?"));//The created value will not be persisted in the database, it will only be used in JSF
 				}
 			}
 			List<DevicePropertyValue> result = new ArrayList<>(tmpMap.values());

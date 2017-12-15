@@ -34,6 +34,8 @@ public class DevicePropertyValue implements Serializable{
 	
 	public DevicePropertyValue(Device device, DeviceProperty property, String value) {
 		this.key = new DevicePropertyValueKey(device, property);
+		this.device = device;
+		this.property = property;
 		this.value = value;
 	}
 
