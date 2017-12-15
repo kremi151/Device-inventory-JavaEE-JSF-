@@ -1,11 +1,19 @@
 package lu.mkremer.javaeega.users;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import lu.mkremer.javaeega.devices.Device;
+import lu.mkremer.javaeega.intervention.Intervention;
+import lu.mkremer.javaeega.intervention.Report;
 
 @Entity
 public class User implements Serializable{
@@ -29,6 +37,16 @@ public class User implements Serializable{
 	
 	@Column(nullable=false)
 	private String password;
+	
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="owner")
+	private List<Device> devices;
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="user")
+	private List<Report> reports;
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="responsible")
+	private List<Intervention> interventions;
 	
 	public User() {}
 	

@@ -20,10 +20,10 @@ public class Intervention {
 	@GeneratedValue
 	private long id;
 
-	@ManyToOne(optional = false)//TODO: Cascading
+	@ManyToOne(optional = false)
 	private Report report;
 	
-	@ManyToOne(optional = false)//TODO: Cascading
+	@ManyToOne(optional = false)
 	private User responsible;
 	
 	@Column(nullable = false)

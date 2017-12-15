@@ -1,16 +1,18 @@
 package lu.mkremer.javaeega.devices;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
+import lu.mkremer.javaeega.intervention.Report;
 import lu.mkremer.javaeega.users.User;
 
 @Entity
@@ -29,12 +31,17 @@ public class Device implements Serializable{
 	private String name;
 
 	@ManyToOne(optional=false)
-	@OnDelete(action=OnDeleteAction.CASCADE)//TODO: Cascading
 	private User owner;
 	
 	@ManyToOne(optional=false)
-	@OnDelete(action=OnDeleteAction.CASCADE)//TODO: Cascading
 	private DeviceType type;
+	
+
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="device")
+	private List<DevicePropertyValue> properties;
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="device")
+	private List<Report> reports;
 	
 	public Device() {}
 	

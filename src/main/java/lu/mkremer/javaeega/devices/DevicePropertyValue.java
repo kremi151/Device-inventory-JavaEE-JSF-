@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class DevicePropertyValue implements Serializable{
@@ -19,6 +21,14 @@ public class DevicePropertyValue implements Serializable{
 	
 	@Column(nullable=false)
 	private String value;
+	
+	@ManyToOne
+	@JoinColumn(name="device_id", insertable=false, updatable=false)
+	private Device device;
+	
+	@ManyToOne
+	@JoinColumn(name="property_id", insertable=false, updatable=false)
+	private DeviceProperty property;
 	
 	public DevicePropertyValue() {}
 	
@@ -36,18 +46,20 @@ public class DevicePropertyValue implements Serializable{
 	}
 
 	public Device getDevice() {
-		return key.getDevice();
+		return device;
 	}
 
 	public void setDevice(Device device) {
-		key.setDevice(device);
+		this.device = device;
+		this.key.setDeviceId(device.getId());
 	}
 
 	public DeviceProperty getProperty() {
-		return key.getProperty();
+		return property;
 	}
 
 	public void setProperty(DeviceProperty property) {
-		key.setProperty(property);
+		this.property = property;
+		this.key.setPropertyId(property.getId());
 	}
 }

@@ -1,17 +1,18 @@
 package lu.mkremer.javaeega.devices;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import javax.persistence.OneToMany;
 
 @Entity
 public class DeviceProperty implements Serializable{
@@ -28,13 +29,15 @@ public class DeviceProperty implements Serializable{
 	@Column(nullable=false)
 	private String name;
 	
-	//@Column(nullable=false)
 	@Enumerated(EnumType.STRING)
 	private DevicePropertyType type;
 
 	@ManyToOne(optional=false)
-	@OnDelete(action=OnDeleteAction.CASCADE)//TODO: Cascading
 	private DeviceType deviceType;
+	
+
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="property")
+	private List<DevicePropertyValue> values;
 	
 	public DeviceProperty() {}
 	

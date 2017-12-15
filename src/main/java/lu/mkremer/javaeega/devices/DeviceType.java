@@ -1,15 +1,16 @@
 package lu.mkremer.javaeega.devices;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import javax.persistence.OneToMany;
 
 @Entity
 public class DeviceType implements Serializable{
@@ -27,8 +28,17 @@ public class DeviceType implements Serializable{
 	private String name;
 	
 	@ManyToOne(optional=true)
-	@OnDelete(action=OnDeleteAction.CASCADE)//TODO:Cascading
 	private DeviceType parent;
+
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="type")
+	private List<Device> devices;
+
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="parent")
+	private List<DeviceType> children;
+
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="deviceType")
+	private List<DeviceProperty> properties;
 	
 	public DeviceType() {}
 	

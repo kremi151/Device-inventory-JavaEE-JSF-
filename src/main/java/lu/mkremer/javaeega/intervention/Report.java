@@ -2,15 +2,19 @@ package lu.mkremer.javaeega.intervention;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -28,10 +32,10 @@ public class Report {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date = Calendar.getInstance().getTime();
 	
-	@ManyToOne(optional=false)//TODO: Cascading
+	@ManyToOne(optional=false)
 	private Device device;
 	
-	@ManyToOne(optional=false)//TODO: Cascading
+	@ManyToOne(optional=false)
 	private User user;
 
 	@Column(nullable=false)
@@ -42,6 +46,9 @@ public class Report {
 
 	@Enumerated(EnumType.STRING)
 	private ReportStatus status = ReportStatus.OPEN;
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="report")
+	private List<Intervention> interventions;
 	
 	public Report() {}
 	
