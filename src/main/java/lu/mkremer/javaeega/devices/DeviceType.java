@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import lu.mkremer.javaeega.consumables.ConsumableType;
+
 @Entity
 public class DeviceType implements Serializable{
 
@@ -39,6 +41,9 @@ public class DeviceType implements Serializable{
 
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="deviceType")
 	private List<DeviceProperty> properties;
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="deviceType")
+	private List<ConsumableType> consumables;
 	
 	public DeviceType() {}
 	

@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 import lu.mkremer.javaeega.devices.Device;
 
@@ -24,10 +24,10 @@ public class Consumable implements Serializable{
 	//@Min(value=0, message="The amount must cannot be negative")
 	private int amount;
 	
-	@OneToOne(optional=true)//TODO: Cascading
+	@ManyToOne(optional=true)
 	private Device device;
 	
-	@OneToOne(optional=false)//TODO: Cascading
+	@ManyToOne(optional=false)
 	private ConsumableType type;
 	
 	public Consumable() {}

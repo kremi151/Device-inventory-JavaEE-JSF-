@@ -1,12 +1,16 @@
 package lu.mkremer.javaeega.consumables;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lu.mkremer.javaeega.devices.DeviceType;
 
@@ -22,11 +26,15 @@ public class ConsumableType implements Serializable{
 	@GeneratedValue
 	private long id;
 	
-	@Column(nullable=false)//TODO: Cascading
+	@Column(nullable=false)
 	private String name;
 	
-	@OneToOne(optional=true)//TODO: Cascading
+	@ManyToOne(optional=true)
 	private DeviceType deviceType;
+	
+
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="type")
+	private List<Consumable> consumables;
 	
 	public ConsumableType() {}
 	

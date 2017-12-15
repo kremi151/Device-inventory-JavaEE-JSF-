@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import lu.mkremer.javaeega.consumables.Consumable;
 import lu.mkremer.javaeega.intervention.Report;
 import lu.mkremer.javaeega.users.User;
 
@@ -42,6 +43,9 @@ public class Device implements Serializable{
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="device")
 	private List<Report> reports;
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="device")
+	private List<Consumable> consumable;
 	
 	public Device() {}
 	
