@@ -11,7 +11,10 @@ import javax.faces.context.FacesContext;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import lu.mkremer.javaeega.consumables.ConsumableType;
+import lu.mkremer.javaeega.devices.Device;
 import lu.mkremer.javaeega.devices.DeviceType;
+import lu.mkremer.javaeega.managers.ConsumableManager;
 import lu.mkremer.javaeega.managers.DeviceManager;
 import lu.mkremer.javaeega.managers.UserManager;
 import lu.mkremer.javaeega.validators.ExistingUsername;
@@ -35,14 +38,10 @@ public class CreateDeviceController implements Serializable{
 	
 	@NotNull
 	private DeviceType type;
-	/*@ValidDeviceTypeId
-	private long type;*/
 
-	@EJB
-	private DeviceManager dm;
-	
-	@EJB
-	private UserManager um;
+	@EJB private DeviceManager dm;
+	@EJB private UserManager um;
+	@EJB private ConsumableManager cm;
 
 	public String getName() {
 		return name;
@@ -74,7 +73,11 @@ public class CreateDeviceController implements Serializable{
 
 	public String create() {
 		if(UserSession.getCurrentSession().canAddDevices()) {
-			dm.createDevice(name, type, um.findUser(username));
+			Device device = dm.createDevice(name, type, um.findUser(username));
+			List<ConsumableType> ctypes = cm.getConsumablesForDeviceType(type);
+			for(ConsumableType ctype : ctypes) {
+				cm.createConsumableForDevice(ctype, 0, device);
+			}
 			name = null;
 			username = null;
 			type = null;

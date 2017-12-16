@@ -75,7 +75,7 @@ public class ReportController {
 		if(session.canSubmitInterventions()) {
 			Report report = dm.findReportById(reportId);
 			if(report != null) {
-				dm.interventOnReport(report, session.getUser(), interventionMessage, newReportStatus);
+				dm.interveneOnReport(report, session.getUser(), interventionMessage, newReportStatus);
 			}else{
 				MessageHelper.throwDangerMessage("Report was not found");
 			}

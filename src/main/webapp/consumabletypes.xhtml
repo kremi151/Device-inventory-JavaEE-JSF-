@@ -7,7 +7,7 @@
    xmlns:c="http://java.sun.com/jsp/jstl/core"
    xmlns:ui="http://java.sun.com/jsf/facelets" >
     <h:head>
-        <title>Device types</title>
+        <title>Consumable types</title>
         <meta charset="utf-8"/>
     </h:head>
     <h:body>
@@ -15,35 +15,42 @@
 			<ui:include src="navbar.xhtml" />
 		</ui:insert> 
     	<b:container style="margin-top:70px">
-    		<c:set var="canList" value="#{usession.canViewDeviceTypes()}" scope="request" />
+    		<c:set var="canList" value="#{usession.canViewConsumableTypes()}" scope="request" />
     		<ui:fragment rendered="#{canList}">
-    			<c:set var="canAdd" value="#{usession.canAddDeviceTypes()}" scope="request" />
+    			<c:set var="canAdd" value="#{usession.canAddConsumableTypes()}" scope="request" />
     			<b:form rendered="#{canAdd}">
-	    			<b:modal id="addtype" class="addDeviceTypeModal" title="Add new device type">
+	    			<b:modal id="addtype" class="addConsumableTypeModal" title="Add new consumable type">
 	    				<b:panelGrid colSpans="12">
-	    					<b:inputText id="name" label="Name" required="true" value="#{devtype.name}"/>
-					    	<b:selectOneMenu value="#{devtype.parentId}" label="Parent type:">
+	    					<b:inputText id="name" label="Name" required="true" value="#{contypes.name}"/>
+					    	<b:selectOneMenu value="#{contypes.parentId}" label="Device type:" required="false">
 					            <f:selectItem itemLabel="None" itemValue="" />
-					            <f:selectItems value="#{devtype.deviceTypes}" var="t" itemLabel="#{t.name}" itemValue="#{t.id}" />
+					            <f:selectItems value="#{contypes.deviceTypes}" var="t" itemLabel="#{t.name}" itemValue="#{t.id}" />
 						    </b:selectOneMenu>
 	    				</b:panelGrid>
 	    				<f:facet name="footer">
-					    	<b:commandButton value="Create" look="primary" action="#{devtype.create}"/>
+					    	<b:commandButton value="Create" look="primary" action="#{contypes.create}"/>
 					        <b:button value="Cancel" dismiss="modal" />
 					    </f:facet>
 	    			</b:modal>
     			</b:form>
     			
-    			<h1>Device types <b:button value="Add" icon="plus" onclick="$('.addDeviceTypeModal').modal();" rendered="#{canAdd}" size="sm"/></h1>
+    			<h1>Consumable types <b:button value="Add" icon="plus" onclick="$('.addConsumableTypeModal').modal();" rendered="#{canAdd}" size="sm"/></h1>
     			<b:messages />
-				<ui:repeat var="t" value="#{devtype.deviceTypes}" varStatus="status">
+				<!-- <ui:repeat var="t" value="#{contypes.consumableTypes}" varStatus="status">
 					<b:panel title="#{t.name}" collapsible="true" collapsed="true">
 						<h:outputText value="&lt;p&gt;Inherits from #{t.parent.name}&lt;/p&gt;" escape="false" rendered="#{not empty t.parent}"/>
 					    <b:button value="View details" outcome="devicetype.xhtml" look="primary" size="sm">
 					    	<f:param name="id" value="#{t.id}"/>
 					    </b:button>
 					</b:panel>
-				</ui:repeat>
+				</ui:repeat> -->
+				<b:dataTable value="#{contypes.consumableTypes}" var="ctype">
+					<b:dataTableColumn value="#{ctype.name}" label="Name" />
+					<b:dataTableColumn label="Associated device type">
+						<h:outputText value="#{ctype.deviceType.name}" rendered="#{ctype.deviceType != null}" />
+						<h:outputText value="&lt;i&gt;None&lt;/i&gt;" escape="false" rendered="#{ctype.deviceType == null}" />
+					</b:dataTableColumn>
+				</b:dataTable>
 				
 			</ui:fragment>
 			<ui:fragment rendered="#{not canList}">

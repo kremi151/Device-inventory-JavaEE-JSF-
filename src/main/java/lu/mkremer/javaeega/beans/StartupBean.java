@@ -22,7 +22,7 @@ import lu.mkremer.javaeega.users.UserGroup;
 @Startup
 public class StartupBean {//TODO: Run it with some default values before submission
 	
-	private final static boolean INIT_DEFAULT_VALUES = false;
+	private final static boolean INIT_DEFAULT_VALUES = true;
 	
 	@EJB
 	private UserManager um;
@@ -38,10 +38,14 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			System.out.println("# Initializing default values #");
 			System.out.println("###############################");
 			
+			System.out.println("### Creating user groups ###");
+			
 			UserGroup group = um.getDefaultGroup();
 			UserGroup itgroup = um.createGroup("IT Service");
 			UserGroup admingroup = um.createGroup("Administrator");
 
+			System.out.println("### Adding permissions ###");
+			
 			itgroup.addPermission("devices.view");
 			itgroup.addPermission("devices.add");
 			itgroup.addPermission("devices.modify");
@@ -68,18 +72,22 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			admingroup.addPermission("consumables.modify");//TODO: Perm
 			admingroup.addPermission("consumables.remove");//TODO: Perm
 			admingroup.addPermission("consumabletypes.view");
-			admingroup.addPermission("consumabletypes.add");//TODO: Perm
+			admingroup.addPermission("consumabletypes.add");
 			admingroup.addPermission("consumabletypes.modify");//TODO: Perm
 			admingroup.addPermission("consumabletypes.remove");//TODO: Perm
 			
 			um.update(itgroup);
 			um.update(admingroup);
+
+			System.out.println("### Creating users ###");;
 			
 			User userAdmin = um.createUser("admin", "Admin", "Istrator", BCrypt.hashpw("adminadmin", BCrypt.gensalt()), admingroup);
 			User userIT = um.createUser("ITuser", "IT", "User", BCrypt.hashpw("testme", BCrypt.gensalt()), itgroup);
 			um.createUser("user", "Some", "User", BCrypt.hashpw("test", BCrypt.gensalt()), group);
 
 			um.createUser("kremi151", "Michel", "Kremer", "$2a$10$wsGq2bJXf.E4sJzuQkVlNOvQ29jI8UjjMR7ECgOADan1k/5NJp2wi", group);
+			
+			System.out.println("### Creating device types ###");
 
 			DeviceType deviceGeneric = dm.createDeviceType("Generic device");
 			DeviceType deviceComputer = dm.createDeviceType("Computer", deviceGeneric);
@@ -88,6 +96,8 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			DeviceType deviceTablet = dm.createDeviceType("Tablet PC", deviceComputer);
 			DeviceType devicePhone = dm.createDeviceType("Mobile phone", deviceComputer);
 			DeviceType devicePrinter = dm.createDeviceType("Printer", deviceGeneric);
+			
+			System.out.println("### Creating device properties ###");
 
 			DeviceProperty propSerialNumber = dm.createDeviceProperty("Serial number", DevicePropertyType.SERIAL_NUMER, deviceGeneric);
 			DeviceProperty propVendor = dm.createDeviceProperty("Vendor", DevicePropertyType.STRING, deviceGeneric);
@@ -101,6 +111,8 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			dm.createDeviceProperty("Paper slots", DevicePropertyType.UNUMBER, devicePrinter);
 			dm.createDeviceProperty("Laser technology", DevicePropertyType.BOOLEAN, devicePrinter);
 			
+			System.out.println("### Creating devices ###");
+			
 			Device device1 = dm.createDevice("Central Management PC", deviceDesktopPC, userAdmin);
 			dm.addOrModifyDeviceProperty(device1, propSerialNumber, "H1T3-CHPC-1234-5678");
 			dm.addOrModifyDeviceProperty(device1, propVendor, "IBM");
@@ -109,8 +121,10 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			dm.addOrModifyDeviceProperty(device1, propStorage, "0,25");
 			dm.addOrModifyDeviceProperty(device1, propRAM, "0,0125");
 			
+			System.out.println("### Creating reports ###");
+			
 			Report report1 = dm.createReportOnDevice(device1, userIT, "Outdated operating system", "The operating should perhaps be updated. The current one is outdated and slow.");
-			dm.interventOnReport(report1, userAdmin, "I considered your request, but I decided to stay at Windows 3.1 because it still works.", ReportStatus.UNSOLVABLE);
+			dm.interveneOnReport(report1, userAdmin, "I considered your request, but I decided to stay at Windows 3.1 because it still works.", ReportStatus.UNSOLVABLE);
 			
 			//TODO: Add some default entries to be added before the actual submission of the project
 			System.out.println("### Done ###");

@@ -219,7 +219,7 @@ public class DeviceManagerImpl implements DeviceManager{
 	}
 
 	@Override
-	public Intervention interventOnReport(Report report, User responsible, String message, ReportStatus newStatus) {
+	public Intervention interveneOnReport(Report report, User responsible, String message, ReportStatus newStatus) {
 		report.setStatus(newStatus);
 		em.merge(report);
 		Intervention intv = new Intervention(report, responsible, message);

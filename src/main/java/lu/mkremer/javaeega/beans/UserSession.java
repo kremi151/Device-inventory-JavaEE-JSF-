@@ -124,6 +124,10 @@ public class UserSession implements Serializable{
 		return user != null && user.hasPermission("consumables.view");
 	}
 	
+	public boolean canAddConsumableTypes() {
+		return user != null && user.hasPermission("consumabletypes.add");
+	}
+	
 	public boolean canViewConsumableTypes() {
 		return user != null && user.hasPermission("consumabletypes.view");
 	}

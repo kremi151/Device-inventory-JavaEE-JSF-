@@ -42,6 +42,6 @@ public interface DeviceManager {
 	List<Intervention> getInterventionsForReport(Report report);
 	Report createReportOnDevice(Device device, User user, String title, String message);
 	Report findReportById(long id);
-	Intervention interventOnReport(Report report, User responsible, String message, ReportStatus newStatus);
+	Intervention interveneOnReport(Report report, User responsible, String message, ReportStatus newStatus);
 	
 }

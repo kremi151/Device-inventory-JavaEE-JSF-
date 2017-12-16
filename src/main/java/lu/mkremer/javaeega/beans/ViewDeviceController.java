@@ -12,10 +12,12 @@ import javax.faces.bean.ViewScoped;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import lu.mkremer.javaeega.consumables.Consumable;
 import lu.mkremer.javaeega.devices.Device;
 import lu.mkremer.javaeega.devices.DeviceProperty;
 import lu.mkremer.javaeega.devices.DevicePropertyValue;
 import lu.mkremer.javaeega.intervention.Report;
+import lu.mkremer.javaeega.managers.ConsumableManager;
 import lu.mkremer.javaeega.managers.DeviceManager;
 import lu.mkremer.javaeega.util.MessageHelper;
 
@@ -28,8 +30,8 @@ public class ViewDeviceController implements Serializable{
 	 */
 	private static final long serialVersionUID = -793544976222187966L;
 
-	@EJB
-	private DeviceManager dm;
+	@EJB private DeviceManager dm;
+	@EJB private ConsumableManager cm;
 	
 	@NotNull
 	@Size(min=1)
@@ -169,6 +171,10 @@ public class ViewDeviceController implements Serializable{
 		List<Report> res = dm.getReportsForDevice(device);
 		res.sort((a, b) -> a.getDate().compareTo(b.getDate()));
 		return res;
+	}
+	
+	public List<Consumable> getConsumables(Device device){
+		return cm.getConsumablesForDevice(device);
 	}
 	
 	//TODO: Interventions
