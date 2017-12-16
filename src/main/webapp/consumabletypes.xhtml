@@ -36,14 +36,6 @@
     			
     			<h1>Consumable types <b:button value="Add" icon="plus" onclick="$('.addConsumableTypeModal').modal();" rendered="#{canAdd}" size="sm"/></h1>
     			<b:messages />
-				<!-- <ui:repeat var="t" value="#{contypes.consumableTypes}" varStatus="status">
-					<b:panel title="#{t.name}" collapsible="true" collapsed="true">
-						<h:outputText value="&lt;p&gt;Inherits from #{t.parent.name}&lt;/p&gt;" escape="false" rendered="#{not empty t.parent}"/>
-					    <b:button value="View details" outcome="devicetype.xhtml" look="primary" size="sm">
-					    	<f:param name="id" value="#{t.id}"/>
-					    </b:button>
-					</b:panel>
-				</ui:repeat> -->
 				<b:dataTable value="#{contypes.consumableTypes}" var="ctype">
 					<b:dataTableColumn value="#{ctype.name}" label="Name" />
 					<b:dataTableColumn label="Associated device type">

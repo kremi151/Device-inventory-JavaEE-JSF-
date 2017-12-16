@@ -69,12 +69,15 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			admingroup.addPermission("interventions.add");
 			admingroup.addPermission("consumables.view");
 			admingroup.addPermission("consumables.add");//TODO: Perm
-			admingroup.addPermission("consumables.modify");//TODO: Perm
+			admingroup.addPermission("consumables.modify");
 			admingroup.addPermission("consumables.remove");//TODO: Perm
 			admingroup.addPermission("consumabletypes.view");
 			admingroup.addPermission("consumabletypes.add");
 			admingroup.addPermission("consumabletypes.modify");//TODO: Perm
 			admingroup.addPermission("consumabletypes.remove");//TODO: Perm
+			admingroup.addPermission("messages.info");//TODO: Perm
+			admingroup.addPermission("messages.warning");//TODO: Perm
+			admingroup.addPermission("messages.severe");//TODO: Perm
 			
 			um.update(itgroup);
 			um.update(admingroup);
