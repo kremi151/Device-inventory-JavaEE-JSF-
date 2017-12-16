@@ -39,7 +39,19 @@ public class ConsumableManagerImpl implements ConsumableManager{
 		ConsumableType type = new ConsumableType(name, deviceType);
 		em.persist(type);
 		invalidateCache();
+		if(deviceType != null)addDefaultConsumable(deviceType, type);
 		return type;
+	}
+	
+	private void addDefaultConsumable(DeviceType devType, ConsumableType type) {
+		List<Device> devices = em.createQuery("select d from Device d where type_id = :id", Device.class).setParameter("id", devType.getId()).getResultList();
+		for(Device device : devices) {
+			createConsumableForDevice(type, 0, device);
+		}
+		List<DeviceType> children = em.createQuery("select t from DeviceType t where parent_id = :id", DeviceType.class).setParameter("id", devType.getId()).getResultList();
+		for(DeviceType t : children) {
+			addDefaultConsumable(t, type);
+		}
 	}
 
 	@Override
