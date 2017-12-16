@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -50,6 +51,13 @@ public class ViewDeviceController implements Serializable{
 	@NotNull(message="A message must be provided")
 	@Size(min=10, message="Message must be at least {min} characters long")
 	private String reportMessage;
+	
+	@NotNull
+	@Min(value=1, message="Value to increment or decrement must be 1 or higher")
+	private int consumableIncrement = 1;
+	
+	@NotNull
+	private long consumableId;
 
 	public String getPropValue() {
 		return propValue;
@@ -93,6 +101,22 @@ public class ViewDeviceController implements Serializable{
 
 	public void setReportMessage(String reportMessage) {
 		this.reportMessage = reportMessage;
+	}
+
+	public int getConsumableIncrement() {
+		return consumableIncrement;
+	}
+
+	public void setConsumableIncrement(int consumableIncrement) {
+		this.consumableIncrement = consumableIncrement;
+	}
+
+	public long getConsumableId() {
+		return consumableId;
+	}
+
+	public void setConsumableId(long consumableId) {
+		this.consumableId = consumableId;
 	}
 
 	public List<DevicePropertyValue> getPropertiesForDevice(Device device){
@@ -177,7 +201,44 @@ public class ViewDeviceController implements Serializable{
 		return cm.getConsumablesForDevice(device);
 	}
 	
-	//TODO: Interventions
+	public void cincrement() {
+		if(UserSession.getCurrentSession().canModifyConsumables()) {
+			Consumable c = cm.getConsumableById(consumableId);
+			if(c != null) {
+				if(c.getAmount() + consumableIncrement <= Integer.MAX_VALUE) {
+					c.setAmount(c.getAmount() + consumableIncrement);
+					cm.update(c);
+				}else {
+					MessageHelper.throwDangerMessage("The requested increasement for consumable \"" + c.getType().getName() + "\" would exceed it's limit");
+				}
+			}else {
+				MessageHelper.throwDangerMessage("Consumable was not found");
+			}
+			consumableIncrement = 1;
+		}else {
+			MessageHelper.throwDangerMessage("You are not allowed to do this");
+		}
+	}
+	
+	public void cdecrement() {
+		if(UserSession.getCurrentSession().canModifyConsumables()) {
+			Consumable c = cm.getConsumableById(consumableId);
+			if(c != null) {
+				if(c.getAmount() - consumableIncrement >= 0) {
+					c.setAmount(c.getAmount() - consumableIncrement);
+					cm.update(c);
+				}else {
+					MessageHelper.throwDangerMessage("The stock for consumable \"" + c.getType().getName() + "\" cannot be negative");
+				}
+			}else {
+				MessageHelper.throwDangerMessage("Consumable was not found");
+			}
+			consumableIncrement = 1;
+		}else {
+			MessageHelper.throwDangerMessage("You are not allowed to do this");
+		}
+	}
+	
 	//TODO: Reference on the UI to the owner -> make link
 	
 }

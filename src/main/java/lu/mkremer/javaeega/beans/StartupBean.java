@@ -7,12 +7,14 @@ import javax.ejb.Startup;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import lu.mkremer.javaeega.consumables.ConsumableType;
 import lu.mkremer.javaeega.devices.Device;
 import lu.mkremer.javaeega.devices.DeviceProperty;
 import lu.mkremer.javaeega.devices.DevicePropertyType;
 import lu.mkremer.javaeega.devices.DeviceType;
 import lu.mkremer.javaeega.intervention.Report;
 import lu.mkremer.javaeega.intervention.ReportStatus;
+import lu.mkremer.javaeega.managers.ConsumableManager;
 import lu.mkremer.javaeega.managers.DeviceManager;
 import lu.mkremer.javaeega.managers.UserManager;
 import lu.mkremer.javaeega.users.User;
@@ -22,13 +24,11 @@ import lu.mkremer.javaeega.users.UserGroup;
 @Startup
 public class StartupBean {//TODO: Run it with some default values before submission
 	
-	private final static boolean INIT_DEFAULT_VALUES = true;
+	private final static boolean INIT_DEFAULT_VALUES = false;
 	
-	@EJB
-	private UserManager um;
-	
-	@EJB
-	private DeviceManager dm;
+	@EJB private UserManager um;
+	@EJB private DeviceManager dm;
+	@EJB private ConsumableManager cm;
 
 	@SuppressWarnings("unused")
 	@PostConstruct
@@ -111,6 +111,10 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			dm.createDeviceProperty("Paper slots", DevicePropertyType.UNUMBER, devicePrinter);
 			dm.createDeviceProperty("Laser technology", DevicePropertyType.BOOLEAN, devicePrinter);
 			
+			System.out.println("### Creating consumable types ###");
+			
+			ConsumableType ctUsbStick = cm.createConsumableType("USB Stick", deviceComputer);
+			
 			System.out.println("### Creating devices ###");
 			
 			Device device1 = dm.createDevice("Central Management PC", deviceDesktopPC, userAdmin);
@@ -120,6 +124,10 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			dm.addOrModifyDeviceProperty(device1, propOS, "Windows 3.1");
 			dm.addOrModifyDeviceProperty(device1, propStorage, "0,25");
 			dm.addOrModifyDeviceProperty(device1, propRAM, "0,0125");
+
+			System.out.println("### Creating consumable types ###");
+			
+			cm.createConsumableForDevice(ctUsbStick, 11, device1);
 			
 			System.out.println("### Creating reports ###");
 			

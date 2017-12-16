@@ -81,4 +81,14 @@ public class ConsumableManagerImpl implements ConsumableManager{
 		return em.createQuery("select c from Consumable c where device_id = :id", Consumable.class).setParameter("id", device.getId()).getResultList();
 	}
 
+	@Override
+	public Consumable getConsumableById(long id) {
+		return em.find(Consumable.class, id);
+	}
+
+	@Override
+	public void update(Consumable consumable) {
+		em.merge(consumable);
+	}
+
 }

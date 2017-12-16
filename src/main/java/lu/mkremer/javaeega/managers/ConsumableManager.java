@@ -18,5 +18,7 @@ public interface ConsumableManager {
 	ConsumableType createConsumableType(String name, DeviceType deviceType);
 	ConsumableType createConsumableType(String name);
 	Consumable createConsumableForDevice(ConsumableType type, int amount, Device device);
+	Consumable getConsumableById(long id);
+	void update(Consumable consumable);
 	
 }

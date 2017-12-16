@@ -144,6 +144,10 @@ public class UserSession implements Serializable{
 		return user != null && user.hasPermission("interventions.add");
 	}
 	
+	public boolean canModifyConsumables() {
+		return user != null && user.hasPermission("consumables.modify");
+	}
+	
 	public static UserSession getCurrentSession() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		return context.getApplication().evaluateExpressionGet(context, "#{usession}", UserSession.class);

@@ -17,6 +17,10 @@
         		document.getElementById("modifyPropertyForm:propId").value = id;
         		document.getElementById("input_modifyPropertyForm:propValue").value = value;
         	}
+        	function prepareConsumableStockModify(consId, consName){
+        		document.getElementById("modifyConsumableStockForm:consId").value = consId;
+        		document.getElementById("consumableName").innerText = consName;
+        	}
         </script>
     </h:head>
     <h:body>
@@ -30,6 +34,7 @@
 				<c:set var="canModify" value="#{usession.canModifyDevice(device)}" scope="request" />
 				<c:set var="canRemove" value="#{usession.canRemoveDevice(device)}" scope="request" />
 				<c:set var="canReport" value="#{usession.canReportOnDevice(device)}" scope="request" />
+				<c:set var="canConsume" value="#{usession.canModifyConsumables()}" scope="request" />
 				
 				<ui:fragment rendered="#{canRead}">
 					<b:form id="modifyPropertyForm" rendered="#{canModify}">
@@ -77,6 +82,23 @@
 					        </f:facet>
 						</b:modal>
 					</b:form>
+					
+					<b:form id="modifyConsumableStockForm" rendered="#{canConsume}">
+						<b:modal class="modifyConsumableStockModal" title="Modify consumable stock">
+							<p>You are modifying the stock for the consumable <span id="consumableName"></span></p>
+							<h:inputHidden id="consId" value="#{vdevice.consumableId}" />
+							<b:inputText value="#{vdevice.consumableIncrement}" type="number" label="Decrement/Increment by:" />
+							<f:facet name="footer">
+					            <b:button value="Cancel" look="primary" dismiss="modal" />
+					            <b:commandButton value="Decrement" icon-awesome="fa-minus" action="#{vdevice.cdecrement}" >
+			        				<f:param name="devid" value="#{param['devid']}" />
+			        			</b:commandButton>
+					            <b:commandButton value="Increment" icon-awesome="fa-plus" action="#{vdevice.cincrement}" >
+			        				<f:param name="devid" value="#{param['devid']}" />
+			        			</b:commandButton>
+					        </f:facet>
+						</b:modal>
+					</b:form>
 				
 					<h1>#{device.name} <b:button value="Report issue" onclick="$('.addReportModal').modal();" icon-awesome="fa-warning" size="sm" rendered="#{canReport}" /> <b:button value="Delete" icon="trash" size="sm" onclick="$('.removeDeviceModal').modal();" rendered="#{canRemove}" /></h1><h2>#{device.type.name}</h2><p>Owner: #{device.owner.firstName} #{device.owner.lastName}</p>
 					<script type="text/javascript">document.title = '#{device.name}';</script>
@@ -110,6 +132,9 @@
 							<b:dataTable value="#{vdevice.getConsumables(device)}" var="consumable">
 								<b:dataTableColumn value="#{consumable.type.name}" label="Name" />
 								<b:dataTableColumn value="#{consumable.amount}" label="Stock" />
+								<b:dataTableColumn label="" orderable="false" style="width:10%;">
+									<b:button value="Modify" icon-awesome="fa-pencil" onclick="prepareConsumableStockModify(#{consumable.id}, '#{consumable.type.name}');$('.modifyConsumableStockModal').modal();" />
+								</b:dataTableColumn>
 							</b:dataTable>
 						</b:panel>
 					</b:accordion>
