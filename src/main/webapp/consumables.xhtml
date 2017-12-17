@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html 
+   xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:b="http://bootsfaces.net/ui"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:ui="http://java.sun.com/jsf/facelets" >
+    <h:head>
+        <title>Consumables</title>
+        <meta charset="utf-8"/>
+        <script type="text/javascript">
+        	function prepareConsumableStockModify(consId, consName){
+        		document.getElementById("modifyConsumableStockForm:consId").value = consId;
+        		document.getElementById("modConsumableName").innerText = consName;
+        	}
+        	function prepareConsumableStockRemove(consId, consName){
+        		document.getElementById("removeConsumableForm:consId").value = consId;
+        		document.getElementById("remConsumableName").innerText = consName;
+        	}
+        </script>
+    </h:head>
+    <h:body>
+	    <ui:insert name="navbar" >
+			<ui:include src="navbar.xhtml" />
+		</ui:insert> 
+    	<b:container style="margin-top:70px">
+    		<c:set var="canList" value="#{usession.canListConsumables()}" scope="request" />
+    		<ui:fragment rendered="#{canList}">
+    			<c:set var="canAdd" value="#{usession.canAddConsumables()}" scope="request" />
+    			<c:set var="canRemove" value="#{usession.canRemoveConsumables()}" scope="request" />
+				<c:set var="canConsume" value="#{usession.canModifyConsumables()}" scope="request" />
+				
+    			<b:form rendered="#{canAdd}">
+	    			<b:modal id="addtype" class="addConsumableModal" title="Add new consumable">
+	    				<b:panelGrid colSpans="12">
+	    					<b:inputText id="amount" label="Amount:" type="number" required="true" value="#{listcons.amount}"/>
+					    	<b:selectOneMenu value="#{listcons.type}" label="Type:" required="true">
+					            <f:selectItems value="#{listcons.consumableTypes}" var="t" itemLabel="#{t.name}" itemValue="#{t}" />
+						    </b:selectOneMenu>
+	    				</b:panelGrid>
+	    				<f:facet name="footer">
+					    	<b:commandButton value="Create" look="primary" action="#{listcons.create}"/>
+					        <b:button value="Cancel" dismiss="modal" />
+					    </f:facet>
+	    			</b:modal>
+    			</b:form>
+					
+				<b:form id="modifyConsumableStockForm" rendered="#{canConsume}">
+					<b:modal class="modifyConsumableStockModal" title="Modify consumable stock">
+						<p>You are modifying the stock for the consumable <span id="modConsumableName"></span></p>
+						<h:inputHidden id="consId" value="#{listcons.consumableId}" />
+						<b:inputText value="#{listcons.consumableIncrement}" type="number" label="Decrement/Increment by:" />
+						<f:facet name="footer">
+					    	<b:button value="Cancel" look="primary" dismiss="modal" />
+					        <b:commandButton value="Decrement" icon-awesome="fa-minus" action="#{listcons.cdecrement}" >
+			        			<f:param name="devid" value="#{param['devid']}" />
+			        		</b:commandButton>
+					        <b:commandButton value="Increment" icon-awesome="fa-plus" action="#{listcons.cincrement}" >
+			        			<f:param name="devid" value="#{param['devid']}" />
+			       			</b:commandButton>
+				        </f:facet>
+					</b:modal>
+				</b:form>
+					
+				<b:form id="removeConsumableForm" rendered="#{canRemove}">
+					<b:modal class="removeConsumableStockModal" title="Delete consumable stock">
+						<p>You are removing the stock for the consumable <span id="remConsumableName"></span> from the system. Do you want to continue?</p>
+						<h:inputHidden id="consId" value="#{listcons.consumableId}" />
+						<f:facet name="footer">
+					    	<b:button value="No" look="primary" dismiss="modal" />
+					        <b:commandButton value="Yes" action="#{listcons.delete}" >
+			        			<f:param name="devid" value="#{param['devid']}" />
+			        		</b:commandButton>
+				        </f:facet>
+					</b:modal>
+				</b:form>
+    			
+    			<h1>General consumables <b:button value="Add" icon="plus" onclick="$('.addConsumableModal').modal();" rendered="#{canAdd}" size="sm"/></h1>
+    			<b:messages />
+				<b:dataTable value="#{listcons.independentConsumables}" var="cons">
+					<b:dataTableColumn value="#{cons.type.name}" label="Name" />
+					<b:dataTableColumn value="#{cons.amount}" label="Stock" />
+					<b:dataTableColumn label="" orderable="false" style="width:20%;">
+						<b:button value="Modify" icon-awesome="fa-pencil" onclick="prepareConsumableStockModify(#{cons.id}, '#{cons.type.name}');$('.modifyConsumableStockModal').modal();" />
+						<b:button value="Delete" icon-awesome="fa-trash" onclick="prepareConsumableStockRemove(#{cons.id}, '#{cons.type.name}');$('.removeConsumableStockModal').modal();" />
+					</b:dataTableColumn>
+				</b:dataTable>
+				
+			</ui:fragment>
+			<ui:fragment rendered="#{not canList}">
+				<b:alert severity="danger">Permission denied</b:alert>
+			</ui:fragment>
+    	</b:container>
+    </h:body>
+</html>

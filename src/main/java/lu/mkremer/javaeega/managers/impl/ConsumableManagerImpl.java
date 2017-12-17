@@ -103,4 +103,22 @@ public class ConsumableManagerImpl implements ConsumableManager{
 		em.merge(consumable);
 	}
 
+	@Override
+	public List<Consumable> getIndependentConsumables() {
+		return em.createQuery("select c from Consumable c where c.device = null", Consumable.class).getResultList();
+	}
+
+	@Override
+	public List<ConsumableType> getIndependentConsumableTypes() {
+		return em.createQuery("select t from ConsumableType t where t.deviceType = null", ConsumableType.class).getResultList();
+	}
+
+	@Override
+	public void deleteConsumableById(long id) {
+		Consumable c = em.find(Consumable.class, id);
+		if(c != null) {
+			em.remove(c);
+		}
+	}
+
 }

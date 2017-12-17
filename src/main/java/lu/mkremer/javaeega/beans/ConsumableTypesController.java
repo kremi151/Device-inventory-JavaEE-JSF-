@@ -25,7 +25,7 @@ public class ConsumableTypesController implements Serializable{
 	private static final long serialVersionUID = 3000397119766641415L;
 
 	@NotNull
-	@Size(min=5, max=128)
+	@Size(min=3, max=128)
 	private String name;
 	
 	private long parentId;

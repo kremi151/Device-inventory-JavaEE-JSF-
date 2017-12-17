@@ -14,11 +14,14 @@ public interface ConsumableManager {
 
 	List<ConsumableType> getConsumableTypes();
 	List<ConsumableType> getConsumablesForDeviceType(DeviceType deviceType);
+	List<ConsumableType> getIndependentConsumableTypes();
 	List<Consumable> getConsumablesForDevice(Device device);
+	List<Consumable> getIndependentConsumables();
 	ConsumableType createConsumableType(String name, DeviceType deviceType);
 	ConsumableType createConsumableType(String name);
 	Consumable createConsumableForDevice(ConsumableType type, int amount, Device device);
 	Consumable getConsumableById(long id);
 	void update(Consumable consumable);
+	void deleteConsumableById(long id);
 	
 }
