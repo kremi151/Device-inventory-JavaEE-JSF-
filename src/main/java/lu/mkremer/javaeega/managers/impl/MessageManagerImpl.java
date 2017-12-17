@@ -2,6 +2,7 @@ package lu.mkremer.javaeega.managers.impl;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -9,6 +10,7 @@ import java.util.Set;
 import javax.ejb.Singleton;
 
 import lu.mkremer.javaeega.consumables.Consumable;
+import lu.mkremer.javaeega.consumables.ConsumableType;
 import lu.mkremer.javaeega.managers.MessageManager;
 import lu.mkremer.javaeega.users.User;
 
@@ -25,6 +27,7 @@ public class MessageManagerImpl implements MessageManager{
 			if(consumable.getAmount() <= consumable.getType().getCritical()) {
 				csm.stock = consumable.getAmount();
 				csm.name = consumable.getType().getName();
+				csm.typeId = consumable.getType().getId();
 				if(consumable.getDevice() != null) {
 					csm.device = consumable.getDevice().getName();
 				}
@@ -60,6 +63,7 @@ public class MessageManagerImpl implements MessageManager{
 	
 	private static class ConsumableStockMessage{
 		private final long consId;
+		private long typeId;
 		private int stock;
 		private String name, device;
 		
@@ -80,6 +84,18 @@ public class MessageManagerImpl implements MessageManager{
 		@Override
 		public int hashCode() {
 			return (int) consId;
+		}
+	}
+
+	@Override
+	public void untrackConsumableType(ConsumableType type) {
+		synchronized(consumableMessages){
+			Iterator<ConsumableStockMessage> it = consumableMessages.iterator();
+			while(it.hasNext()) {
+				if(it.next().typeId == type.getId()) {
+					it.remove();
+				}
+			}
 		}
 	}
 

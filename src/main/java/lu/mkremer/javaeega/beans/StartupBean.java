@@ -79,7 +79,7 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			admingroup.addPermission("consumabletypes.view");
 			admingroup.addPermission("consumabletypes.add");
 			admingroup.addPermission("consumabletypes.modify");
-			admingroup.addPermission("consumabletypes.remove");//TODO: Perm
+			admingroup.addPermission("consumabletypes.remove");
 			admingroup.addPermission("messages.info");//TODO: Perm
 			admingroup.addPermission("messages.warning");//TODO: Perm
 			admingroup.addPermission("messages.severe");//TODO: Perm
@@ -142,7 +142,6 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			Report report1 = dm.createReportOnDevice(device1, userIT, "Outdated operating system", "The operating should perhaps be updated. The current one is outdated and slow.");
 			dm.interveneOnReport(report1, userAdmin, "I considered your request, but I decided to stay at Windows 3.1 because it still works.", ReportStatus.UNSOLVABLE);
 			
-			//TODO: Add some default entries to be added before the actual submission of the project
 			System.out.println("### Done ###");
 		}
 		

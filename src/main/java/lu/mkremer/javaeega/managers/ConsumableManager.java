@@ -26,5 +26,6 @@ public interface ConsumableManager {
 	void update(Consumable consumable);
 	void update(ConsumableType type);
 	void deleteConsumableById(long id);
+	void deleteConsumableTypeById(long id);
 	
 }

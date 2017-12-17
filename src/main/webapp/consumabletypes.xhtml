@@ -16,6 +16,11 @@
         		document.getElementById("input_modifyConsumableForm:critical").value = critical;
         		$(".modifyConsumableTypeModal").modal();
         	}
+        	function removeConsumableType(typeId, typeName){
+        		document.getElementById("removeConsumableTypeForm:typeId").value = typeId;
+        		document.getElementById("remConsumableTypeName").innerText = typeName;
+        		$(".removeConsumableTypeModal").modal();
+        	}
         </script>
     </h:head>
     <h:body>
@@ -27,6 +32,7 @@
     		<ui:fragment rendered="#{canList}">
     			<c:set var="canAdd" value="#{usession.canAddConsumableTypes()}" scope="request" />
     			<c:set var="canModify" value="#{usession.canModifyConsumableTypes()}" scope="request" />
+    			<c:set var="canRemove" value="#{usession.canRemoveConsumableTypes()}" scope="request" />
     			
     			<b:form rendered="#{canAdd}">
 	    			<b:modal id="addtype" class="addConsumableTypeModal" title="Add new consumable type">
@@ -58,6 +64,19 @@
 					    </f:facet>
 	    			</b:modal>
     			</b:form>
+					
+				<b:form id="removeConsumableTypeForm" rendered="#{canRemove}">
+					<b:modal class="removeConsumableTypeModal" title="Delete consumable type">
+						<p>You are removing the consumable type <span id="remConsumableTypeName"></span> and every associated instance from the system. Do you want to continue?</p>
+						<h:inputHidden id="typeId" value="#{contypes.typeId}" />
+						<f:facet name="footer">
+					    	<b:button value="No" look="primary" dismiss="modal" />
+					        <b:commandButton value="Yes" action="#{contypes.delete}" >
+			        			<f:param name="devid" value="#{param['devid']}" />
+			        		</b:commandButton>
+				        </f:facet>
+					</b:modal>
+				</b:form>
     			
     			<h1>Consumable types <b:button value="Add" icon="plus" onclick="$('.addConsumableTypeModal').modal();" rendered="#{canAdd}" size="sm"/></h1>
     			<b:messages />
@@ -68,8 +87,9 @@
 						<h:outputText value="#{ctype.deviceType.name}" rendered="#{ctype.deviceType != null}" />
 						<h:outputText value="&lt;i&gt;None&lt;/i&gt;" escape="false" rendered="#{ctype.deviceType == null}" />
 					</b:dataTableColumn>
-					<b:dataTableColumn label="" orderable="false" style="width:10%;">
+					<b:dataTableColumn label="" orderable="false" style="width:20%;">
 						<b:button value="Modify" icon-awesome="fa-pencil" onclick="modifyConsumableType(#{ctype.id}, '#{ctype.name}', #{ctype.critical});" rendered="#{canModify}" />
+						<b:button value="Delete" icon-awesome="fa-trash" onclick="removeConsumableType(#{ctype.id}, '#{ctype.name}');" rendered="#{canRemove}" />
 					</b:dataTableColumn>
 				</b:dataTable>
 				

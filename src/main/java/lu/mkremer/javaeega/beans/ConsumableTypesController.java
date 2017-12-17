@@ -105,4 +105,17 @@ public class ConsumableTypesController implements Serializable{
 			MessageHelper.throwDangerMessage("You are not allowed to do this");
 		}
 	}
+	
+	public void delete() {
+		if(UserSession.getCurrentSession().canRemoveConsumableTypes()) {
+			ConsumableType type = cm.getConsumableTypeById(typeId);
+			if(type != null) {
+				cm.deleteConsumableTypeById(typeId);
+			}else{
+				MessageHelper.throwDangerMessage("Consumable type was not found");
+			}
+		}else {
+			MessageHelper.throwDangerMessage("You are not allowed to do this");
+		}
+	}
 }

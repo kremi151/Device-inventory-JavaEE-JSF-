@@ -147,4 +147,13 @@ public class ConsumableManagerImpl implements ConsumableManager{
 		for(Consumable c : affected)mm.notifyConsumableStock(c);
 	}
 
+	@Override
+	public void deleteConsumableTypeById(long id) {
+		ConsumableType type = em.find(ConsumableType.class, id);
+		if(type != null) {
+			em.remove(type);
+			mm.untrackConsumableType(type);
+		}
+	}
+
 }
