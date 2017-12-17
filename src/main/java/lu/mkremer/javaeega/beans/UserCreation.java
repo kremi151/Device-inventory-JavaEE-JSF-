@@ -113,18 +113,10 @@ public class UserCreation implements Serializable{
 
 	public String register() {
 		message = null;
-		boolean fail = false;//TODO: needed?
-		
-		if(!fail) {
-			String hashedPwd = BCrypt.hashpw(password, BCrypt.gensalt());
-			um.createUser(username, firstName, lastName, hashedPwd, um.getDefaultGroup());
-			
-			MessageHelper.throwInfoMessage("Account has been created. You can now log in.");
-			
-			return "login";
-		}else {
-			return "register";
-		}
+		String hashedPwd = BCrypt.hashpw(password, BCrypt.gensalt());
+		um.createUser(username, firstName, lastName, hashedPwd, um.getDefaultGroup());
+		MessageHelper.throwInfoMessage("Account has been created. You can now log in.");
+		return "login";
 	}
 
 }
