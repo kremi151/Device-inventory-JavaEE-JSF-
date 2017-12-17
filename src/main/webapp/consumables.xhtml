@@ -10,13 +10,15 @@
         <title>Consumables</title>
         <meta charset="utf-8"/>
         <script type="text/javascript">
-        	function prepareConsumableStockModify(consId, consName){
+        	function modifyConsumableStock(consId, consName){
         		document.getElementById("modifyConsumableStockForm:consId").value = consId;
         		document.getElementById("modConsumableName").innerText = consName;
+        		$(".modifyConsumableStockModal").modal();
         	}
-        	function prepareConsumableStockRemove(consId, consName){
+        	function removeConsumableStock(consId, consName){
         		document.getElementById("removeConsumableForm:consId").value = consId;
         		document.getElementById("remConsumableName").innerText = consName;
+        		$(".removeConsumableStockModal").modal();
         	}
         </script>
     </h:head>
@@ -82,8 +84,8 @@
 					<b:dataTableColumn value="#{cons.type.name}" label="Name" />
 					<b:dataTableColumn value="#{cons.amount}" label="Stock" />
 					<b:dataTableColumn label="" orderable="false" style="width:20%;">
-						<b:button value="Modify" icon-awesome="fa-pencil" onclick="prepareConsumableStockModify(#{cons.id}, '#{cons.type.name}');$('.modifyConsumableStockModal').modal();" rendered="#{canConsume}"/>
-						<b:button value="Delete" icon-awesome="fa-trash" onclick="prepareConsumableStockRemove(#{cons.id}, '#{cons.type.name}');$('.removeConsumableStockModal').modal();" rendered="#{canRemove}" />
+						<b:button value="Modify" icon-awesome="fa-pencil" onclick="modifyConsumableStock(#{cons.id}, '#{cons.type.name}');" rendered="#{canConsume}"/>
+						<b:button value="Delete" icon-awesome="fa-trash" onclick="removeConsumableStock(#{cons.id}, '#{cons.type.name}');" rendered="#{canRemove}" />
 					</b:dataTableColumn>
 				</b:dataTable>
 				

@@ -10,20 +10,23 @@
         <title>Device information</title>
         <meta charset="utf-8"/>
         <script type="text/javascript">
-        	function prepareModifyProperty(devId, id, name, type, value){
+        	function modifyProperty(devId, id, name, type, value){
         		document.getElementById("modifyPropertyModalTarget").innerText = name;
         		document.getElementById("modifyPropertyModalType").innerText = type;
         		document.getElementById("modifyPropertyForm:devId").value = devId;
         		document.getElementById("modifyPropertyForm:propId").value = id;
         		document.getElementById("input_modifyPropertyForm:propValue").value = value;
+        		$(".modifyPropertyModal").modal();
         	}
-        	function prepareConsumableStockModify(consId, consName){
+        	function modifyConsumableStock(consId, consName){
         		document.getElementById("modifyConsumableStockForm:consId").value = consId;
         		document.getElementById("consumableName").innerText = consName;
+        		$(".modifyConsumableStockModal").modal();
         	}
-        	function prepareConsumableStockRemove(consId, consName){
+        	function removeConsumableStock(consId, consName){
         		document.getElementById("removeConsumableForm:consId").value = consId;
         		document.getElementById("remConsumableName").innerText = consName;
+        		$(".removeConsumableStockModal").modal();
         	}
         </script>
     </h:head>
@@ -127,7 +130,7 @@
 			        			<b:dataTableColumn value="#{prop.property.name}" label="Property" />
 			        			<b:dataTableColumn value="#{prop.value}" label="Value" />
 			        			<b:dataTableColumn label="" orderable="false">
-			        				<b:button onclick="prepareModifyProperty(#{param['devid']}, #{prop.property.id}, '#{prop.property.name}', '#{prop.property.type.description}', '#{prop.value}');$('.modifyPropertyModal').modal();" value="Modify" icon="pencil" disabled="#{not canModify}" />
+			        				<b:button onclick="modifyProperty(#{param['devid']}, #{prop.property.id}, '#{prop.property.name}', '#{prop.property.type.description}', '#{prop.value}');" value="Modify" icon="pencil" disabled="#{not canModify}" />
 			        			</b:dataTableColumn>
 			        		</b:dataTable>
 						</b:panel>
@@ -151,8 +154,8 @@
 								<b:dataTableColumn value="#{consumable.type.name}" label="Name" />
 								<b:dataTableColumn value="#{consumable.amount}" label="Stock" />
 								<b:dataTableColumn label="" orderable="false" style="width:20%;">
-									<b:button value="Modify" icon-awesome="fa-pencil" onclick="prepareConsumableStockModify(#{consumable.id}, '#{consumable.type.name}');$('.modifyConsumableStockModal').modal();" rendered="#{canConsume}"/>
-									<b:button value="Delete" icon-awesome="fa-trash" onclick="prepareConsumableStockRemove(#{consumable.id}, '#{consumable.type.name}');$('.removeConsumableStockModal').modal();" rendered="#{canRemoveConsumable}" />
+									<b:button value="Modify" icon-awesome="fa-pencil" onclick="modifyConsumableStock(#{consumable.id}, '#{consumable.type.name}');" rendered="#{canConsume}"/>
+									<b:button value="Delete" icon-awesome="fa-trash" onclick="removeConsumableStock(#{consumable.id}, '#{consumable.type.name}');" rendered="#{canRemoveConsumable}" />
 								</b:dataTableColumn>
 							</b:dataTable>
 						</b:panel>

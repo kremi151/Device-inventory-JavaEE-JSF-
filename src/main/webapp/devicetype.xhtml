@@ -10,13 +10,14 @@
         <title>Device type</title>
         <meta charset="utf-8"/>
         <script type="text/javascript">
-	    	function preparePropertyRemoval(id, name, origin){
+	    	function removeProperty(id, name, origin){
 	    		document.getElementById('remPropModalPropName').innerText = name;
 	    		var origins = document.getElementsByClassName('remPropModalPropOrigin');
 	    		for(var i = 0 ; i &lt; origins.length ; i++){
 	    			origins[i].innerText = origin;
 	    		}
 	    		document.getElementById('remPropForm:propId').value = id;
+	    		$(".remDevPropModalClass").modal();
 	    	}
         </script>
     </h:head>
@@ -85,7 +86,7 @@
 								<b:dataTableColumn value="#{prop.type.description}" label="Type" />
 								<b:dataTableColumn value="#{prop.deviceType.name}" label="Origin" />
 								<b:dataTableColumn orderable="false" searchable="false" label="">
-									<b:button value="Delete" icon="trash" onclick="preparePropertyRemoval(#{prop.id}, '#{prop.name}', '#{prop.deviceType.name}');$('.remDevPropModalClass').modal();" disabled="#{not canModify}" size="sm" />
+									<b:button value="Delete" icon="trash" onclick="removeProperty(#{prop.id}, '#{prop.name}', '#{prop.deviceType.name}');" disabled="#{not canModify}" size="sm" />
 								</b:dataTableColumn>
 							</b:dataTable>
 						</b:form>
