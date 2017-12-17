@@ -137,6 +137,10 @@ public class UserSession implements Serializable{
 		return user != null && user.hasPermission("consumabletypes.view");
 	}
 	
+	public boolean canModifyConsumableTypes() {
+		return user != null && user.hasPermission("consumabletypes.modify");
+	}
+	
 	public boolean canModifyDeviceType() {
 		return user != null && user.hasPermission("devicetypes.modify");
 	}

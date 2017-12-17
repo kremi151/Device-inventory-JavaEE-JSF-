@@ -43,13 +43,14 @@ public class ConsumableType implements Serializable{
 	
 	public ConsumableType() {}
 	
-	public ConsumableType(String name, DeviceType deviceType) {
+	public ConsumableType(String name, int critical, DeviceType deviceType) {
 		this.name = name;
 		this.deviceType = deviceType;
+		this.critical = critical;
 	}
 	
-	public ConsumableType(String name) {
-		this(name, null);
+	public ConsumableType(String name, int critical) {
+		this(name, critical, null);
 	}
 
 	public long getId() {

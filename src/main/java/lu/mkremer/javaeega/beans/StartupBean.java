@@ -78,7 +78,7 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			admingroup.addPermission("consumables.remove");
 			admingroup.addPermission("consumabletypes.view");
 			admingroup.addPermission("consumabletypes.add");
-			admingroup.addPermission("consumabletypes.modify");//TODO: Perm
+			admingroup.addPermission("consumabletypes.modify");
 			admingroup.addPermission("consumabletypes.remove");//TODO: Perm
 			admingroup.addPermission("messages.info");//TODO: Perm
 			admingroup.addPermission("messages.warning");//TODO: Perm
@@ -121,7 +121,7 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			
 			System.out.println("### Creating consumable types ###");
 			
-			ConsumableType ctUsbStick = cm.createConsumableType("USB Stick", deviceComputer);
+			ConsumableType ctUsbStick = cm.createConsumableType("USB Stick", 3, deviceComputer);
 			
 			System.out.println("### Creating devices ###");
 			

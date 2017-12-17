@@ -9,6 +9,14 @@
     <h:head>
         <title>Consumable types</title>
         <meta charset="utf-8"/>
+        <script type="text/javascript">
+        	function modifyConsumableType(typeId, name, critical){
+        		document.getElementById("contypeName").innerText = name;
+        		document.getElementById("modifyConsumableForm:typeId").value = typeId;
+        		document.getElementById("input_modifyConsumableForm:critical").value = critical;
+        		$(".modifyConsumableTypeModal").modal();
+        	}
+        </script>
     </h:head>
     <h:body>
 	    <ui:insert name="navbar" >
@@ -18,10 +26,13 @@
     		<c:set var="canList" value="#{usession.canViewConsumableTypes()}" scope="request" />
     		<ui:fragment rendered="#{canList}">
     			<c:set var="canAdd" value="#{usession.canAddConsumableTypes()}" scope="request" />
+    			<c:set var="canModify" value="#{usession.canModifyConsumableTypes()}" scope="request" />
+    			
     			<b:form rendered="#{canAdd}">
 	    			<b:modal id="addtype" class="addConsumableTypeModal" title="Add new consumable type">
 	    				<b:panelGrid colSpans="12">
-	    					<b:inputText id="name" label="Name" required="true" value="#{contypes.name}"/>
+	    					<b:inputText id="name" label="Name:" required="true" value="#{contypes.name}"/>
+	    					<b:inputText id="critical" label="Critical limit:" type="number" required="true" value="#{contypes.criticalLimit}" />
 					    	<b:selectOneMenu value="#{contypes.parentId}" label="Device type:" required="false">
 					            <f:selectItem itemLabel="None" itemValue="" />
 					            <f:selectItems value="#{contypes.deviceTypes}" var="t" itemLabel="#{t.name}" itemValue="#{t.id}" />
@@ -34,13 +45,31 @@
 	    			</b:modal>
     			</b:form>
     			
+    			<b:form id="modifyConsumableForm" rendered="#{canModify}">
+	    			<b:modal id="modtype" class="modifyConsumableTypeModal" title="Modify consumable type">
+	    				<p>You are modifying the consumable type <span id="contypeName"></span></p>
+	    				<b:panelGrid colSpans="12">
+	    					<h:inputHidden id="typeId" value="#{contypes.typeId}" />
+	    					<b:inputText id="critical" label="New critical limit:" type="number" required="true" value="#{contypes.criticalLimit}" />
+	    				</b:panelGrid>
+	    				<f:facet name="footer">
+					        <b:button value="Cancel" look="primary" dismiss="modal" />
+					    	<b:commandButton value="Apply" action="#{contypes.modify}"/>
+					    </f:facet>
+	    			</b:modal>
+    			</b:form>
+    			
     			<h1>Consumable types <b:button value="Add" icon="plus" onclick="$('.addConsumableTypeModal').modal();" rendered="#{canAdd}" size="sm"/></h1>
     			<b:messages />
 				<b:dataTable value="#{contypes.consumableTypes}" var="ctype">
 					<b:dataTableColumn value="#{ctype.name}" label="Name" />
+					<b:dataTableColumn value="#{ctype.critical}" label="Critical limit" />
 					<b:dataTableColumn label="Associated device type">
 						<h:outputText value="#{ctype.deviceType.name}" rendered="#{ctype.deviceType != null}" />
 						<h:outputText value="&lt;i&gt;None&lt;/i&gt;" escape="false" rendered="#{ctype.deviceType == null}" />
+					</b:dataTableColumn>
+					<b:dataTableColumn label="" orderable="false" style="width:10%;">
+						<b:button value="Modify" icon-awesome="fa-pencil" onclick="modifyConsumableType(#{ctype.id}, '#{ctype.name}', #{ctype.critical});" rendered="#{canModify}" />
 					</b:dataTableColumn>
 				</b:dataTable>
 				

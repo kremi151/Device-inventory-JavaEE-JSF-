@@ -40,8 +40,8 @@ public class ConsumableManagerImpl implements ConsumableManager{
 	}
 
 	@Override
-	public ConsumableType createConsumableType(String name, DeviceType deviceType) {
-		ConsumableType type = new ConsumableType(name, deviceType);
+	public ConsumableType createConsumableType(String name, int critical, DeviceType deviceType) {
+		ConsumableType type = new ConsumableType(name, critical, deviceType);
 		em.persist(type);
 		invalidateCache();
 		if(deviceType != null)addDefaultConsumable(deviceType, type);
@@ -60,8 +60,8 @@ public class ConsumableManagerImpl implements ConsumableManager{
 	}
 
 	@Override
-	public ConsumableType createConsumableType(String name) {
-		ConsumableType type = new ConsumableType(name);
+	public ConsumableType createConsumableType(String name, int critical) {
+		ConsumableType type = new ConsumableType(name, critical);
 		em.persist(type);
 		invalidateCache();
 		return type;
@@ -132,6 +132,19 @@ public class ConsumableManagerImpl implements ConsumableManager{
 	@Override
 	public List<Consumable> getCriticalConsumables() {
 		return em.createQuery("select c from Consumable c where c.amount <= c.type.critical", Consumable.class).getResultList();
+	}
+
+	@Override
+	public ConsumableType getConsumableTypeById(long id) {
+		return em.find(ConsumableType.class, id);
+	}
+
+	@Override
+	public void update(ConsumableType type) {
+		em.merge(type);
+		invalidateCache();
+		List<Consumable> affected = em.createQuery("select c from Consumable c where type_id = :id", Consumable.class).setParameter("id", type.getId()).getResultList();
+		for(Consumable c : affected)mm.notifyConsumableStock(c);
 	}
 
 }
