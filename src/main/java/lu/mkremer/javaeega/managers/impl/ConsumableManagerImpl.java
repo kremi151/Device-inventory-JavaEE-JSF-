@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,12 +15,16 @@ import lu.mkremer.javaeega.consumables.ConsumableType;
 import lu.mkremer.javaeega.devices.Device;
 import lu.mkremer.javaeega.devices.DeviceType;
 import lu.mkremer.javaeega.managers.ConsumableManager;
+import lu.mkremer.javaeega.managers.MessageManager;
 
 @Singleton
 public class ConsumableManagerImpl implements ConsumableManager{
 	
 	@PersistenceContext
 	private EntityManager em;
+	
+	@EJB
+	private MessageManager mm;
 	
 	private final HashMap<Long, List<ConsumableType>> consumableCache = new HashMap<>();
 	
@@ -85,6 +90,7 @@ public class ConsumableManagerImpl implements ConsumableManager{
 	public Consumable createConsumableForDevice(ConsumableType type, int amount, Device device) {
 		Consumable consumable = new Consumable(type, amount, device);
 		em.persist(consumable);
+		mm.notifyConsumableStock(consumable);
 		return consumable;
 	}
 
@@ -101,6 +107,7 @@ public class ConsumableManagerImpl implements ConsumableManager{
 	@Override
 	public void update(Consumable consumable) {
 		em.merge(consumable);
+		mm.notifyConsumableStock(consumable);
 	}
 
 	@Override
@@ -118,7 +125,13 @@ public class ConsumableManagerImpl implements ConsumableManager{
 		Consumable c = em.find(Consumable.class, id);
 		if(c != null) {
 			em.remove(c);
+			mm.untrackConsumable(c);
 		}
+	}
+
+	@Override
+	public List<Consumable> getCriticalConsumables() {
+		return em.createQuery("select c from Consumable c where c.amount <= c.type.critical", Consumable.class).getResultList();
 	}
 
 }

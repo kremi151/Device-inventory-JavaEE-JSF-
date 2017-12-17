@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Min;
 
 import lu.mkremer.javaeega.devices.DeviceType;
 
@@ -28,6 +29,10 @@ public class ConsumableType implements Serializable{
 	
 	@Column(nullable=false)
 	private String name;
+	
+	@Column(nullable=false)
+	@Min(0)
+	private int critical = 5;
 	
 	@ManyToOne(optional=true)
 	private DeviceType deviceType;
@@ -69,5 +74,13 @@ public class ConsumableType implements Serializable{
 
 	public void setDeviceType(DeviceType deviceType) {
 		this.deviceType = deviceType;
+	}
+
+	public int getCritical() {
+		return critical;
+	}
+
+	public void setCritical(int critical) {
+		this.critical = critical;
 	}
 }

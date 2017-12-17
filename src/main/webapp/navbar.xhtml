@@ -25,6 +25,9 @@
 	             	<b:navLink value="Consumables" outcome="consumables.xhtml" iconAwesome="fa-list-ul" rendered="#{viewConsumables}"></b:navLink>
                  </b:dropMenu>
 	         </b:dropMenu>
+		     <b:navLink value="Messages" href="#" rendered="#{usession.loggedIn}">
+		     	<b:badge value="#{usession.notificationCount}" rendered="#{usession.notificationCount > 0}" />
+		     </b:navLink>
 	     </b:navbarLinks>
 	     
 	     <b:navbarLinks pull="right" rendered="#{not usession.loggedIn}">

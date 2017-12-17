@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import org.mindrot.jbcrypt.BCrypt;
 
 import lu.mkremer.javaeega.devices.Device;
+import lu.mkremer.javaeega.managers.MessageManager;
 import lu.mkremer.javaeega.managers.UserManager;
 import lu.mkremer.javaeega.users.User;
 import lu.mkremer.javaeega.util.MessageHelper;
@@ -25,8 +26,8 @@ public class UserSession implements Serializable{
 	 */
 	private static final long serialVersionUID = -6591517985681627665L;
 	
-	@EJB
-	private UserManager um;
+	@EJB private UserManager um;
+	@EJB private MessageManager mm;
 	
 	private User user;
 	
@@ -78,6 +79,10 @@ public class UserSession implements Serializable{
 	
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public int getNotificationCount() {
+		return (user != null) ? mm.notificationCount(user) : 0;
 	}
 	
 	public String getDisplayName() {

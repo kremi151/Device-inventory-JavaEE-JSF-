@@ -1,5 +1,7 @@
 package lu.mkremer.javaeega.beans;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -7,6 +9,7 @@ import javax.ejb.Startup;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import lu.mkremer.javaeega.consumables.Consumable;
 import lu.mkremer.javaeega.consumables.ConsumableType;
 import lu.mkremer.javaeega.devices.Device;
 import lu.mkremer.javaeega.devices.DeviceProperty;
@@ -16,6 +19,7 @@ import lu.mkremer.javaeega.intervention.Report;
 import lu.mkremer.javaeega.intervention.ReportStatus;
 import lu.mkremer.javaeega.managers.ConsumableManager;
 import lu.mkremer.javaeega.managers.DeviceManager;
+import lu.mkremer.javaeega.managers.MessageManager;
 import lu.mkremer.javaeega.managers.UserManager;
 import lu.mkremer.javaeega.users.User;
 import lu.mkremer.javaeega.users.UserGroup;
@@ -29,6 +33,7 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 	@EJB private UserManager um;
 	@EJB private DeviceManager dm;
 	@EJB private ConsumableManager cm;
+	@EJB private MessageManager mm;
 
 	@SuppressWarnings("unused")
 	@PostConstruct
@@ -140,5 +145,16 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			//TODO: Add some default entries to be added before the actual submission of the project
 			System.out.println("### Done ###");
 		}
+		
+		System.out.println("###########################################");
+		System.out.println("# Scanning for critical consumable stocks #");
+		System.out.println("###########################################");
+		
+		List<Consumable> consumables = cm.getCriticalConsumables();
+		for(Consumable c : consumables) {
+			mm.notifyConsumableStock(c);
+		}
+		
+		System.out.println("### Done ###");
 	}
 }

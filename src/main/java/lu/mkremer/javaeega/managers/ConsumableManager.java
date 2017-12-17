@@ -17,6 +17,7 @@ public interface ConsumableManager {
 	List<ConsumableType> getIndependentConsumableTypes();
 	List<Consumable> getConsumablesForDevice(Device device);
 	List<Consumable> getIndependentConsumables();
+	List<Consumable> getCriticalConsumables();
 	ConsumableType createConsumableType(String name, DeviceType deviceType);
 	ConsumableType createConsumableType(String name);
 	Consumable createConsumableForDevice(ConsumableType type, int amount, Device device);
