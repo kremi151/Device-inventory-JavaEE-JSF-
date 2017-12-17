@@ -32,7 +32,7 @@
 	    			<b:modal id="addtype" class="addConsumableTypeModal" title="Add new consumable type">
 	    				<b:panelGrid colSpans="12">
 	    					<b:inputText id="name" label="Name:" required="true" value="#{contypes.name}"/>
-	    					<b:inputText id="critical" label="Critical limit:" type="number" required="true" value="#{contypes.criticalLimit}" />
+	    					<b:inputText id="critical" label="Critical limit:" type="number" tooltip="When the stock falls beneath the defined critical level, the IT staff will be notified" required="true" value="#{contypes.criticalLimit}" />
 					    	<b:selectOneMenu value="#{contypes.parentId}" label="Device type:" required="false">
 					            <f:selectItem itemLabel="None" itemValue="" />
 					            <f:selectItems value="#{contypes.deviceTypes}" var="t" itemLabel="#{t.name}" itemValue="#{t.id}" />
@@ -50,7 +50,7 @@
 	    				<p>You are modifying the consumable type <span id="contypeName"></span></p>
 	    				<b:panelGrid colSpans="12">
 	    					<h:inputHidden id="typeId" value="#{contypes.typeId}" />
-	    					<b:inputText id="critical" label="New critical limit:" type="number" required="true" value="#{contypes.criticalLimit}" />
+	    					<b:inputText id="critical" label="New critical limit:" type="number" tooltip="When the stock falls beneath the defined critical level, the IT staff will be notified" required="true" value="#{contypes.criticalLimit}" />
 	    				</b:panelGrid>
 	    				<f:facet name="footer">
 					        <b:button value="Cancel" look="primary" dismiss="modal" />

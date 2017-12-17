@@ -155,6 +155,6 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			mm.notifyConsumableStock(c);
 		}
 		
-		System.out.println("### Done ###");
+		System.out.println("### Done, found " + consumables.size() + " ###");
 	}
 }
