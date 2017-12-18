@@ -10,10 +10,9 @@
         <title>Device information</title>
         <meta charset="utf-8"/>
         <script type="text/javascript">
-        	function modifyProperty(devId, id, name, type, value){
+        	function modifyProperty(id, name, type, value){
         		document.getElementById("modifyPropertyModalTarget").innerText = name;
         		document.getElementById("modifyPropertyModalType").innerText = type;
-        		document.getElementById("modifyPropertyForm:devId").value = devId;
         		document.getElementById("modifyPropertyForm:propId").value = id;
         		document.getElementById("input_modifyPropertyForm:propValue").value = value;
         		$(".modifyPropertyModal").modal();
@@ -35,7 +34,9 @@
 			<ui:include src="navbar.xhtml" />
 		</ui:insert> 
 		<b:container style="margin-top:70px">
-			<c:set var="device" value="#{vdevice.getDeviceById(param['devid'])}" scope="request" />
+			<!-- <c:set var="device" value="#{vdevice.getDeviceById(param['devid'])}" scope="request" /> -->
+    		<f:event type="preRenderView" listener="#{vdevice.preRenderPage}" />
+			<c:set var="device" value="#{vdevice.getDevice()}" scope="request" />
 			<ui:fragment rendered="#{device != null}">
 				<c:set var="canRead" value="#{usession.canReadDevice(device)}" scope="request" />
 				<c:set var="canModify" value="#{usession.canModifyDevice(device)}" scope="request" />
@@ -43,7 +44,6 @@
 				<c:set var="canReport" value="#{usession.canReportOnDevice(device)}" scope="request" />
 				<c:set var="canConsume" value="#{usession.canModifyConsumables()}" scope="request" />
     			<c:set var="canRemoveConsumable" value="#{usession.canRemoveConsumables()}" scope="request" />
-    			<f:event type="preRenderView" listener="#{vdevice.preRenderPage}" />
 				
 				<ui:fragment rendered="#{canRead}">
 					<b:form id="modifyPropertyForm" rendered="#{canModify}">
@@ -51,8 +51,6 @@
 							<p>Property: <strong><span id="modifyPropertyModalTarget"></span></strong></p>
 							<p>Type: <strong><span id="modifyPropertyModalType"></span></strong></p>
 							<h:inputHidden id="propId" value="#{vdevice.propId}" />
-							<h:inputHidden id="devId" value="#{vdevice.devId}" />
-							<script type="text/javascript">document.getElementById("modifyPropertyForm:devId").value = #{param['devid']};</script>
 							<b:inputText id="propValue" value="#{vdevice.propValue}" label="Value:" />
 							<f:facet name="footer">
 					            <b:button value="Cancel" dismiss="modal" />
@@ -65,8 +63,6 @@
 					
 					<b:form id="removeDeviceForm" rendered="#{canRemove}">
 						<b:modal class="removeDeviceModal" title="Delete device">
-							<h:inputHidden id="devId" value="#{vdevice.devId}" />
-							<script type="text/javascript">document.getElementById("removeDeviceForm:devId").value = #{param['devid']};</script>
 							<h:outputText value="The device #{device.name} of type #{device.type.name} owned by #{device.owner.firstName} #{device.owner.lastName} will be removed from the system. Do you want to continue?" />
 							<f:facet name="footer">
 					            <b:button value="No" look="primary" dismiss="modal" />
@@ -79,8 +75,6 @@
 					
 					<b:form id="addReportForm" rendered="#{canReport}">
 						<b:modal class="addReportModal" title="Report issue">
-							<h:inputHidden id="devId" value="#{vdevice.devId}" />
-							<script type="text/javascript">document.getElementById("addReportForm:devId").value = #{param['devid']};</script>
 							<b:inputText id="reportTitle" value="#{vdevice.reportTitle}" label="Title:" />
 							<b:inputText id="reportMsg" value="#{vdevice.reportMessage}" label="Message:" />
 							<f:facet name="footer">
@@ -131,7 +125,7 @@
 			        			<b:dataTableColumn value="#{prop.property.name}" label="Property" />
 			        			<b:dataTableColumn value="#{prop.value}" label="Value" />
 			        			<b:dataTableColumn label="" orderable="false">
-			        				<b:button onclick="modifyProperty(#{param['devid']}, #{prop.property.id}, '#{prop.property.name}', '#{prop.property.type.description}', '#{prop.value}');" value="Modify" icon="pencil" disabled="#{not canModify}" />
+			        				<b:button onclick="modifyProperty(#{prop.property.id}, '#{prop.property.name}', '#{prop.property.type.description}', '#{prop.value}');" value="Modify" icon="pencil" disabled="#{not canModify}" />
 			        			</b:dataTableColumn>
 			        		</b:dataTable>
 						</b:panel>

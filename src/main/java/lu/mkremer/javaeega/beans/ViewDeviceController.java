@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -43,9 +44,6 @@ public class ViewDeviceController implements Serializable{
 	@NotNull
 	private long propId;
 	
-	@NotNull
-	private long devId;
-	
 	@NotNull(message="A title must be provided")
 	@Size(min=8, max=128, message="Title must be between {min} and {max} characters long")
 	private String reportTitle;
@@ -61,25 +59,37 @@ public class ViewDeviceController implements Serializable{
 	@NotNull
 	private long consumableId;
 	
+	private Device device;
+	
+	@PostConstruct
+	public void init() {
+		UserSession session = UserSession.getCurrentSession();
+		if(session.isLoggedIn()) {
+			FacesContext fc = FacesContext.getCurrentInstance();
+			String rawDevid = fc.getExternalContext().getRequestParameterMap().get("devid");
+			if(rawDevid != null) {
+				try {
+					long devid = Long.parseLong(rawDevid);
+					this.device = dm.getDeviceById(devid);
+				}catch(NumberFormatException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public void preRenderPage(ComponentSystemEvent event) {
-		FacesContext fc = FacesContext.getCurrentInstance();
-		String rawDevid = fc.getExternalContext().getRequestParameterMap().get("devid");
-		if(rawDevid != null) {
-			try {
-				long devid = Long.parseLong(rawDevid);
-				Device device = dm.getDeviceById(devid);
-				List<Consumable> consumables = cm.getConsumablesForDevice(device);
-				int criticals = 0;
-				for(Consumable c : consumables) {
-					if(c.getAmount() <= c.getType().getCritical()) {
-						criticals++;
-					}
+		UserSession session = UserSession.getCurrentSession();
+		if(device != null && session.canReadDevice(device)) {
+			List<Consumable> consumables = cm.getConsumablesForDevice(device);
+			int criticals = 0;
+			for(Consumable c : consumables) {
+				if(c.getAmount() <= c.getType().getCritical()) {
+					criticals++;
 				}
-				if(criticals > 0) {
-					MessageHelper.throwWarningMessage(String.format("The stock of %d consumable(s) are low in quantity", criticals));
-				}
-			}catch(NumberFormatException e) {
-				e.printStackTrace();
+			}
+			if(criticals > 0) {
+				MessageHelper.throwWarningMessage(String.format("The stock of %d consumable(s) are low in quantity", criticals));
 			}
 		}
 	}
@@ -100,16 +110,8 @@ public class ViewDeviceController implements Serializable{
 		this.propId = propId;
 	}
 
-	public long getDevId() {
-		return devId;
-	}
-
-	public void setDevId(long devId) {
-		this.devId = devId;
-	}
-
-	public Device getDeviceById(long devId) {
-		return dm.getDeviceById(devId);
+	public Device getDevice() {
+		return this.device;
 	}
 
 	public String getReportTitle() {
@@ -166,53 +168,61 @@ public class ViewDeviceController implements Serializable{
 	}
 	
 	public void modifyProperty() {//TODO: Look here to know how custom messages are thrown
-		DeviceProperty property = dm.getPropertyById(propId);
-		if(property == null) {
-			MessageHelper.throwDangerMessage("Unknown property");
-			return;
+		try {
+			DeviceProperty property = dm.getPropertyById(propId);
+			if(property == null) {
+				MessageHelper.throwDangerMessage("Unknown property");
+				return;
+			}
+			if(!propValue.matches(property.getType().getRegEx())) {
+				MessageHelper.throwDangerMessage("Expected a value of type " + property.getType().getDescription() + ", got \"" + propValue + "\"");
+				return;
+			}
+			if(device == null) {
+				MessageHelper.throwDangerMessage("Unknown device");
+				return;
+			}
+			if(UserSession.getCurrentSession().canModifyDevice(device)) {
+				dm.addOrModifyDeviceProperty(device, property, propValue);
+				propId = 0;
+				propValue = null;
+			}else {
+				MessageHelper.throwDangerMessage("You are not allowed to do this");
+			}
+		}catch(Exception e) {
+			MessageHelper.throwDangerMessage("An unexpected error occured: " + e.getMessage());
+			e.printStackTrace();
 		}
-		if(!propValue.matches(property.getType().getRegEx())) {
-			MessageHelper.throwDangerMessage("Expected a value of type " + property.getType().getDescription() + ", got \"" + propValue + "\"");
-			return;
-		}
-		Device device = dm.getDeviceById(devId);
-		if(device == null) {
-			MessageHelper.throwDangerMessage("Unknown device");
-			return;
-		}
-		if(UserSession.getCurrentSession().canModifyDevice(device)) {
-			dm.addOrModifyDeviceProperty(device, property, propValue);
-			devId = 0;
-			propId = 0;
-			propValue = null;
-		}else {
-			MessageHelper.throwDangerMessage("You are not allowed to do this");
-		}
-		
 	}
 	
 	public String delete() {
-		Device device = dm.getDeviceById(devId);
-		if(device == null) {
-			MessageHelper.throwDangerMessage("Unknown device");
-			return null;
+		try {
+			if(device == null) {
+				MessageHelper.throwDangerMessage("Unknown device");
+			}else if(UserSession.getCurrentSession().canRemoveDevice(device)) {
+				dm.removeDevice(device);
+				return UserSession.getCurrentSession().canListDevices() ? "alldevices.xhtml" : "mydevices.xhtml";
+			}else {
+				MessageHelper.throwDangerMessage("You are not allowed to do this");
+			}
+		}catch(Exception e) {
+			MessageHelper.throwDangerMessage("An unexpected error occured: " + e.getMessage());
+			e.printStackTrace();
 		}
-		if(UserSession.getCurrentSession().canRemoveDevice(device)) {
-			dm.removeDevice(device);
-			return UserSession.getCurrentSession().canListDevices() ? "alldevices.xhtml" : "mydevices.xhtml";
-		}else {
-			MessageHelper.throwDangerMessage("You are not allowed to do this");
-			return null;
-		}
+		return null;
 	}
 	
 	public void report() {
-		UserSession session = UserSession.getCurrentSession();
-		Device device = dm.getDeviceById(devId);
-		if(device != null && session.canReportOnDevice(device)) {
-			dm.createReportOnDevice(device, session.getUser(), reportTitle, reportMessage);
-		}else {
-			MessageHelper.throwDangerMessage("You are not allowed to do this");
+		try {
+			UserSession session = UserSession.getCurrentSession();
+			if(device != null && session.canReportOnDevice(device)) {
+				dm.createReportOnDevice(device, session.getUser(), reportTitle, reportMessage);
+			}else {
+				MessageHelper.throwDangerMessage("You are not allowed to do this");
+			}
+		}catch(Exception e) {
+			MessageHelper.throwDangerMessage("An unexpected error occured: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	
