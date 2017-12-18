@@ -29,6 +29,7 @@
     	<b:container style="margin-top:70px">
     		<c:set var="canList" value="#{usession.canListConsumables()}" scope="request" />
     		<ui:fragment rendered="#{canList}">
+    			<f:event type="preRenderView" listener="#{listcons.preRenderPage}" />
     			<c:set var="canAdd" value="#{usession.canAddConsumables()}" scope="request" />
     			<c:set var="canRemove" value="#{usession.canRemoveConsumables()}" scope="request" />
 				<c:set var="canConsume" value="#{usession.canModifyConsumables()}" scope="request" />
@@ -80,19 +81,21 @@
     			
     			<h1>General consumables <b:button value="Add" icon="plus" onclick="$('.addConsumableModal').modal();" rendered="#{canAdd}" size="sm"/></h1>
     			<b:messages />
-				<b:dataTable value="#{listcons.independentConsumables}" var="cons">
-					<b:dataTableColumn value="#{cons.type.name}" label="Name" />
-					<b:dataTableColumn value="#{cons.amount}" label="Stock" />
-					<b:dataTableColumn label="" orderable="false" style="width:20%;">
-						<b:button value="Modify" icon-awesome="fa-pencil" onclick="modifyConsumableStock(#{cons.id}, '#{cons.type.name}');" rendered="#{canConsume}"/>
-						<b:button value="Delete" icon-awesome="fa-trash" onclick="removeConsumableStock(#{cons.id}, '#{cons.type.name}');" rendered="#{canRemove}" />
-					</b:dataTableColumn>
-				</b:dataTable>
+				<b:form>
+					<b:dataTable value="#{listcons.independentConsumables}" var="cons">
+						<b:dataTableColumn value="#{cons.type.name}" label="Name" />
+						<b:dataTableColumn label="Stock">
+							#{cons.amount} <b:iconAwesome name="warning" rendered="#{cons.amount le cons.type.critical}" />
+						</b:dataTableColumn>
+						<b:dataTableColumn label="" orderable="false" style="width:20%;">
+							<b:button value="Modify" icon-awesome="fa-pencil" onclick="modifyConsumableStock(#{cons.id}, '#{cons.type.name}');" rendered="#{canConsume}"/>
+							<b:button value="Delete" icon-awesome="fa-trash" onclick="removeConsumableStock(#{cons.id}, '#{cons.type.name}');" rendered="#{canRemove}" />
+						</b:dataTableColumn>
+					</b:dataTable>
+				</b:form>
 				
 			</ui:fragment>
-			<ui:fragment rendered="#{not canList}">
-				<b:alert severity="danger">Permission denied</b:alert>
-			</ui:fragment>
+			<b:alert severity="danger" rendered="#{not canList}">Permission denied</b:alert>
     	</b:container>
     </h:body>
 </html>

@@ -5,7 +5,9 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ComponentSystemEvent;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -38,6 +40,28 @@ public class ConsumablesController implements Serializable{
 	@NotNull
 	@Min(value=1, message="Value to increment or decrement must be 1 or higher")
 	private int consumableIncrement = 1;
+	
+	@ManagedProperty("#{usession}")
+	private UserSession session;
+
+	public void preRenderPage(ComponentSystemEvent event) {
+		if(session.canListConsumables()) {
+			List<Consumable> consumables = cm.getIndependentConsumables();
+			int criticals = 0;
+			for(Consumable c : consumables) {
+				if(c.getAmount() <= c.getType().getCritical()) {
+					criticals++;
+				}
+			}
+			if(criticals > 0) {
+				MessageHelper.throwWarningMessage(String.format("The stock of %d consumable(s) are low in quantity", criticals));
+			}
+		}
+	}
+
+	public void setSession(UserSession session) {
+		this.session = session;
+	}
 
 	public int getAmount() {
 		return amount;
@@ -80,7 +104,7 @@ public class ConsumablesController implements Serializable{
 	}
 	
 	public void create() {
-		if(UserSession.getCurrentSession().canAddConsumables()) {
+		if(session.canAddConsumables()) {
 			cm.createConsumableForDevice(type, amount, null);
 		}else {
 			MessageHelper.throwDangerMessage("You are not allowed to do this");
@@ -88,7 +112,7 @@ public class ConsumablesController implements Serializable{
 	}
 	
 	public void cincrement() {
-		if(UserSession.getCurrentSession().canModifyConsumables()) {
+		if(session.canModifyConsumables()) {
 			Consumable c = cm.getConsumableById(consumableId);
 			if(c != null) {
 				if(c.getAmount() + consumableIncrement <= Integer.MAX_VALUE) {
@@ -107,7 +131,7 @@ public class ConsumablesController implements Serializable{
 	}
 	
 	public void cdecrement() {
-		if(UserSession.getCurrentSession().canModifyConsumables()) {
+		if(session.canModifyConsumables()) {
 			Consumable c = cm.getConsumableById(consumableId);
 			if(c != null) {
 				if(c.getAmount() - consumableIncrement >= 0) {
