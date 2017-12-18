@@ -38,7 +38,7 @@
 
 	<error-page>
 		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
-		<location>/WEB-INF/expired.xhtml</location>
+		<location>/expired.xhtml</location>
 	</error-page>
 	
 	<context-param>
