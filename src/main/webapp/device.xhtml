@@ -34,7 +34,6 @@
 			<ui:include src="navbar.xhtml" />
 		</ui:insert> 
 		<b:container style="margin-top:70px">
-			<!-- <c:set var="device" value="#{vdevice.getDeviceById(param['devid'])}" scope="request" /> -->
     		<f:event type="preRenderView" listener="#{vdevice.preRenderPage}" />
 			<c:set var="device" value="#{vdevice.getDevice()}" scope="request" />
 			<ui:fragment rendered="#{device != null}">

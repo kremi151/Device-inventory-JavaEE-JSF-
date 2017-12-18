@@ -169,6 +169,7 @@ public class UserSession implements Serializable{
 		return user != null && user.hasPermission("consumables.remove");
 	}
 	
+	@Deprecated
 	public static UserSession getCurrentSession() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		return context.getApplication().evaluateExpressionGet(context, "#{usession}", UserSession.class);

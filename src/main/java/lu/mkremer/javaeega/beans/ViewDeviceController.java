@@ -9,6 +9,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
@@ -61,9 +62,11 @@ public class ViewDeviceController implements Serializable{
 	
 	private Device device;
 	
+	@ManagedProperty("#{usession}")
+	private UserSession session;
+	
 	@PostConstruct
 	public void init() {
-		UserSession session = UserSession.getCurrentSession();
 		if(session.isLoggedIn()) {
 			FacesContext fc = FacesContext.getCurrentInstance();
 			String rawDevid = fc.getExternalContext().getRequestParameterMap().get("devid");
@@ -79,7 +82,6 @@ public class ViewDeviceController implements Serializable{
 	}
 	
 	public void preRenderPage(ComponentSystemEvent event) {
-		UserSession session = UserSession.getCurrentSession();
 		if(device != null && session.canReadDevice(device)) {
 			List<Consumable> consumables = cm.getConsumablesForDevice(device);
 			int criticals = 0;
@@ -92,6 +94,10 @@ public class ViewDeviceController implements Serializable{
 				MessageHelper.throwWarningMessage(String.format("The stock of %d consumable(s) are low in quantity", criticals));
 			}
 		}
+	}
+
+	public void setSession(UserSession session) {
+		this.session = session;
 	}
 
 	public String getPropValue() {
@@ -182,7 +188,7 @@ public class ViewDeviceController implements Serializable{
 				MessageHelper.throwDangerMessage("Unknown device");
 				return;
 			}
-			if(UserSession.getCurrentSession().canModifyDevice(device)) {
+			if(session.canModifyDevice(device)) {
 				dm.addOrModifyDeviceProperty(device, property, propValue);
 				propId = 0;
 				propValue = null;
@@ -199,9 +205,9 @@ public class ViewDeviceController implements Serializable{
 		try {
 			if(device == null) {
 				MessageHelper.throwDangerMessage("Unknown device");
-			}else if(UserSession.getCurrentSession().canRemoveDevice(device)) {
+			}else if(session.canRemoveDevice(device)) {
 				dm.removeDevice(device);
-				return UserSession.getCurrentSession().canListDevices() ? "alldevices.xhtml" : "mydevices.xhtml";
+				return session.canListDevices() ? "alldevices.xhtml" : "mydevices.xhtml";
 			}else {
 				MessageHelper.throwDangerMessage("You are not allowed to do this");
 			}
@@ -214,7 +220,6 @@ public class ViewDeviceController implements Serializable{
 	
 	public void report() {
 		try {
-			UserSession session = UserSession.getCurrentSession();
 			if(device != null && session.canReportOnDevice(device)) {
 				dm.createReportOnDevice(device, session.getUser(), reportTitle, reportMessage);
 			}else {
@@ -237,7 +242,7 @@ public class ViewDeviceController implements Serializable{
 	}
 	
 	public void cincrement() {
-		if(UserSession.getCurrentSession().canModifyConsumables()) {
+		if(session.canModifyConsumables()) {
 			Consumable c = cm.getConsumableById(consumableId);
 			if(c != null) {
 				if(c.getAmount() + consumableIncrement <= Integer.MAX_VALUE) {
@@ -256,7 +261,7 @@ public class ViewDeviceController implements Serializable{
 	}
 	
 	public void cdecrement() {
-		if(UserSession.getCurrentSession().canModifyConsumables()) {
+		if(session.canModifyConsumables()) {
 			Consumable c = cm.getConsumableById(consumableId);
 			if(c != null) {
 				if(c.getAmount() - consumableIncrement >= 0) {
