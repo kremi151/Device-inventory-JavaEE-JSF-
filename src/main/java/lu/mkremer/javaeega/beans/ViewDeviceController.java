@@ -9,6 +9,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ComponentSystemEvent;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -58,6 +60,29 @@ public class ViewDeviceController implements Serializable{
 	
 	@NotNull
 	private long consumableId;
+	
+	public void preRenderPage(ComponentSystemEvent event) {
+		FacesContext fc = FacesContext.getCurrentInstance();
+		String rawDevid = fc.getExternalContext().getRequestParameterMap().get("devid");
+		if(rawDevid != null) {
+			try {
+				long devid = Long.parseLong(rawDevid);
+				Device device = dm.getDeviceById(devid);
+				List<Consumable> consumables = cm.getConsumablesForDevice(device);
+				int criticals = 0;
+				for(Consumable c : consumables) {
+					if(c.getAmount() <= c.getType().getCritical()) {
+						criticals++;
+					}
+				}
+				if(criticals > 0) {
+					MessageHelper.throwWarningMessage(String.format("The stock of %d consumable(s) are low in quantity", criticals));
+				}
+			}catch(NumberFormatException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public String getPropValue() {
 		return propValue;

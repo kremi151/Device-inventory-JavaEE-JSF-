@@ -13,6 +13,10 @@ public class MessageHelper {
 		throwMessage(message, FacesMessage.SEVERITY_INFO);
 	}
 	
+	public static void throwWarningMessage(String message) {
+		throwMessage(message, FacesMessage.SEVERITY_WARN);
+	}
+	
 	public static void throwMessage(String message, FacesMessage.Severity severity) {
 		FacesMessage msg = new FacesMessage(message);
 		msg.setSeverity(severity);

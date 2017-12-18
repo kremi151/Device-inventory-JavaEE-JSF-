@@ -43,6 +43,7 @@
 				<c:set var="canReport" value="#{usession.canReportOnDevice(device)}" scope="request" />
 				<c:set var="canConsume" value="#{usession.canModifyConsumables()}" scope="request" />
     			<c:set var="canRemoveConsumable" value="#{usession.canRemoveConsumables()}" scope="request" />
+    			<f:event type="preRenderView" listener="#{vdevice.preRenderPage}" />
 				
 				<ui:fragment rendered="#{canRead}">
 					<b:form id="modifyPropertyForm" rendered="#{canModify}">
