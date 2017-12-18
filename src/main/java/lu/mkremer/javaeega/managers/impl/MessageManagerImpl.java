@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.ejb.Singleton;
+import javax.faces.application.FacesMessage;
 
 import lu.mkremer.javaeega.consumables.Consumable;
 import lu.mkremer.javaeega.consumables.ConsumableType;
@@ -42,14 +43,14 @@ public class MessageManagerImpl implements MessageManager{
 	}
 
 	@Override
-	public List<String> getWarningMessages() {
-		LinkedList<String> res = new LinkedList<>();
+	public List<Message> getMessagesForUser(User user) {//TODO: Filter messages for different user groups (permissions)
+		LinkedList<Message> res = new LinkedList<>();
 		synchronized(consumableMessages) {
 			for(ConsumableStockMessage csm : consumableMessages) {
 				if(csm.device != null) {
-					res.add(String.format("Consumable stock of <strong>%s</strong> for device <strong>%s</strong> is at a critical level of <strong>%d</strong>", csm.name, csm.device, csm.stock));
+					res.add(new MessageManager.Message(String.format("Consumable stock of <strong>%s</strong> for device <strong>%s</strong> is at a critical level of <strong>%d</strong>", csm.name, csm.device, csm.stock), FacesMessage.SEVERITY_WARN));
 				}else {
-					res.add(String.format("General consumable stock of <strong>%s</strong> is at a critical level of <strong>%d</strong>", csm.name, csm.stock));
+					res.add(new MessageManager.Message(String.format("General consumable stock of <strong>%s</strong> is at a critical level of <strong>%d</strong>", csm.name, csm.stock), FacesMessage.SEVERITY_WARN));
 				}
 			}
 		}
