@@ -25,14 +25,28 @@
 							<b:dataTableColumn value="#{group.name}" label="Name" />
 							<b:dataTableColumn value="#{group.permissions.size()}" label="Permissions" />
 							<b:dataTableColumn label="" orderable="false">
-								<b:button value="View" iconAwesome="fa-eye" outcome="usergroup.xhtml">
+								<b:button value="View" iconAwesome="fa-eye" outcome="usergroup.xhtml" disabled="#{not canList}">
 									<f:param name="id" value="#{group.id}" />
 								</b:button>
 							</b:dataTableColumn>
 						</b:dataTable>
 					</b:panel>
 					<b:panel id="users" title="Users">
-						--- Under construction ---
+						<b:dataTable value="#{usermgmt.users}" var="user">
+							<b:dataTableColumn label="Username">
+								<c:set var="canViewUser" value="#{usession.canViewUser(user.username)}" />
+								<h:link value="#{user.username}" outcome="user.xhtml" rendered="#{canViewUser}">
+									<f:param name="id" value="#{user.username}" />
+								</h:link>
+								<h:outputText value="#{user.groupName}" rendered="#{not canViewUser}" />
+							</b:dataTableColumn>
+							<b:dataTableColumn label="User group">
+								<h:link value="#{user.groupName}" outcome="usergroup.xhtml" rendered="#{canList}">
+									<f:param name="id" value="#{user.groupId}" />
+								</h:link>
+								<h:outputText value="#{user.groupName}" rendered="#{not canList}" />
+							</b:dataTableColumn>
+						</b:dataTable>
 					</b:panel>
 				</b:accordion>
 			</ui:fragment>

@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 
 import lu.mkremer.javaeega.managers.UserManager;
 import lu.mkremer.javaeega.users.User;
+import lu.mkremer.javaeega.users.UserDescription;
 import lu.mkremer.javaeega.users.UserGroup;
 
 //@Stateless
@@ -90,6 +91,16 @@ public class UserManagerImpl implements UserManager{
 	@Override
 	public UserGroup getGroupById(long id) {
 		return em.find(UserGroup.class, id);
+	}
+
+	@Override
+	public List<UserDescription> listUserDescriptions() {
+		return em.createQuery("select new " + UserDescription.class.getCanonicalName() + "(u.user_id, u.group.name, u.group.id) from User u", UserDescription.class).getResultList();
+	}
+
+	@Override
+	public void update(User user) {
+		em.merge(user);
 	}
 	
 }

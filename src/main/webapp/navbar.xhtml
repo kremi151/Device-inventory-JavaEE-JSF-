@@ -38,7 +38,9 @@
 	     </b:navbarLinks>
 	       <b:navbarLinks pull="right" styleClass="hidden-xs" rendered="#{usession.loggedIn}">
 	         <b:dropMenu value="#{usession.displayName}" iconAwesome="fa-user">
-	             <b:navLink value="Profile" href="#" iconAwesome="fa-cogs"></b:navLink>
+	             <b:navLink value="Profile" outcome="user.xhtml" iconAwesome="fa-cogs">
+	             	<f:param name="id" value="#{usession.user.userId}" />
+	             </b:navLink>
 	             <b:navLink value="My devices" outcome="mydevices.xhtml" iconAwesome="fa-desktop"></b:navLink>
 	             <b:navLink></b:navLink>
 	             <b:navLink header="Session"></b:navLink>

@@ -61,7 +61,7 @@ public class UserSession implements Serializable{
 	    ec.redirect(ec.getRequestContextPath() + "/index.xhtml");
 	}
 	
-	User getUser() {
+	public User getUser() {
 		return user;
 	}
 	
@@ -175,6 +175,18 @@ public class UserSession implements Serializable{
 	
 	public boolean canModifyUserGroups() {
 		return user != null && user.hasPermission("usergroups.modify");
+	}
+	
+	public boolean canViewUser(User user) {
+		return this.user != null && (this.user.equals(user) || this.user.hasPermission("users.view"));
+	}
+	
+	public boolean canViewUser(String username) {
+		return user != null && (user.getUserId().equals(username) || user.hasPermission("users.view"));
+	}
+	
+	public boolean canModifyUsers() {
+		return user != null && user.hasPermission("users.modify");
 	}
 	
 	@Deprecated

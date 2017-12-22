@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import lu.mkremer.javaeega.managers.UserManager;
+import lu.mkremer.javaeega.users.UserDescription;
 import lu.mkremer.javaeega.users.UserGroup;
 
 @ManagedBean(name="usermgmt")
@@ -36,6 +37,10 @@ public class UserManagementController implements Serializable{
 		}else {
 			return Collections.emptyList();
 		}
+	}
+	
+	public List<UserDescription> getUsers(){
+		return um.listUserDescriptions();
 	}
 
 }

@@ -78,6 +78,18 @@ public class User implements Serializable{
 		return lastName;
 	}
 	
+	public void setGroup(UserGroup group) {
+		this.group = group;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
 	public boolean hasPermission(String perm) {
 		return group.hasPermission(perm);
 	}

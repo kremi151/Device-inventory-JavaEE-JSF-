@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import lu.mkremer.javaeega.users.User;
+import lu.mkremer.javaeega.users.UserDescription;
 import lu.mkremer.javaeega.users.UserGroup;
 
 @Local
@@ -18,8 +19,10 @@ public interface UserManager {
 	boolean doesUsernameExist(String username);
 	User findUser(String username);
 	List<User> listAllUsers();
+	List<UserDescription> listUserDescriptions();
 	List<User> listMatchingUsers(String filter);
 	void update(UserGroup group);
+	void update(User user);
 	List<UserGroup> getUserGroups();
 	
 }
