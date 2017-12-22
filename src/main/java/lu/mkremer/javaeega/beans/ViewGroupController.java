@@ -62,7 +62,13 @@ public class ViewGroupController implements Serializable{
 	}
 
 	public List<String> getPermissions(){
-		return group != null ? new ArrayList<>(group.getPermissions()) : Collections.emptyList();
+		if(group != null) {
+			ArrayList<String> list = new ArrayList<>(group.getPermissions());
+			Collections.sort(list);
+			return list;
+		}else {
+			return Collections.emptyList();
+		}
 	}
 	
 	public String[] getSelectedPermissions() {
@@ -93,10 +99,11 @@ public class ViewGroupController implements Serializable{
 		}
 	}
 	
-	public void addPermission() {
+	public void addPermission() {//TODO: Refresh all active sessions being part of this group
 		if(group != null && session.canModifyUserGroups()) {
 			group.addPermission(permissionNode);
 			um.update(group);
+			permissionNode = null;
 		}else {
 			MessageHelper.throwDangerMessage("You are not allowed to do this");
 		}

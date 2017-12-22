@@ -41,14 +41,14 @@
 						<b:panel id="permsPanel" title="Permissions">
 							<b:container id="permsContainer">
 								<b:form id="permsForm">
-									<p:selectManyCheckbox id="permlist" value="#{vgroup.selectedPermissions}" layout="grid" columns="3">
+									<p:selectManyCheckbox id="permlist" value="#{vgroup.selectedPermissions}" layout="responsive" columns="3">
 										<f:selectItems value="#{vgroup.permissions}" var="perm" itemLabel="#{perm}" itemValue="#{perm}" />
 									</p:selectManyCheckbox>
 									<b:commandButton action="#{vgroup.deletePermissions}" value="Delete selected permissions" icon="trash" rendered="#{canModify}" >
 								   		<f:param name="id" value="#{param['id']}" />
 								   	</b:commandButton>
+									<b:button value="Add permission" icon="plus" onclick="$('.addPermModal').modal();" style="margin-left:0.5em;" />
 								</b:form>
-								<b:button value="Add permission" icon="plus" onclick="$('.addPermModal').modal();" />
 							</b:container>
 						</b:panel>
 					</b:accordion>
