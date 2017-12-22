@@ -28,7 +28,7 @@ import lu.mkremer.javaeega.users.UserGroup;
 @Startup
 public class StartupBean {//TODO: Run it with some default values before submission
 	
-	private final static boolean INIT_DEFAULT_VALUES = false;
+	private final static boolean INIT_DEFAULT_VALUES = true;
 	
 	@EJB private UserManager um;
 	@EJB private DeviceManager dm;
@@ -109,17 +109,17 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			
 			System.out.println("### Creating device properties ###");
 
-			DeviceProperty propSerialNumber = dm.createDeviceProperty("Serial number", DevicePropertyType.SERIAL_NUMER, deviceGeneric);
-			DeviceProperty propVendor = dm.createDeviceProperty("Vendor", DevicePropertyType.STRING, deviceGeneric);
-			DeviceProperty propMAC = dm.createDeviceProperty("MAC Address", DevicePropertyType.MAC_ADDRESS, deviceComputer);
-			DeviceProperty propOS = dm.createDeviceProperty("Operating system", DevicePropertyType.STRING, deviceComputer);
-			DeviceProperty propStorage = dm.createDeviceProperty("Storage in GB", DevicePropertyType.UFLOAT, deviceComputer);
-			DeviceProperty propRAM = dm.createDeviceProperty("RAM in GB", DevicePropertyType.UFLOAT, deviceComputer);
-			dm.createDeviceProperty("Hard keyboard", DevicePropertyType.BOOLEAN, devicePhone);
-			dm.createDeviceProperty("SIM slots", DevicePropertyType.UNUMBER, devicePhone);
-			dm.createDeviceProperty("Has SIM slot", DevicePropertyType.BOOLEAN, deviceTablet);
-			dm.createDeviceProperty("Paper slots", DevicePropertyType.UNUMBER, devicePrinter);
-			dm.createDeviceProperty("Laser technology", DevicePropertyType.BOOLEAN, devicePrinter);
+			DeviceProperty propSerialNumber = dm.createDeviceProperty("Serial number", DevicePropertyType.SERIAL_NUMER, deviceGeneric, "serial,number,snumber,nbr");
+			DeviceProperty propVendor = dm.createDeviceProperty("Vendor", DevicePropertyType.STRING, deviceGeneric, "vendor,oem,manufacturer");
+			DeviceProperty propMAC = dm.createDeviceProperty("MAC Address", DevicePropertyType.MAC_ADDRESS, deviceComputer, "mac,address");
+			DeviceProperty propOS = dm.createDeviceProperty("Operating system", DevicePropertyType.STRING, deviceComputer, "operating,system,os");
+			DeviceProperty propStorage = dm.createDeviceProperty("Storage in GB", DevicePropertyType.UFLOAT, deviceComputer, "storage,disk,memory");
+			DeviceProperty propRAM = dm.createDeviceProperty("RAM in GB", DevicePropertyType.UFLOAT, deviceComputer, "ram,random,access,memory");
+			dm.createDeviceProperty("Hard keyboard", DevicePropertyType.BOOLEAN, devicePhone, "hard,keyboard");
+			dm.createDeviceProperty("SIM slots", DevicePropertyType.UNUMBER, devicePhone, "sim,slots");
+			dm.createDeviceProperty("Has SIM slot", DevicePropertyType.BOOLEAN, deviceTablet, "has,sim,slots");
+			dm.createDeviceProperty("Paper slots", DevicePropertyType.UNUMBER, devicePrinter, "paper,slots");
+			dm.createDeviceProperty("Laser technology", DevicePropertyType.BOOLEAN, devicePrinter, "laser,technology,printing,printer,paper");
 			
 			System.out.println("### Creating consumable types ###");
 			
@@ -158,4 +158,6 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 		
 		System.out.println("### Done, found " + consumables.size() + " ###");
 	}
+	
+	//TODO: Verify that validation annotations have adequate messages
 }

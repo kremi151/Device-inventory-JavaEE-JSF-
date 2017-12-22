@@ -49,10 +49,11 @@
 		    			<b:modal id="addprop" class="addDevicePropertyModal" title="Create new property">
 		    				<b:panelGrid colSpans="12">
 		    					<b:inputText id="name" label="Name" required="true" value="#{nprop.name}"/>
-						    	<b:message for="@previous" />
 							    <b:selectOneMenu value="#{nprop.type}" required="true" label="Type:">
 							        <f:selectItems value="#{nprop.propertyTypes}" var="t" itemLabel="#{t.description}" itemValue="#{t}" />
 						        </b:selectOneMenu>
+						        <h:outputLabel value="Search tags (optional):" />
+						        <b:inputText value="#{nprop.tags}" tags="true" placeholder="Separate tags by commas (,)" required="false" />
 		    				</b:panelGrid>
 			    			<f:facet name="footer">
 						    	<b:commandButton value="Create" look="primary" action="#{nprop.createProperty()}">
@@ -77,7 +78,7 @@
 			    		</b:modal>
 		    		</b:form>
 					
-					<h1>#{devType.name} <b:button value="Back" outcome="devicetypes.xhtml" size="sm"/> <b:button value="Delete" icon="trash" rendered="#{usession.canRemoveDeviceTypes()}" onclick="$('.remDeviceTypeModal').modal();" size="sm"/></h1>
+					<h1>#{devType.name} <b:button value="Back" outcome="devicetypes.xhtml" size="sm"/> <b:button value="Delete" icon="trash" rendered="#{usession.canRemoveDeviceTypes()}" onclick="$('.remDeviceTypeModal').modal();" size="sm" style="margin-left:0.5em;"/></h1>
 					<b:messages />
 					<b:panel title="Properties">
 						<b:form>

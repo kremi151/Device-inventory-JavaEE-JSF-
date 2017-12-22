@@ -35,6 +35,9 @@ public class DeviceProperty implements Serializable{
 	@ManyToOne(optional=false)
 	private DeviceType deviceType;
 	
+	@Column(nullable=true)
+	private String tags;
+	
 
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="property")
 	private List<DevicePropertyValue> values;
@@ -75,6 +78,14 @@ public class DeviceProperty implements Serializable{
 		this.type = type;
 	}
 	
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == this) {

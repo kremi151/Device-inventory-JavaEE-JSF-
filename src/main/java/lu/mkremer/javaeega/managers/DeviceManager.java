@@ -22,7 +22,7 @@ public interface DeviceManager {
 	DeviceType getDeviceTypeById(long id);
 	Device createDevice(String name, DeviceType type, User owner);
 	Device getDeviceById(long id);
-	DeviceProperty createDeviceProperty(String name, DevicePropertyType type, DeviceType deviceType);
+	DeviceProperty createDeviceProperty(String name, DevicePropertyType type, DeviceType deviceType, String tags);
 	DeviceProperty getPropertyById(long id);
 	DevicePropertyValue addOrModifyDeviceProperty(Device device, DeviceProperty property, String value);
 	void updateObject(DeviceType type);

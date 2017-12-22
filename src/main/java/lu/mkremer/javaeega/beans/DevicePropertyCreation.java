@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.validation.constraints.NotNull;
@@ -25,17 +26,26 @@ public class DevicePropertyCreation implements Serializable{
 	 */
 	private static final long serialVersionUID = 5826688074579095852L;
 
-	@NotNull
-	@Size(min=5, max=32)
+	@NotNull(message="No property name specified")
+	@Size(min=5, max=32, message="Property name must be between {min} and {max} characters long")
 	private String name;
 	
-	@NotNull
+	@NotNull(message="No property type defined")
 	private DevicePropertyType type;
 	
-	@EJB
-	private DeviceManager dm;
+	private String tags;
+	
+	@EJB private DeviceManager dm;
+	
+	@ManagedProperty("#{usession}")
+	private UserSession session;
 
 	
+	public void setSession(UserSession session) {
+		this.session = session;
+	}
+
+
 	public String getName() {
 		return name;
 	}
@@ -56,13 +66,28 @@ public class DevicePropertyCreation implements Serializable{
 	}
 
 
+	public String getTags() {
+		return tags;
+	}
+
+
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
+
+
 	public void createProperty() {
-		if(UserSession.getCurrentSession().canModifyDeviceType()) {
-			long deviceTypeId = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
-			DeviceType devType = dm.getDeviceTypeById(deviceTypeId);
-			dm.createDeviceProperty(name, type, devType);
-			name = null;
-			type = null;
+		if(session.canModifyDeviceType()) {
+			try {
+				long deviceTypeId = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
+				DeviceType devType = dm.getDeviceTypeById(deviceTypeId);
+				dm.createDeviceProperty(name, type, devType, tags);
+				name = null;
+				type = null;
+				tags = null;
+			}catch(NumberFormatException | NullPointerException e) {
+				MessageHelper.throwWarningMessage("An unexpected error occured");
+			}
 		}else {
 			MessageHelper.throwDangerMessage("You are not allowed to do this");
 		}

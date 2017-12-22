@@ -98,8 +98,9 @@ public class DeviceManagerImpl implements DeviceManager{
 	}
 
 	@Override
-	public DeviceProperty createDeviceProperty(String name, DevicePropertyType type, DeviceType deviceType) {
+	public DeviceProperty createDeviceProperty(String name, DevicePropertyType type, DeviceType deviceType, String tags) {
 		DeviceProperty property = new DeviceProperty(name, type, deviceType);
+		property.setTags(tags);
 		em.persist(property);
 		invalidatePropertyCache();
 		return property;
