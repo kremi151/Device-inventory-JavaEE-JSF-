@@ -1,51 +1,75 @@
-<h:form
-	xmlns="http://www.w3.org/1999/xhtml"
+<h:form xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:b="http://bootsfaces.net/ui"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:h="http://java.sun.com/jsf/html">
-	<b:navBar
-	      brand="Device inventory" 
-	      brandHref="index.xhtml"
-	      inverse="true"
-	      fixed="top"
-	      sticky="true" >
-	     <b:navbarLinks>
+	<b:navBar brand="Device inventory" brandHref="index.xhtml"
+		inverse="true" fixed="top" sticky="true">
+		<b:navbarLinks>
 			<c:set var="viewDevices" value="#{usession.canListDevices()}" />
 			<c:set var="viewDeviceTypes" value="#{usession.canViewDeviceTypes()}" />
 			<c:set var="viewConsumables" value="#{usession.canListConsumables()}" />
-			<c:set var="viewConsumableTypes" value="#{usession.canViewConsumableTypes()}" />
+			<c:set var="viewConsumableTypes"
+				value="#{usession.canViewConsumableTypes()}" />
 			<c:set var="canManageUsers" value="#{usession.canViewUserGroups()}" />
-	         <b:dropMenu value="IT Management" rendered="#{viewDevices or viewDeviceTypes or viewConsumables or viewConsumableTypes or canManageUsers}" iconAwesome="fa-lock">
-	             <b:dropMenu value="Devices" iconAwesome="fa-laptop" rendered="#{viewDevices or viewDeviceTypes}">
-                 	<b:navLink value="Device types" outcome="devicetypes.xhtml" iconAwesome="fa-list-ul" rendered="#{viewDeviceTypes}"></b:navLink>
-	             	<b:navLink value="Devices" outcome="alldevices.xhtml" iconAwesome="fa-list-ul" rendered="#{viewDevices}"></b:navLink>
-                 </b:dropMenu>
-                 <b:dropMenu value="Consumables" iconAwesome="fa-puzzle-piece" rendered="#{viewConsumables or viewConsumableTypes}">
-                 	<b:navLink value="Consumable types" outcome="consumabletypes.xhtml" iconAwesome="fa-list-ul" rendered="#{viewConsumableTypes}"></b:navLink>
-	             	<b:navLink value="Consumables" outcome="consumables.xhtml" iconAwesome="fa-list-ul" rendered="#{viewConsumables}"></b:navLink>
-                 </b:dropMenu>
-                 <b:navLink value="User management" outcome="usermgmt.xhtml" iconAwesome="fa-group" rendered="#{canManageUsers}"></b:navLink>
-	         </b:dropMenu>
-		     <b:navLink value="Messages" outcome="messages.xhtml" rendered="#{usession.loggedIn}">
-		     	<b:badge value="#{usession.notificationCount}" style="margin-left:0.5em;" rendered="#{usession.notificationCount > 0}" />
-		     </b:navLink>
-	     </b:navbarLinks>
-	     
-	     <b:navbarLinks pull="right" rendered="#{not usession.loggedIn}">
-	     	<b:navLink value="Sign in" href="login.xhtml" iconAwesome="fa-sign-in"></b:navLink>
-	     	<b:navLink value="Create account" href="register.xhtml" iconAwesome="fa-user-plus"></b:navLink>
-	     </b:navbarLinks>
-	       <b:navbarLinks pull="right" styleClass="hidden-xs" rendered="#{usession.loggedIn}">
-	         <b:dropMenu value="#{usession.displayName}" iconAwesome="fa-user">
-	             <b:navLink value="Profile" outcome="user.xhtml" iconAwesome="fa-cogs">
-	             	<f:param name="id" value="#{usession.user.userId}" />
-	             </b:navLink>
-	             <b:navLink value="My devices" outcome="mydevices.xhtml" iconAwesome="fa-desktop"></b:navLink>
-	             <b:navLink></b:navLink>
-	             <b:navLink header="Session"></b:navLink>
-	             <b:navCommandLink value="Log out" action="#{usession.logout}" iconAwesome="fa-sign-out"></b:navCommandLink>
-	         </b:dropMenu>
-	     </b:navbarLinks>
-	 </b:navBar>
- </h:form>
+			<b:dropMenu value="IT Management"
+				rendered="#{viewDevices or viewDeviceTypes or viewConsumables or viewConsumableTypes or canManageUsers}"
+				iconAwesome="fa-lock">
+				<b:dropMenu value="Devices" iconAwesome="fa-laptop"
+					rendered="#{viewDevices or viewDeviceTypes}">
+					<b:navLink value="Device types" outcome="devicetypes.xhtml"
+						iconAwesome="fa-list-ul" rendered="#{viewDeviceTypes}"></b:navLink>
+					<b:navLink value="Devices" outcome="alldevices.xhtml"
+						iconAwesome="fa-list-ul" rendered="#{viewDevices}"></b:navLink>
+				</b:dropMenu>
+				<b:dropMenu value="Consumables" iconAwesome="fa-puzzle-piece"
+					rendered="#{viewConsumables or viewConsumableTypes}">
+					<b:navLink value="Consumable types" outcome="consumabletypes.xhtml"
+						iconAwesome="fa-list-ul" rendered="#{viewConsumableTypes}"></b:navLink>
+					<b:navLink value="Consumables" outcome="consumables.xhtml"
+						iconAwesome="fa-list-ul" rendered="#{viewConsumables}"></b:navLink>
+				</b:dropMenu>
+				<b:navLink value="User management" outcome="usermgmt.xhtml"
+					iconAwesome="fa-group" rendered="#{canManageUsers}"></b:navLink>
+			</b:dropMenu>
+			<b:navLink value="Messages" outcome="messages.xhtml"
+				rendered="#{usession.loggedIn}">
+				<b:badge value="#{usession.notificationCount}"
+					style="margin-left:0.5em;"
+					rendered="#{usession.notificationCount > 0}" />
+			</b:navLink>
+		</b:navbarLinks>
+
+		<b:navbarLinks pull="right" rendered="#{not usession.loggedIn}">
+			<b:navLink value="Sign in" href="login.xhtml"
+				iconAwesome="fa-sign-in"></b:navLink>
+			<b:navLink value="Create account" href="register.xhtml"
+				iconAwesome="fa-user-plus"></b:navLink>
+		</b:navbarLinks>
+
+		<b:navbarLinks pull="right" styleClass="hidden-xs"
+			rendered="#{usession.loggedIn}">
+
+			<b:dropMenu value="Search" iconAwesome="fa-search">
+				<b:inputText placeholder="Search expression" style="min-width: 10vw;">
+					<f:facet name="append">
+						<b:button iconAwesome="fa-search" />
+					</f:facet>
+				</b:inputText>
+			</b:dropMenu>
+
+			<b:dropMenu value="#{usession.displayName}" iconAwesome="fa-user">
+				<b:navLink value="Profile" outcome="user.xhtml"
+					iconAwesome="fa-cogs">
+					<f:param name="id" value="#{usession.user.userId}" />
+				</b:navLink>
+				<b:navLink value="My devices" outcome="mydevices.xhtml"
+					iconAwesome="fa-desktop"></b:navLink>
+				<b:navLink></b:navLink>
+				<b:navLink header="Session"></b:navLink>
+				<b:navCommandLink value="Log out" action="#{usession.logout}"
+					iconAwesome="fa-sign-out"></b:navCommandLink>
+			</b:dropMenu>
+		</b:navbarLinks>
+	</b:navBar>
+</h:form>
