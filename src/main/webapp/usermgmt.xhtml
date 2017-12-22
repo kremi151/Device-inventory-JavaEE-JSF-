@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html 
+   xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:b="http://bootsfaces.net/ui"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:ui="http://java.sun.com/jsf/facelets" >
+    <h:head>
+        <title>User management</title>
+        <meta charset="utf-8"/>
+    </h:head>
+    <h:body>
+	    <ui:insert name="navbar" >
+			<ui:include src="navbar.xhtml" />
+		</ui:insert> 
+		<b:container style="margin-top:70px">
+			<c:set var="canList" value="#{usession.canViewUserGroups()}" />
+			<ui:fragment rendered="#{canList}">
+			
+				<h1>User management</h1>
+				<b:accordion expanded-panels="userGroups">
+					<b:panel id="userGroups" title="User groups">
+						<b:dataTable value="#{usermgmt.userGroups}" var="group">
+							<b:dataTableColumn value="#{group.name}" label="Name" />
+							<b:dataTableColumn value="#{group.permissions.size()}" label="Permissions" />
+							<b:dataTableColumn label="" orderable="false">
+								<b:button value="View" iconAwesome="fa-eye" outcome="usergroup.xhtml">
+									<f:param name="id" value="#{group.id}" />
+								</b:button>
+							</b:dataTableColumn>
+						</b:dataTable>
+					</b:panel>
+					<b:panel id="users" title="Users">
+						--- Under construction ---
+					</b:panel>
+				</b:accordion>
+			</ui:fragment>
+			<b:alert severity="danger" rendered="#{not canList}">Permission denied</b:alert>
+		</b:container>
+    </h:body>
+</html>

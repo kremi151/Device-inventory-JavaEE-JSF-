@@ -15,7 +15,8 @@
 			<c:set var="viewDeviceTypes" value="#{usession.canViewDeviceTypes()}" />
 			<c:set var="viewConsumables" value="#{usession.canListConsumables()}" />
 			<c:set var="viewConsumableTypes" value="#{usession.canViewConsumableTypes()}" />
-	         <b:dropMenu value="IT Management" rendered="#{viewDevices or viewDeviceTypes or viewConsumables or viewConsumableTypes}" iconAwesome="fa-lock">
+			<c:set var="canManageUsers" value="#{usession.canViewUserGroups()}" />
+	         <b:dropMenu value="IT Management" rendered="#{viewDevices or viewDeviceTypes or viewConsumables or viewConsumableTypes or canManageUsers}" iconAwesome="fa-lock">
 	             <b:dropMenu value="Devices" iconAwesome="fa-laptop" rendered="#{viewDevices or viewDeviceTypes}">
                  	<b:navLink value="Device types" outcome="devicetypes.xhtml" iconAwesome="fa-list-ul" rendered="#{viewDeviceTypes}"></b:navLink>
 	             	<b:navLink value="Devices" outcome="alldevices.xhtml" iconAwesome="fa-list-ul" rendered="#{viewDevices}"></b:navLink>
@@ -24,6 +25,7 @@
                  	<b:navLink value="Consumable types" outcome="consumabletypes.xhtml" iconAwesome="fa-list-ul" rendered="#{viewConsumableTypes}"></b:navLink>
 	             	<b:navLink value="Consumables" outcome="consumables.xhtml" iconAwesome="fa-list-ul" rendered="#{viewConsumables}"></b:navLink>
                  </b:dropMenu>
+                 <b:navLink value="User management" outcome="usermgmt.xhtml" iconAwesome="fa-group" rendered="#{canManageUsers}"></b:navLink>
 	         </b:dropMenu>
 		     <b:navLink value="Messages" outcome="messages.xhtml" rendered="#{usession.loggedIn}">
 		     	<b:badge value="#{usession.notificationCount}" style="margin-left:0.5em;" rendered="#{usession.notificationCount > 0}" />

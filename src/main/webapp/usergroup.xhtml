@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html 
+   xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:b="http://bootsfaces.net/ui"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:p="http://primefaces.org/ui" >
+    <h:head>
+        <title>User group</title>
+        <meta charset="utf-8"/>
+    </h:head>
+    <h:body>
+	    <ui:insert name="navbar" >
+			<ui:include src="navbar.xhtml" />
+		</ui:insert> 
+		<b:container style="margin-top:70px">
+			<c:set var="canView" value="#{usession.canViewUserGroups()}" />
+			<ui:fragment rendered="#{canView}">
+				<c:set var="canModify" value="#{usession.canModifyUserGroups()}" />
+				
+				<b:form id="addPermForm">
+					<b:modal class="addPermModal" title="Add new permission">
+						<p>You are adding a new permission node to the user group #{vgroup.group.name}</p>
+						<b:inputText value="#{vgroup.permissionNode}" label="Permission node:" />
+						<f:facet name="footer">
+							<b:commandButton value="Add" look="primary" action="#{vgroup.addPermission}" >
+						   		<f:param name="id" value="#{param['id']}" />
+						   	</b:commandButton>
+						    <b:button value="Cancel" dismiss="modal" />
+					    </f:facet>
+					</b:modal>
+				</b:form>
+				
+				<ui:fragment rendered="#{vgroup.group != null}">
+					<script type="text/javascript">document.title = "#{vgroup.group.name}";</script>
+					<h1>#{vgroup.group.name} <b:button value="Back" outcome="usermgmt.xhtml" iconAwesome="fa-group" /></h1>
+					<b:messages />
+					<b:accordion expanded-panels="permsPanel">
+						<b:panel id="permsPanel" title="Permissions">
+							<b:container id="permsContainer">
+								<b:form id="permsForm">
+									<p:selectManyCheckbox id="permlist" value="#{vgroup.selectedPermissions}" layout="grid" columns="3">
+										<f:selectItems value="#{vgroup.permissions}" var="perm" itemLabel="#{perm}" itemValue="#{perm}" />
+									</p:selectManyCheckbox>
+									<b:commandButton action="#{vgroup.deletePermissions}" value="Delete selected permissions" icon="trash" rendered="#{canModify}" >
+								   		<f:param name="id" value="#{param['id']}" />
+								   	</b:commandButton>
+								</b:form>
+								<b:button value="Add permission" icon="plus" onclick="$('.addPermModal').modal();" />
+							</b:container>
+						</b:panel>
+					</b:accordion>
+				</ui:fragment>
+				<b:alert severity="warning" rendered="#{vgroup.group == null}">Requested user group was not found</b:alert>
+			</ui:fragment>
+			<b:alert severity="danger" rendered="#{not canView}">Permission denied</b:alert>
+		</b:container>
+    </h:body>
+</html>

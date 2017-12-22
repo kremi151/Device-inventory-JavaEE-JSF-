@@ -48,6 +48,10 @@ public class UserGroup implements Serializable{
 		permissions.add(perm);
 	}
 	
+	public boolean removePermission(String perm) {
+		return permissions.remove(perm);
+	}
+	
 	public boolean hasPermission(String perm) {
 		return permissions.contains(perm);
 	}

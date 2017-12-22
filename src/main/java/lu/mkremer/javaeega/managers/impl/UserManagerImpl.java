@@ -81,5 +81,15 @@ public class UserManagerImpl implements UserManager{
 	public void update(UserGroup group) {
 		em.merge(group);
 	}
+
+	@Override
+	public List<UserGroup> getUserGroups() {
+		return em.createQuery("select g from UserGroup g", UserGroup.class).getResultList();
+	}
+
+	@Override
+	public UserGroup getGroupById(long id) {
+		return em.find(UserGroup.class, id);
+	}
 	
 }

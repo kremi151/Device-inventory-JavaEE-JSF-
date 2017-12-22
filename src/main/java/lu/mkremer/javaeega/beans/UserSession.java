@@ -169,6 +169,14 @@ public class UserSession implements Serializable{
 		return user != null && user.hasPermission("consumables.remove");
 	}
 	
+	public boolean canViewUserGroups() {
+		return user != null && user.hasPermission("usergroups.view");
+	}
+	
+	public boolean canModifyUserGroups() {
+		return user != null && user.hasPermission("usergroups.modify");
+	}
+	
 	@Deprecated
 	public static UserSession getCurrentSession() {
 		FacesContext context = FacesContext.getCurrentInstance();
