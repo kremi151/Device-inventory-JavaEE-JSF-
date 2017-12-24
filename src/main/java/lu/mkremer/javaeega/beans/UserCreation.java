@@ -29,34 +29,28 @@ public class UserCreation implements Serializable{
 	 */
 	private static final long serialVersionUID = 2151015178431675787L;
 
-	@NotNull
-	@Size(min=2, max=32) 
+	@NotNull(message="No first name supplied")
+	@Size(min=2, max=32, message="First name must be between {min} and {max} characters long") 
 	private String firstName;
 
-	@NotNull
-	@Size(min=2, max=32) 
+	@NotNull(message="No last name supplied")
+	@Size(min=2, max=32, message="Last name must be between {min} and {max} characters long") 
 	private String lastName;
 
-	@NotNull
-	@Size(min=8, max=20)
+	@NotNull(message="No username supplied")
+	@Size(min=2, max=20, message="Username must be between {min} and {max} characters long") 
 	@UniqueUsername
 	private String username;
 
-	@NotNull
+	@NotNull(message="No password supplied")
 	@ValidPassword
 	private String password;
 
-	@NotNull
+	@NotNull(message="No password supplied")
 	private String vpassword;
-	
-	private String message;
 	
 	@EJB
 	private UserManager um;
-
-	public String getMessage() {
-		return message;
-	}
 
 	public String getFirstName() {
 		return firstName;
@@ -112,7 +106,6 @@ public class UserCreation implements Serializable{
 	}
 
 	public String register() {
-		message = null;
 		String hashedPwd = BCrypt.hashpw(password, BCrypt.gensalt());
 		um.createUser(username, firstName, lastName, hashedPwd, um.getDefaultGroup());
 		MessageHelper.throwInfoMessage("Account has been created. You can now log in.");

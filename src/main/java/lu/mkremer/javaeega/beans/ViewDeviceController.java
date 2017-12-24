@@ -38,8 +38,8 @@ public class ViewDeviceController implements Serializable{
 	@EJB private DeviceManager dm;
 	@EJB private ConsumableManager cm;
 	
-	@NotNull
-	@Size(min=1)
+	@NotNull(message="No property value supplied")
+	@Size(min=1, message="Property value must be at least {min} character(s) long")
 	private String propValue;
 	
 	@NotNull

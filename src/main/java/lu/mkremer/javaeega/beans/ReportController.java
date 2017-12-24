@@ -30,7 +30,7 @@ public class ReportController {
 	@Size(min=10, message="Message must be at least {min} characters long")
 	private String interventionMessage;
 	
-	@NotNull
+	@NotNull(message="No report status supplied")
 	private ReportStatus newReportStatus;
 	
 	@ManagedProperty("#{usession}")

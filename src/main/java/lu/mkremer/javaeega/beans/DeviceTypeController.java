@@ -24,8 +24,8 @@ public class DeviceTypeController implements Serializable{
 	 */
 	private static final long serialVersionUID = -4206845110470003590L;
 
-	@NotNull
-	@Size(min=5, max=128)
+	@NotNull(message="No device type name supplied")
+	@Size(min=5, max=128, message="Device type name must be metween {min} and {max} characters long")
 	private String name;
 	
 	private long parentId;

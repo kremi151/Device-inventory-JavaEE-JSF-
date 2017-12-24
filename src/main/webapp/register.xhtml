@@ -14,12 +14,8 @@
 			<ui:include src="navbar.xhtml" />
 		</ui:insert> 
 		<b:container style="margin-top:70px">
+			<h1>Create new account</h1>
 			<b:jumbotron style="background:#F5F5F5;">
-				<ui:fragment rendered="#{!empty ucreation.message}">
-					<div class="alert alert-danger">
-						#{ucreation.message}
-					</div>
-				</ui:fragment>
 		        <ui:fragment rendered="#{!usession.loggedIn}">
 		        	<h:form id="registerForm">
 					    <b:inputText id="username" label="Username" required="true" value="#{ucreation.username}"/>

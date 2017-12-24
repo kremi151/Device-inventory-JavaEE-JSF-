@@ -159,5 +159,4 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 		System.out.println("### Done, found " + consumables.size() + " ###");
 	}
 	
-	//TODO: Verify that validation annotations have adequate messages
 }

@@ -33,8 +33,8 @@ public class ConsumableTypesController implements Serializable{
 		this.session = session;
 	}
 
-	@NotNull
-	@Size(min=3, max=128)
+	@NotNull(message="No consumable type name supplied")
+	@Size(min=3, max=128, message="Consumable type name must be between {min} and {max} characters long")
 	private String name;
 	
 	private long parentId;

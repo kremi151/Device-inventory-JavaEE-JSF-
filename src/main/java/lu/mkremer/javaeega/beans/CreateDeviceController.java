@@ -29,15 +29,15 @@ public class CreateDeviceController implements Serializable{
 	 */
 	private static final long serialVersionUID = -8630636366031507240L;
 
-	@NotNull
-	@Size(min=5, max=100)
+	@NotNull(message="No device name supplied")
+	@Size(min=5, max=100, message="Device name must be between {min} and {max} characters long")
 	private String name;
 	
-	@NotNull
+	@NotNull(message="No username supplied")
 	@ExistingUsername
 	private String username;
 	
-	@NotNull
+	@NotNull(message="No device type supplied")
 	private DeviceType type;
 
 	@EJB private DeviceManager dm;
