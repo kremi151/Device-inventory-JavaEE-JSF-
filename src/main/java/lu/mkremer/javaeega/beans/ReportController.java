@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -31,6 +32,13 @@ public class ReportController {
 	
 	@NotNull
 	private ReportStatus newReportStatus;
+	
+	@ManagedProperty("#{usession}")
+	private UserSession session;
+	
+	public void setSession(UserSession session) {
+		this.session = session;
+	}
 	
 	public Report fetchReport(long id) {
 		return dm.findReportById(id);
@@ -71,7 +79,6 @@ public class ReportController {
 	}
 
 	public void intervene() {
-		UserSession session = UserSession.getCurrentSession();
 		if(session.canSubmitInterventions()) {
 			Report report = dm.findReportById(reportId);
 			if(report != null) {

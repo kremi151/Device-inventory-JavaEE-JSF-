@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
@@ -21,9 +22,16 @@ public class DeleteDeviceTypeController implements Serializable{
 	
 	@EJB
 	private DeviceManager dm;
+	
+	@ManagedProperty("#{usession}")
+	private UserSession session;
+	
+	public void setSession(UserSession session) {
+		this.session = session;
+	}
 
 	public String deleteDeviceType() {
-		if(UserSession.getCurrentSession().canRemoveDeviceTypes()) {
+		if(session.canRemoveDeviceTypes()) {
 			try {
 				long id = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
 				dm.removeDeviceTypeById(id);

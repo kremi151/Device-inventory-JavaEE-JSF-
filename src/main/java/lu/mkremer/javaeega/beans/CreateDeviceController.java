@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.validation.constraints.NotNull;
@@ -42,6 +43,13 @@ public class CreateDeviceController implements Serializable{
 	@EJB private DeviceManager dm;
 	@EJB private UserManager um;
 	@EJB private ConsumableManager cm;
+	
+	@ManagedProperty("#{usession}")
+	private UserSession session;
+	
+	public void setSession(UserSession session) {
+		this.session = session;
+	}
 
 	public String getName() {
 		return name;
@@ -72,7 +80,7 @@ public class CreateDeviceController implements Serializable{
 	}
 
 	public String create() {
-		if(UserSession.getCurrentSession().canAddDevices()) {
+		if(session.canAddDevices()) {
 			Device device = dm.createDevice(name, type, um.findUser(username));
 			List<ConsumableType> ctypes = cm.getConsumablesForDeviceType(type);
 			for(ConsumableType ctype : ctypes) {

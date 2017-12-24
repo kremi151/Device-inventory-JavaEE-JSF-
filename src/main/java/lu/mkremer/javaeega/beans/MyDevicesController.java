@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import lu.mkremer.javaeega.devices.Device;
@@ -23,8 +24,14 @@ public class MyDevicesController implements Serializable{
 	@EJB
 	private DeviceManager dm;
 	
+	@ManagedProperty("#{usession}")
+	private UserSession session;
+	
+	public void setSession(UserSession session) {
+		this.session = session;
+	}
+	
 	public List<Device> getMyDevices(){
-		UserSession session = UserSession.getCurrentSession();
 		if(session.isLoggedIn()) {
 			return dm.getDevicesOfUser(session.getUser());
 		}else {

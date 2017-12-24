@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.validation.constraints.NotNull;
 
@@ -24,6 +25,13 @@ public class DevicePropertyRemoval implements Serializable{
 	
 	@EJB
 	private DeviceManager dm;
+	
+	@ManagedProperty("#{usession}")
+	private UserSession session;
+	
+	public void setSession(UserSession session) {
+		this.session = session;
+	}
 
 	public long getPropId() {
 		return propId;
@@ -34,7 +42,7 @@ public class DevicePropertyRemoval implements Serializable{
 	}
 	
 	public void remove() {
-		if(UserSession.getCurrentSession().canModifyDeviceType()) {
+		if(session.canModifyDeviceType()) {
 			dm.removePropertyById(propId);
 			propId = 0;
 		}else {

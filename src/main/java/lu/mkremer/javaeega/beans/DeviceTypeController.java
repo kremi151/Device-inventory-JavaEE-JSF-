@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -31,6 +32,13 @@ public class DeviceTypeController implements Serializable{
 	
 	@EJB
 	private DeviceManager dm;
+	
+	@ManagedProperty("#{usession}")
+	private UserSession session;
+	
+	public void setSession(UserSession session) {
+		this.session = session;
+	}
 
 	public String getName() {
 		return name;
@@ -53,7 +61,7 @@ public class DeviceTypeController implements Serializable{
 	}
 	
 	public void create() {
-		if(UserSession.getCurrentSession().canAddDeviceTypes()) {
+		if(session.canAddDeviceTypes()) {
 			if(parentId > 0) {
 				dm.createDeviceType(name, dm.getDeviceTypeById(parentId));
 			}else {

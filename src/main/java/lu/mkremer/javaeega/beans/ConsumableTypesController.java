@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -24,6 +25,13 @@ public class ConsumableTypesController implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 3000397119766641415L;
+	
+	@ManagedProperty("#{usession}")
+	private UserSession session;
+	
+	public void setSession(UserSession session) {
+		this.session = session;
+	}
 
 	@NotNull
 	@Size(min=3, max=128)
@@ -81,7 +89,7 @@ public class ConsumableTypesController implements Serializable{
 	}
 
 	public void create() {
-		if(UserSession.getCurrentSession().canAddDeviceTypes()) {
+		if(session.canAddDeviceTypes()) {
 			cm.createConsumableType(name, criticalLimit, (parentId > 0) ? dm.getDeviceTypeById(parentId) : null);
 			parentId = 0;
 			criticalLimit = 5;
@@ -92,7 +100,7 @@ public class ConsumableTypesController implements Serializable{
 	}
 	
 	public void modify() {
-		if(UserSession.getCurrentSession().canModifyConsumableTypes()) {
+		if(session.canModifyConsumableTypes()) {
 			ConsumableType type = cm.getConsumableTypeById(typeId);
 			if(type != null) {
 				type.setCritical(criticalLimit);
@@ -107,7 +115,7 @@ public class ConsumableTypesController implements Serializable{
 	}
 	
 	public void delete() {
-		if(UserSession.getCurrentSession().canRemoveConsumableTypes()) {
+		if(session.canRemoveConsumableTypes()) {
 			ConsumableType type = cm.getConsumableTypeById(typeId);
 			if(type != null) {
 				cm.deleteConsumableTypeById(typeId);
