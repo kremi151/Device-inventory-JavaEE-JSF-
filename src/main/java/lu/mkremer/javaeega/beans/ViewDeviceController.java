@@ -173,7 +173,7 @@ public class ViewDeviceController implements Serializable{
 		}
 	}
 	
-	public void modifyProperty() {//TODO: Look here to know how custom messages are thrown
+	public void modifyProperty() {
 		try {
 			DeviceProperty property = dm.getPropertyById(propId);
 			if(property == null) {

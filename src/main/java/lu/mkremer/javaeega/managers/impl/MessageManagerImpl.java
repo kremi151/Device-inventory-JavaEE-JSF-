@@ -59,7 +59,7 @@ public class MessageManagerImpl implements MessageManager{
 
 	@Override
 	public int notificationCount(User user) {
-		return consumableMessages.size();//TODO: Adjust notification count maybe in future
+		return consumableMessages.size();
 	}
 	
 	private static class ConsumableStockMessage{
