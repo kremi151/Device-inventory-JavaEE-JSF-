@@ -283,6 +283,4 @@ public class ViewDeviceController implements Serializable{
 		cm.deleteConsumableById(consumableId);
 	}
 	
-	//TODO: Reference on the UI to the owner -> make link
-	
 }

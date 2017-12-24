@@ -19,7 +19,7 @@
 		    <ui:fragment rendered="#{canView}">
 		    	<c:set var="editable" value="#{usession.canModifyUsers()}" />
 		    	<b:form>
-			    	<h1>#{vuser.user.firstName} #{vuser.user.lastName} (#{vuser.user.userId}) <b:button value="Back" outcome="usermgmt.xhtml" iconAwesome="fa-group" /><b:commandButton value="Save" iconAwesome="fa-floppy-o" action="#{vuser.saveModifications()}" style="margin-left:0.5em;" /></h1>
+			    	<h1>#{vuser.user.firstName} #{vuser.user.lastName} (#{vuser.user.userId}) <b:button value="Back" onclick="history.go(-1)" iconAwesome="fa-group" /><b:commandButton value="Save" iconAwesome="fa-floppy-o" action="#{vuser.saveModifications()}" style="margin-left:0.5em;" /></h1>
 			    	<b:messages />
 		    		<b:panelGrid colSpans="4,8" size="xs">
 			    		<h:outputLabel value="First name:" />

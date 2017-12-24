@@ -21,7 +21,13 @@
     			<b:dataTable value="#{alldevices.allDevices}" var="device">
     				<b:dataTableColumn value="#{device.name}" label="Name"/>
     				<b:dataTableColumn value="#{device.type.name}" label="Type"/>
-    				<b:dataTableColumn value="#{device.owner.firstName} #{device.owner.lastName}" label="Owner"/>
+    				<b:dataTableColumn label="Owner">
+    					<h:outputLink value="user.xhtml" rendered="#{usession.canViewUser(device.owner.userId)}">
+    						<f:param name="id" value="#{device.owner.userId}" />
+    						<h:outputText value="#{device.owner.firstName} #{device.owner.lastName}" />
+    					</h:outputLink>
+    					<h:outputText value="#{device.owner.firstName} #{device.owner.lastName}" rendered="#{!usession.canViewUser(device.owner.userId)}" />
+    				</b:dataTableColumn>
     				<b:dataTableColumn label="" orderable="false">
 						<b:button value="View" icon-awesome="fa-eye" outcome="device.xhtml" size="sm">
 							<f:param name="devid" value="#{device.id}" />
