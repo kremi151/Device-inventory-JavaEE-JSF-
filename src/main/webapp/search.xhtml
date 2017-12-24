@@ -17,7 +17,7 @@
 		<b:container style="margin-top:70px">
 			<ui:fragment rendered="#{usession.loggedIn}">
 				<b:jumbotron style="padding: 16px 12px;">
-					<h:outputText value="#{searcher.searchResults.size()} results for '#{param['query']}'" />
+					<h:outputText value="#{searcher.searchResults.size()} result(s) for '#{param['query']}'" />
 				</b:jumbotron>
 				<ui:repeat var="result" value="#{searcher.searchResults}">
 					<b:jumbotron style="padding: 16px 12px;">
