@@ -27,8 +27,12 @@ public class MessagesController {
 	public void preRenderPage(ComponentSystemEvent event) {
 		if(session.isLoggedIn()) {
 			List<MessageManager.Message> msgs = mm.getMessagesForUser(session.getUser());
-			for(MessageManager.Message msg : msgs) {
-				MessageHelper.throwMessage(msg.getHtml(), msg.getSeverity());
+			if(msgs.size() > 0) {
+				for(MessageManager.Message msg : msgs) {
+					MessageHelper.throwMessage(msg.getHtml(), msg.getSeverity());
+				}
+			}else {
+				MessageHelper.throwInfoMessage("No messages found");
 			}
 		}
 	}
