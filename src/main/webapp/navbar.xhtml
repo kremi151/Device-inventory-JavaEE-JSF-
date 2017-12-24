@@ -51,9 +51,9 @@
 			rendered="#{usession.loggedIn}">
 
 			<b:dropMenu value="Search" iconAwesome="fa-search">
-				<b:inputText placeholder="Search expression" style="min-width: 10vw;">
+				<b:inputText value="#{navbarcon.searchQuery}" placeholder="Search expression" style="min-width: 10vw;">
 					<f:facet name="append">
-						<b:button iconAwesome="fa-search" />
+						<b:commandButton iconAwesome="fa-search" action="#{navbarcon.search}"/>
 					</f:facet>
 				</b:inputText>
 			</b:dropMenu>

@@ -115,7 +115,7 @@
 						</b:modal>
 					</b:form>
 				
-					<h1>#{device.name} <b:button value="Report issue" onclick="$('.addReportModal').modal();" icon-awesome="fa-warning" size="sm" rendered="#{canReport}" /> <b:button value="Delete" icon="trash" size="sm" onclick="$('.removeDeviceModal').modal();" rendered="#{canRemove}" /></h1><h2>#{device.type.name}</h2><p>Owner: #{device.owner.firstName} #{device.owner.lastName}</p>
+					<h1>#{device.name} <b:button value="Report issue" onclick="$('.addReportModal').modal();" icon-awesome="fa-warning" size="sm" rendered="#{canReport}" /> <b:button value="Delete" icon="trash" size="sm" onclick="$('.removeDeviceModal').modal();" rendered="#{canRemove}" style="margin-left:0.5em;" /></h1><h2>#{device.type.name}</h2><p>Owner: #{device.owner.firstName} #{device.owner.lastName}</p>
 					<script type="text/javascript">document.title = '#{device.name}';</script>
 					<b:messages />
 					<b:accordion expanded-panels="panelProps">
