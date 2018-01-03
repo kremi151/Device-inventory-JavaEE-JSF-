@@ -27,7 +27,7 @@
 						<b:modal class="addInterventionModal" title="Publish new intervention">
 							<h:inputHidden id="reportId" value="#{reportc.reportId}" />
 							<script type="text/javascript">document.getElementById("addInterventionForm:reportId").value = #{report.id};</script>
-							<b:inputText id="intvMsg" value="#{reportc.interventionMessage}" label="Message:" />
+							<b:inputTextarea id="intvMsg" value="#{reportc.interventionMessage}" label="Message:" />
 							<b:selectOneMenu value="#{reportc.newReportStatus}" label="Type:" required="true">
 			    				<f:selectItems value="#{reportc.reportStatuses}" var="s" itemLabel="#{s.description}" itemValue="#{s}"/>
 			    			</b:selectOneMenu>
