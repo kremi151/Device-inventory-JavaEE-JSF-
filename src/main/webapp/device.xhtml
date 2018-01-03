@@ -76,7 +76,7 @@
 					<b:form id="addReportForm" rendered="#{canReport}">
 						<b:modal class="addReportModal" title="Report issue">
 							<b:inputText id="reportTitle" value="#{vdevice.reportTitle}" label="Title:" />
-							<b:inputText id="reportMsg" value="#{vdevice.reportMessage}" label="Message:" />
+							<b:inputTextarea id="reportMsg" value="#{vdevice.reportMessage}" label="Message:" />
 							<f:facet name="footer">
 					            <b:button value="Cancel" dismiss="modal" />
 					            <b:commandButton value="Post" look="primary" action="#{vdevice.report}" >

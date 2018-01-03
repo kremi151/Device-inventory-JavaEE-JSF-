@@ -36,7 +36,4 @@ public class MessagesController {
 			}
 		}
 	}
-	
-	//TODO: UI -> separate different messages
-	//TODO: UI -> make devices or consumables clickable
 }
