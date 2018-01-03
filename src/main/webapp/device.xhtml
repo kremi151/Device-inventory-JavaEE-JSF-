@@ -5,7 +5,8 @@
    xmlns:b="http://bootsfaces.net/ui"
    xmlns:f="http://java.sun.com/jsf/core"
    xmlns:c="http://java.sun.com/jsp/jstl/core"
-   xmlns:ui="http://java.sun.com/jsf/facelets" >
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:mk="http://mkremer.lu/facelets" >
     <h:head>
         <title>Device information</title>
         <meta charset="utf-8"/>
@@ -36,7 +37,7 @@
 		<b:container style="margin-top:70px">
     		<f:event type="preRenderView" listener="#{vdevice.preRenderPage}" />
 			<c:set var="device" value="#{vdevice.getDevice()}" scope="request" />
-			<ui:fragment rendered="#{device != null}">
+			<mk:restricted condition="#{device != null}" severity="warning" message="Unknown device">
 				<c:set var="canRead" value="#{usession.canReadDevice(device)}" scope="request" />
 				<c:set var="canModify" value="#{usession.canModifyDevice(device)}" scope="request" />
 				<c:set var="canRemove" value="#{usession.canRemoveDevice(device)}" scope="request" />
@@ -44,7 +45,7 @@
 				<c:set var="canConsume" value="#{usession.canModifyConsumables()}" scope="request" />
     			<c:set var="canRemoveConsumable" value="#{usession.canRemoveConsumables()}" scope="request" />
 				
-				<ui:fragment rendered="#{canRead}">
+				<mk:restricted condition="#{canRead}" message="You do not have access to this information">
 					<b:form id="modifyPropertyForm" rendered="#{canModify}">
 						<b:modal class="modifyPropertyModal" title="Modify property">
 							<p>Property: <strong><span id="modifyPropertyModalTarget"></span></strong></p>
@@ -166,10 +167,8 @@
 							</b:form>
 						</b:panel>
 					</b:accordion>
-				</ui:fragment>
-				<b:alert severity="danger" rendered="#{not canRead}">You do not have access to this information</b:alert>
-			</ui:fragment>
-			<b:alert severity="warning" rendered="#{device == null}">Unknown device</b:alert>
+				</mk:restricted>
+			</mk:restricted>
 		</b:container>
     </h:body>
 </html>

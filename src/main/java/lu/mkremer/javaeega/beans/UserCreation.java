@@ -19,6 +19,7 @@ import lu.mkremer.javaeega.managers.UserManager;
 import lu.mkremer.javaeega.util.MessageHelper;
 import lu.mkremer.javaeega.validators.UniqueUsername;
 import lu.mkremer.javaeega.validators.ValidPassword;
+import lu.mkremer.javaeega.validators.ValidUsername;
 
 @ViewScoped
 @ManagedBean(name="ucreation")
@@ -40,6 +41,7 @@ public class UserCreation implements Serializable{
 	@NotNull(message="No username supplied")
 	@Size(min=2, max=20, message="Username must be between {min} and {max} characters long") 
 	@UniqueUsername
+	@ValidUsername
 	private String username;
 
 	@NotNull(message="No password supplied")

@@ -5,7 +5,8 @@
    xmlns:b="http://bootsfaces.net/ui"
    xmlns:f="http://java.sun.com/jsf/core"
    xmlns:c="http://java.sun.com/jsp/jstl/core"
-   xmlns:ui="http://java.sun.com/jsf/facelets" >
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:mk="http://mkremer.lu/facelets" >
     <h:head>
         <title>Messages</title>
         <meta charset="utf-8"/>
@@ -15,12 +16,11 @@
 			<ui:include src="navbar.xhtml" />
 		</ui:insert> 
 		<b:container style="margin-top:70px">
-    		<ui:fragment rendered="#{usession.loggedIn}">
+			<mk:restricted condition="#{usession.loggedIn}">
     			<f:event type="preRenderView" listener="#{messages.preRenderPage}" />
 				<h1>Messages</h1>
 				<b:messages escape="false" />
-    		</ui:fragment>
-    		<b:alert severity="danger" rendered="#{not usession.loggedIn}">Permission denied</b:alert>
+    		</mk:restricted>
 		</b:container>
     </h:body>
 </html>

@@ -5,7 +5,8 @@
    xmlns:b="http://bootsfaces.net/ui"
    xmlns:f="http://java.sun.com/jsf/core"
    xmlns:c="http://java.sun.com/jsp/jstl/core"
-   xmlns:ui="http://java.sun.com/jsf/facelets" >
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:mk="http://mkremer.lu/facelets" >
     <h:head>
         <title>Create new device</title>
         <meta charset="utf-8"/>
@@ -22,8 +23,8 @@
 		</ui:insert> 
     	<b:container style="margin-top:70px">
     		<c:set var="canAdd" value="#{usession.canAddDevices()}" scope="request" />
-    		<ui:fragment rendered="#{canAdd}">
-	    		<b:modal title="Select owner" class="selectUserModal">
+    		<mk:restricted condition="#{canAdd}">
+    			<b:modal title="Select owner" class="selectUserModal">
 	    			<ui:include src="selectuser_fragment.xhtml">
 	    				<ui:param name="resultListener" value="userSelected" />
 	    			</ui:include>
@@ -38,8 +39,7 @@
 	    			<b:inputText class="ownerInputTextClass" value="#{createdevice.username}" label="Owned by:" onclick="$('.selectUserModal').modal();" placeholder="Enter the username of the owner"/>
 	    			<b:commandButton value="Create" look="primary" action="#{createdevice.create}"/> <b:button value="Cancel" outcome="alldevices.xhtml"/>
     			</b:form>
-			</ui:fragment>
-			<b:alert severity="danger" rendered="#{not canAdd}">Permission denied</b:alert>
+    		</mk:restricted>
     	</b:container>
     </h:body>
 </html>

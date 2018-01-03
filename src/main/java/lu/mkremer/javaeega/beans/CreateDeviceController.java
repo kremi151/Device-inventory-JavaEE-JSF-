@@ -23,6 +23,8 @@ import lu.mkremer.javaeega.validators.ExistingUsername;
 @ManagedBean(name="createdevice")
 @ViewScoped
 public class CreateDeviceController implements Serializable{
+
+	//TODO: Use the user selector from webprog 2 project (PAY ATTENTION: userId <-> username) & 2 parameters for result listener!!!
 	
 	/**
 	 * 

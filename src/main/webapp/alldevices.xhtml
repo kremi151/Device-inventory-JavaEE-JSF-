@@ -5,7 +5,8 @@
    xmlns:b="http://bootsfaces.net/ui"
    xmlns:f="http://java.sun.com/jsf/core"
    xmlns:c="http://java.sun.com/jsp/jstl/core"
-   xmlns:ui="http://java.sun.com/jsf/facelets" >
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:mk="http://mkremer.lu/facelets" >
     <h:head>
         <title>All devices</title>
         <meta charset="utf-8"/>
@@ -16,7 +17,7 @@
 		</ui:insert> 
     	<b:container style="margin-top:70px">
     		<c:set var="canList" value="#{usession.canListDevices()}" scope="request" />
-    		<ui:fragment rendered="#{canList}">
+    		<mk:restricted condition="#{canList}">
     			<h1>All devices <b:button value="Add" outcome="createdevice.xhtml" rendered="#{usession.canAddDevices()}" icon="plus" size="sm" /></h1>
     			<b:dataTable value="#{alldevices.allDevices}" var="device">
     				<b:dataTableColumn value="#{device.name}" label="Name"/>
@@ -34,8 +35,7 @@
 						</b:button>
 					</b:dataTableColumn>
     			</b:dataTable>
-			</ui:fragment>
-			<b:alert severity="danger" rendered="#{not canList}">Permission denied</b:alert>
+    		</mk:restricted>
     	</b:container>
     </h:body>
 </html>

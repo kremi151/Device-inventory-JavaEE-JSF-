@@ -5,7 +5,8 @@
    xmlns:b="http://bootsfaces.net/ui"
    xmlns:f="http://java.sun.com/jsf/core"
    xmlns:c="http://java.sun.com/jsp/jstl/core"
-   xmlns:ui="http://java.sun.com/jsf/facelets" >
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:mk="http://mkremer.lu/facelets" >
     <h:head>
         <title>Device types</title>
         <meta charset="utf-8"/>
@@ -16,7 +17,7 @@
 		</ui:insert> 
     	<b:container style="margin-top:70px">
     		<c:set var="canList" value="#{usession.canViewDeviceTypes()}" scope="request" />
-    		<ui:fragment rendered="#{canList}">
+    		<mk:restricted condition="#{canList}">
     			<c:set var="canAdd" value="#{usession.canAddDeviceTypes()}" scope="request" />
     			<b:form rendered="#{canAdd}">
 	    			<b:modal id="addtype" class="addDeviceTypeModal" title="Add new device type">
@@ -45,10 +46,7 @@
 					</b:panel>
 				</ui:repeat>
 				
-			</ui:fragment>
-			<ui:fragment rendered="#{not canList}">
-				<b:alert severity="danger">Permission denied</b:alert>
-			</ui:fragment>
+			</mk:restricted>
     	</b:container>
     </h:body>
 </html>

@@ -6,7 +6,9 @@ import javax.faces.bean.ManagedBean;
 
 @ManagedBean(name = "test", eager = true)
 public class TestClass {
-	
+
+//TODO: REPLACE INDEX.XHTML START PAGE!!!
+
 	private String expand(int n) {
 		if(n < 10) {
 			return "0" + n;

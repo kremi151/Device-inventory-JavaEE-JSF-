@@ -5,7 +5,8 @@
    xmlns:b="http://bootsfaces.net/ui"
    xmlns:f="http://java.sun.com/jsf/core"
    xmlns:c="http://java.sun.com/jsp/jstl/core"
-   xmlns:ui="http://java.sun.com/jsf/facelets" >
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:mk="http://mkremer.lu/facelets" >
     <h:head>
         <title>User management</title>
         <meta charset="utf-8"/>
@@ -16,7 +17,7 @@
 		</ui:insert> 
 		<b:container style="margin-top:70px">
 			<c:set var="canList" value="#{usession.canViewUserGroups()}" />
-			<ui:fragment rendered="#{canList}">
+			<mk:restricted condition="#{canList}">
 			
 				<h1>User management</h1>
 				<b:accordion expanded-panels="userGroups">
@@ -49,8 +50,7 @@
 						</b:dataTable>
 					</b:panel>
 				</b:accordion>
-			</ui:fragment>
-			<b:alert severity="danger" rendered="#{not canList}">Permission denied</b:alert>
+			</mk:restricted>
 		</b:container>
     </h:body>
 </html>

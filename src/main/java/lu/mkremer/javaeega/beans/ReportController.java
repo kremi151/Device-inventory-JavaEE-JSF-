@@ -28,7 +28,7 @@ public class ReportController {
 	
 	@NotNull(message="A message must be provided")
 	@Size(min=10, message="Message must be at least {min} characters long")
-	private String interventionMessage;
+	private String interventionMessage;//TODO: Use textarea in UI
 	
 	@NotNull(message="No report status supplied")
 	private ReportStatus newReportStatus;

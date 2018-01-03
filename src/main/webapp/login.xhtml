@@ -4,7 +4,8 @@
    xmlns:h="http://java.sun.com/jsf/html"
    xmlns:b="http://bootsfaces.net/ui"
    xmlns:f="http://java.sun.com/jsf/core"
-   xmlns:ui="http://java.sun.com/jsf/facelets" >
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:mk="http://mkremer.lu/facelets" >
     <h:head>
         <title>Login</title>
         <meta charset="utf-8"/>
@@ -18,16 +19,13 @@
 				<b:column span="6" offset="3">
 					<b:jumbotron offset="2" style="background:#F5F5F5;">
 						<b:messages />
-				        <ui:fragment rendered="#{!usession.loggedIn}">
-				        	<h:form>
+						<mk:restricted condition="#{!usession.loggedIn}" severity="info" message="You are already logged in">
+							<h:form>
 							    <b:inputText id="username" label="Username:" value="#{usession.username}"/>
 							    <b:inputSecret id="password" label="Password:" value="#{usession.password}"/>
 							    <b:commandButton value="Login" look="primary" action="#{usession.login}"/>
 							</h:form>
-				        </ui:fragment>
-				        <ui:fragment rendered="#{usession.loggedIn}">
-				        	<h1>You are already logged in</h1>
-				        </ui:fragment>
+						</mk:restricted>
 					</b:jumbotron>
 				</b:column>
 			</b:row>

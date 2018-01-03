@@ -5,7 +5,8 @@
    xmlns:b="http://bootsfaces.net/ui"
    xmlns:f="http://java.sun.com/jsf/core"
    xmlns:c="http://java.sun.com/jsp/jstl/core"
-   xmlns:ui="http://java.sun.com/jsf/facelets" >
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:mk="http://mkremer.lu/facelets" >
     <h:head>
         <title>Report</title>
         <meta charset="utf-8"/>
@@ -16,9 +17,9 @@
 		</ui:insert> 
 		<b:container style="margin-top:70px">
 			<c:set var="report" value="#{reportc.fetchReport(param['id'])}" />
-			<ui:fragment rendered="#{report != null}">
+			<mk:restricted condition="#{report != null}" severity="warning" message="Unknown report">
 				<c:set var="canRead" value="#{usession.canReadDevice(report.device)}" scope="request" />
-				<ui:fragment rendered="#{canRead}">
+				<mk:restricted condition="#{canRead}" message="You do not have access to this information">
 					<script type="text/javascript">document.title = "#{report.title} / #{report.device.name}";</script>
 					<c:set var="canIntervene" value="#{usession.canSubmitInterventions()}" scope="request" />
 					
@@ -50,7 +51,7 @@
 						<p><i>#{report.user.firstName} #{report.user.lastName}</i> - #{report.date}</p>
 					</b:jumbotron>
 					<c:set var="interventions" value="#{reportc.getInterventions(report)}" />
-					<ui:fragment rendered="#{interventions.size() > 0}">
+					<mk:restricted condition="#{interventions.size() > 0}" severity="info" message="No interventions found">
 						<b:panel title="Interventions" collapsed="true">
 							<ui:repeat var="intv" value="#{interventions}">
 								<b:well>
@@ -59,12 +60,9 @@
 								</b:well>
 							</ui:repeat>
 						</b:panel>
-					</ui:fragment>
-					<b:alert severity="info" rendered="#{interventions.size() == 0}">No interventions found</b:alert>
-				</ui:fragment>
-				<b:alert severity="danger" rendered="#{not canRead}">You do not have access to this information</b:alert>
-			</ui:fragment>
-			<b:alert severity="warning" rendered="#{report == null}">Unknown report</b:alert>
+					</mk:restricted>
+				</mk:restricted>
+			</mk:restricted>
 		</b:container>
     </h:body>
 </html>

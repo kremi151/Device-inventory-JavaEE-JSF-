@@ -27,8 +27,8 @@ import lu.mkremer.javaeega.users.UserGroup;
 @Singleton
 @Startup
 public class StartupBean {//TODO: Run it with some default values before submission
-	
-	private final static boolean INIT_DEFAULT_VALUES = false;
+	//TODO: Deletion modals -> make confirm buttons RED
+	private final static boolean INIT_DEFAULT_VALUES = true;
 	
 	@EJB private UserManager um;
 	@EJB private DeviceManager dm;
@@ -82,9 +82,9 @@ public class StartupBean {//TODO: Run it with some default values before submiss
 			admingroup.addPermission("consumabletypes.add");
 			admingroup.addPermission("consumabletypes.modify");
 			admingroup.addPermission("consumabletypes.remove");
-			admingroup.addPermission("messages.info");//TODO: Perm
-			admingroup.addPermission("messages.warning");//TODO: Perm
-			admingroup.addPermission("messages.severe");//TODO: Perm
+			admingroup.addPermission("messages.info");
+			admingroup.addPermission("messages.warning");
+			admingroup.addPermission("messages.severe");
 			
 			um.update(itgroup);
 			um.update(admingroup);

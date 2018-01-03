@@ -5,7 +5,8 @@
    xmlns:b="http://bootsfaces.net/ui"
    xmlns:f="http://java.sun.com/jsf/core"
    xmlns:c="http://java.sun.com/jsp/jstl/core"
-   xmlns:ui="http://java.sun.com/jsf/facelets" >
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:mk="http://mkremer.lu/facelets" >
     <h:head>
         <title>Device type</title>
         <meta charset="utf-8"/>
@@ -27,8 +28,8 @@
 		</ui:insert>
 		<b:container style="margin-top:70px">
 			<c:set var="canView" value="#{usession.canViewDeviceTypes()}" scope="request" />
-			<ui:fragment rendered="#{canView}">
-				<ui:fragment rendered="#{param['id'] != null}">
+			<mk:restricted condition="#{canView}">
+				<mk:restricted condition="#{param['id'] != null}" severity="warning" message="No device type specified">
 					<c:set var="devType" value="#{devtype.fetchDeviceType(param['id'])}" scope="request" />
 					<c:set var="canModify" value="#{usession.canModifyDeviceType()}" scope="request" />
 					<script type="text/javascript">document.title = "#{devType.name}";</script>
@@ -93,12 +94,8 @@
 						</b:form>
 						<b:button value="Add new property" onclick="$('.addDevicePropertyModal').modal();" rendered="#{canModify}" look="primary" size="lg"/>
 					</b:panel>
-		    	</ui:fragment>
-		    	<ui:fragment rendered="#{param['id'] == null}">
-		    		<b:alert severity="warning">No device type specified</b:alert>
-		    	</ui:fragment>
-			</ui:fragment>
-			<b:alert severity="danger" rendered="#{not canView}">Permission denied</b:alert>
+		    	</mk:restricted>
+			</mk:restricted>
 		</b:container>
     </h:body>
 </html>
