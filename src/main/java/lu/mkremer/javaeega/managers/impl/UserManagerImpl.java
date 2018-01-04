@@ -32,8 +32,7 @@ public class UserManagerImpl implements UserManager{
 
 	@Override
 	public UserGroup getDefaultGroup() {
-		List<UserGroup> groups = em.createQuery("select g from UserGroup g", UserGroup.class)
-				.getResultList();
+		List<UserGroup> groups = em.createQuery("select g from UserGroup g", UserGroup.class).getResultList();
 		if(!groups.isEmpty()) {
 			return groups.get(0);//TODO: Find better way
 		}else {

@@ -38,21 +38,22 @@
 					<script type="text/javascript">document.title = "#{vgroup.group.name}";</script>
 					<h1>#{vgroup.group.name} <b:button value="Back" outcome="usermgmt.xhtml" iconAwesome="fa-group" /></h1>
 					<b:messages />
-					<b:accordion expanded-panels="permsPanel">
+					<b:form id="permsForm">
 						<b:panel id="permsPanel" title="Permissions">
 							<b:container id="permsContainer">
-								<b:form id="permsForm">
-									<p:selectManyCheckbox id="permlist" value="#{vgroup.selectedPermissions}" layout="responsive" columns="3">
-										<f:selectItems value="#{vgroup.permissions}" var="perm" itemLabel="#{perm}" itemValue="#{perm}" />
-									</p:selectManyCheckbox>
-									<b:commandButton action="#{vgroup.deletePermissions}" value="Delete selected permissions" icon="trash" rendered="#{canModify}" >
-								   		<f:param name="id" value="#{param['id']}" />
-								   	</b:commandButton>
-									<b:button value="Add permission" icon="plus" onclick="$('.addPermModal').modal();" style="margin-left:0.5em;" />
-								</b:form>
+								<p:selectManyCheckbox id="permlist" value="#{vgroup.selectedPermissions}" layout="responsive" columns="3">
+									<f:selectItems value="#{vgroup.permissions}" var="perm" itemLabel="#{perm}" itemValue="#{perm}" />
+								</p:selectManyCheckbox>
+								<b:alert severity="info" rendered="#{empty vgroup.permissions}">No permissions granted for this user group</b:alert>
 							</b:container>
+							<f:facet name="footer">
+								<b:commandButton action="#{vgroup.deletePermissions}" look="danger" value="Delete selected permissions" icon="trash" rendered="#{canModify}" >
+							   		<f:param name="id" value="#{param['id']}" />
+								</b:commandButton>
+								<b:button value="Add permission" icon="plus" onclick="$('.addPermModal').modal();" style="margin-left:0.5em;" />
+							</f:facet>
 						</b:panel>
-					</b:accordion>
+					</b:form>
 				</mk:restricted>
 			</mk:restricted>
 		</b:container>
