@@ -38,10 +38,10 @@
 		    			<b:modal id="remdevtype" class="remDeviceTypeModal" title="Delete device type">
 		    				<h:outputText value="You are going to delete the device type &quot;#{devType.name}&quot;. Do you want to continue?" />
 		    				<f:facet name="footer">
-								<b:commandButton value="Yes" action="#{rmdevtype.deleteDeviceType}" >
+								<b:commandButton value="Yes" icon-awesome="fa-warning" look="danger" action="#{rmdevtype.deleteDeviceType}" >
 						    		<f:param name="id" value="#{param['id']}" />
 						    	</b:commandButton>
-							    <b:button value="No" look="primary" dismiss="modal" />
+							    <b:button value="No" dismiss="modal" />
 						    </f:facet>
 		    			</b:modal>
 		    		</b:form>
@@ -71,10 +71,10 @@
 			    			<p>You are going to delete the property &quot;<span id="remPropModalPropName">.zzZ</span>&quot; from device type &quot;<span class="remPropModalPropOrigin">.zzZ</span>&quot;</p>
 			   				<p>This will remove the property also from device subtypes of &quot;<span class="remPropModalPropOrigin">.zzZ</span>&quot;. Do you wish to continue?</p>
 			   				<f:facet name="footer">
-								<b:commandButton value="Yes" action="#{rprop.remove()}" >
+								<b:commandButton value="Yes" icon-awesome="fa-warning" look="danger" action="#{rprop.remove()}" >
 						    		<f:param name="id" value="#{param['id']}" />
 						    	</b:commandButton>
-							    <b:button value="No" look="primary" dismiss="modal" />
+							    <b:button value="No" dismiss="modal" />
 						    </f:facet>
 			    		</b:modal>
 		    		</b:form>
@@ -92,7 +92,9 @@
 								</b:dataTableColumn>
 							</b:dataTable>
 						</b:form>
-						<b:button value="Add new property" onclick="$('.addDevicePropertyModal').modal();" rendered="#{canModify}" look="primary" size="lg"/>
+						<f:facet name="footer">
+							<b:button value="Add new property" onclick="$('.addDevicePropertyModal').modal();" rendered="#{canModify}" look="primary" />
+						</f:facet>
 					</b:panel>
 		    	</mk:restricted>
 			</mk:restricted>

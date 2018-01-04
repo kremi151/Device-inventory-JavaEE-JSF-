@@ -71,10 +71,10 @@
 						<p>You are removing the consumable type <span id="remConsumableTypeName"></span> and every associated instance from the system. Do you want to continue?</p>
 						<h:inputHidden id="typeId" value="#{contypes.typeId}" />
 						<f:facet name="footer">
-					    	<b:button value="No" look="primary" dismiss="modal" />
-					        <b:commandButton value="Yes" action="#{contypes.delete}" >
+					        <b:commandButton value="Yes" icon-awesome="fa-warning" look="danger" action="#{contypes.delete}" >
 			        			<f:param name="devid" value="#{param['devid']}" />
 			        		</b:commandButton>
+					    	<b:button value="No" dismiss="modal" />
 				        </f:facet>
 					</b:modal>
 				</b:form>

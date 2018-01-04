@@ -52,11 +52,6 @@
 					
 				<b:form id="modifyConsumableStockForm" rendered="#{canConsume}">
 					<b:modal class="modifyConsumableStockModal" title="Modify consumable stock">
-    		<ui:fragment rendered="#{canList}">
-    			
-				
-			</ui:fragment>
-			<b:alert severity="danger" rendered="#{not canList}">Permission denied</b:alert>
 						<p>You are modifying the stock for the consumable <span id="modConsumableName"></span></p>
 						<h:inputHidden id="consId" value="#{listcons.consumableId}" />
 						<b:inputText value="#{listcons.consumableIncrement}" type="number" label="Decrement/Increment by:" />
@@ -77,10 +72,10 @@
 						<p>You are removing the stock for the consumable <span id="remConsumableName"></span> from the system. Do you want to continue?</p>
 						<h:inputHidden id="consId" value="#{listcons.consumableId}" />
 						<f:facet name="footer">
-					    	<b:button value="No" look="primary" dismiss="modal" />
-					        <b:commandButton value="Yes" action="#{listcons.delete}" >
+					        <b:commandButton value="Yes" icon-awesome="fa-warning" look="danger" action="#{listcons.delete}" >
 			        			<f:param name="devid" value="#{param['devid']}" />
 			        		</b:commandButton>
+					    	<b:button value="No" dismiss="modal" />
 				        </f:facet>
 					</b:modal>
 				</b:form>

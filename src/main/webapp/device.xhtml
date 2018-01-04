@@ -65,10 +65,10 @@
 						<b:modal class="removeDeviceModal" title="Delete device">
 							<h:outputText value="The device #{device.name} of type #{device.type.name} owned by #{device.owner.firstName} #{device.owner.lastName} will be removed from the system. Do you want to continue?" />
 							<f:facet name="footer">
-					            <b:button value="No" look="primary" dismiss="modal" />
-					            <b:commandButton value="Yes" action="#{vdevice.delete}" >
+					            <b:commandButton value="Yes" icon-awesome="fa-warning" look="danger" action="#{vdevice.delete}" >
 			        				<f:param name="devid" value="#{param['devid']}" />
 			        			</b:commandButton>
+					            <b:button value="No" dismiss="modal" />
 					        </f:facet>
 						</b:modal>
 					</b:form>
@@ -108,10 +108,10 @@
 							<p>You are removing the stock for the consumable <span id="remConsumableName"></span> for the device #{device.name} from the system. Do you want to continue?</p>
 							<h:inputHidden id="consId" value="#{vdevice.consumableId}" />
 							<f:facet name="footer">
-						    	<b:button value="No" look="primary" dismiss="modal" />
-						        <b:commandButton value="Yes" action="#{vdevice.deleteConsumable}" >
+						        <b:commandButton value="Yes" icon-awesome="fa-warning" look="danger" action="#{vdevice.deleteConsumable}" >
 				        			<f:param name="devid" value="#{param['devid']}" />
 				        		</b:commandButton>
+						    	<b:button value="No" dismiss="modal" />
 					        </f:facet>
 						</b:modal>
 					</b:form>
