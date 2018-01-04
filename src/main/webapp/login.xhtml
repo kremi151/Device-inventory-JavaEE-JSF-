@@ -15,20 +15,9 @@
 			<ui:include src="navbar.xhtml" />
 		</ui:insert> 
 		<b:container style="margin-top:70px">
-			<b:row>
-				<b:column span="6" offset="3">
-					<b:jumbotron offset="2" style="background:#F5F5F5;">
-						<b:messages />
-						<mk:restricted condition="#{!usession.loggedIn}" severity="info" message="You are already logged in">
-							<h:form>
-							    <b:inputText id="username" label="Username:" value="#{usession.username}"/>
-							    <b:inputSecret id="password" label="Password:" value="#{usession.password}"/>
-							    <b:commandButton value="Login" look="primary" action="#{usession.login}"/>
-							</h:form>
-						</mk:restricted>
-					</b:jumbotron>
-				</b:column>
-			</b:row>
+			<ui:insert name="login" >
+	    	  <ui:include src="/template/loginform.xhtml" />
+	    	</ui:insert>
         </b:container>
     </h:body>
 </html>

@@ -18,15 +18,9 @@
 		<b:container style="margin-top:70px">
 			<mk:restricted condition="#{usession.loggedIn}">
 				<h1>My devices</h1>
-				<b:dataTable value="#{mydevices.myDevices}" var="device">
-					<b:dataTableColumn value="#{device.name}" label="Name"/>
-					<b:dataTableColumn value="#{device.type.name}" label="Type"/>
-					<b:dataTableColumn label="" orderable="false">
-						<b:button value="View" icon-awesome="fa-eye" outcome="device.xhtml" size="sm">
-							<f:param name="devid" value="#{device.id}" />
-						</b:button>
-					</b:dataTableColumn>
-				</b:dataTable>
+				<ui:insert name="mydevices">
+					<ui:include src="/template/mydevicestable.xhtml" />
+			    </ui:insert>
 			</mk:restricted>
 		</b:container>
     </h:body>

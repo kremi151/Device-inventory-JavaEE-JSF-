@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:mk="http://mkremer.lu/facelets">
+	<body>
+		<ui:composition>
+			<b:row>
+				<b:column span="6" offset="3">
+					<b:jumbotron offset="2" style="background:#F5F5F5;">
+						<b:messages />
+						<mk:restricted condition="#{!usession.loggedIn}" severity="info" message="You are already logged in">
+							<h:form>
+								<b:inputText id="username" label="Username:" value="#{usession.username}" />
+								<b:inputSecret id="password" label="Password:" value="#{usession.password}" />
+								<b:commandButton value="Login" look="primary" action="#{usession.login}" />
+							</h:form>
+						</mk:restricted>
+					</b:jumbotron>
+				</b:column>
+			</b:row>
+		</ui:composition>
+	</body>
+</html>

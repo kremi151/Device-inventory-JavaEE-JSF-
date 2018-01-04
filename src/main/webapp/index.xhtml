@@ -7,7 +7,7 @@
    xmlns:c="http://java.sun.com/jsp/jstl/core"
    xmlns:ui="http://java.sun.com/jsf/facelets" >
     <h:head>
-        <title>Start Page</title>
+        <title>#{usession.loggedIn ? 'Start Page' : 'Login'}</title>
         <meta charset="utf-8"/>
     </h:head>
     <h:body>
@@ -15,11 +15,19 @@
 			<ui:include src="navbar.xhtml" />
 		</ui:insert> 
 		<b:container style="margin-top:70px">
-			<b:jumbotron>
-		        <center><h1>Hello!</h1>
-		        <h2>This page is currently under construction</h2>
-		        <h3>You visited this page at #{test.getTimeStamp()}</h3></center>
-	        </b:jumbotron>
+			<c:choose>
+				<c:when test="#{usession.loggedIn}">
+					<h1>My devices</h1>
+					<ui:insert name="mydevices">
+			    	  <ui:include src="/template/mydevicestable.xhtml" />
+			    	</ui:insert>
+				</c:when>
+				<c:otherwise>
+					<ui:insert name="login">
+			    	  <ui:include src="/template/loginform.xhtml" />
+			    	</ui:insert>
+				</c:otherwise>
+			</c:choose>
 		</b:container>
     </h:body>
 </html>
