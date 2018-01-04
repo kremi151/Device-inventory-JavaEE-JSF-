@@ -3,6 +3,8 @@ package lu.mkremer.javaeega.beans;
 import java.io.IOException;
 import java.io.Serializable;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -12,6 +14,7 @@ import javax.faces.context.FacesContext;
 import org.mindrot.jbcrypt.BCrypt;
 
 import lu.mkremer.javaeega.devices.Device;
+import lu.mkremer.javaeega.managers.EventManager;
 import lu.mkremer.javaeega.managers.MessageManager;
 import lu.mkremer.javaeega.managers.UserManager;
 import lu.mkremer.javaeega.users.User;
@@ -28,11 +31,34 @@ public class UserSession implements Serializable{
 	
 	@EJB private UserManager um;
 	@EJB private MessageManager mm;
+	@EJB private EventManager eventManager;
 	
 	private User user;
 	
 	private String username;
 	private String password;
+	
+	private long userModificationListenerId, userGroupModificationListenerId;
+	
+	@PostConstruct
+	public void init() {
+		userModificationListenerId = eventManager.addOnUserModifiedListener(user -> {
+			if(this.user != null && this.user.getUserId().equals(user.getUserId())) {
+				this.user = user;
+			}
+		});
+		userGroupModificationListenerId = eventManager.addOnUserGroupModifiedListener(group -> {
+			if(this.user != null && this.user.getGroup().getId() == user.getGroup().getId()) {
+				this.user = um.findUser(this.user.getUserId());
+			}
+		});
+	}
+	
+	@PreDestroy
+	public void preDestroy() {
+		eventManager.removeOnUserModifiedListener(userModificationListenerId);
+		eventManager.removeOnUserGroupModifiedListener(userGroupModificationListenerId);
+	}
 
 	public String login() {
 		User user = um.findUser(username);

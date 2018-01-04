@@ -2,10 +2,12 @@ package lu.mkremer.javaeega.managers.impl;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import lu.mkremer.javaeega.managers.EventManager;
 import lu.mkremer.javaeega.managers.UserManager;
 import lu.mkremer.javaeega.users.User;
 import lu.mkremer.javaeega.users.UserDescription;
@@ -17,6 +19,8 @@ public class UserManagerImpl implements UserManager{
 
 	@PersistenceContext
 	private EntityManager em;
+	
+	@EJB private EventManager eventManager;
 
 	@Override
 	public User createUser(String userId, String firstName, String lastName, String hashedPassword, UserGroup group) {
@@ -80,6 +84,7 @@ public class UserManagerImpl implements UserManager{
 	@Override
 	public void update(UserGroup group) {
 		em.merge(group);
+		new Thread(() -> eventManager.dispatchUserGroupModified(group)).start();
 	}
 
 	@Override
@@ -100,6 +105,7 @@ public class UserManagerImpl implements UserManager{
 	@Override
 	public void update(User user) {
 		em.merge(user);
+		new Thread(() -> eventManager.dispatchUserModified(user)).start();
 	}
 	
 }

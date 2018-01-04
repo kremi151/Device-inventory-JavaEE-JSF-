@@ -87,7 +87,7 @@ public class ViewGroupController implements Serializable{
 		this.permissionNode = permissionNode;
 	}
 
-	public void deletePermissions() {//TODO: Make user sessions being part of this group reloading from database
+	public void deletePermissions() {
 		if(group != null && session.canModifyUserGroups()) {
 			if(selectedPermissions != null)for(String perm : selectedPermissions) {
 				group.removePermission(perm);
@@ -99,7 +99,7 @@ public class ViewGroupController implements Serializable{
 		}
 	}
 	
-	public void addPermission() {//TODO: Refresh all active sessions being part of this group
+	public void addPermission() {
 		if(group != null && session.canModifyUserGroups()) {
 			group.addPermission(permissionNode);
 			um.update(group);

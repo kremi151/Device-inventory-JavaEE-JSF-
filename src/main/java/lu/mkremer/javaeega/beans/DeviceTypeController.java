@@ -82,6 +82,4 @@ public class DeviceTypeController implements Serializable{
 		return dm.getDeviceTypeById(id);
 	}
 	
-	//TODO: Optimize the UI (perhaps using b:dataTable...
-	
 }
