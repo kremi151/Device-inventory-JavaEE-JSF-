@@ -26,9 +26,9 @@ import lu.mkremer.javaeega.users.UserGroup;
 
 @Singleton
 @Startup
-public class StartupBean {//TODO: Run it with some default values before submission
+public class StartupBean {
 	
-	public final static boolean INIT_DEFAULT_VALUES = true;
+	public final static boolean INIT_DEFAULT_VALUES = true;//TODO: Modify this value to prevent initializing with default values at server startup
 	
 	@EJB private UserManager um;
 	@EJB private DeviceManager dm;
