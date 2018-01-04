@@ -78,6 +78,10 @@ public class User implements Serializable{
 		return lastName;
 	}
 	
+	public String getFullName() {
+		return firstName + " " + lastName;
+	}
+	
 	public void setGroup(UserGroup group) {
 		this.group = group;
 	}

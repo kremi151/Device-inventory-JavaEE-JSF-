@@ -34,7 +34,7 @@ public class UserManagerImpl implements UserManager{
 	public UserGroup getDefaultGroup() {
 		List<UserGroup> groups = em.createQuery("select g from UserGroup g", UserGroup.class).getResultList();
 		if(!groups.isEmpty()) {
-			return groups.get(0);//TODO: Find better way
+			return groups.get(0);
 		}else {
 			UserGroup group = new UserGroup("Normal user");
 			em.persist(group);
@@ -73,8 +73,8 @@ public class UserManagerImpl implements UserManager{
 
 	@Override
 	public List<User> listMatchingUsers(String filter) {
-		return em.createQuery("select u from User u where u.user_id like %:filter% or u.firstName like %:filter% or u.lastName like %:filter%", User.class)
-				.setParameter("filter", filter).getResultList();
+		return em.createQuery("select u from User u where u.user_id like :filter or u.firstName like :filter or u.lastName like :filter", User.class)
+				.setParameter("filter", "%"+filter+"%").getResultList();
 	}
 
 	@Override

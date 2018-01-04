@@ -11,9 +11,10 @@
         <title>Create new device</title>
         <meta charset="utf-8"/>
         <script type="text/javascript">
-        	function userSelected(userId){
+        	function userSelected(userId, displayName){
         		$('.selectUserModal').modal('hide');
-        		$('.ownerInputTextClass').val(userId);
+        		$('.ownerIdHiddenClass').val(userId);
+        		$('.ownerInputTextClass').val(displayName);
         	}
         </script>
     </h:head>
@@ -25,7 +26,7 @@
     		<c:set var="canAdd" value="#{usession.canAddDevices()}" scope="request" />
     		<mk:restricted condition="#{canAdd}">
     			<b:modal title="Select owner" class="selectUserModal">
-	    			<ui:include src="selectuser_fragment.xhtml">
+	    			<ui:include src="/template/selectuser_fragment.xhtml">
 	    				<ui:param name="resultListener" value="userSelected" />
 	    			</ui:include>
 	    		</b:modal>
@@ -36,7 +37,12 @@
 	    			<b:selectOneMenu value="#{createdevice.type}" label="Type:">
 	    				<f:selectItems value="#{createdevice.types}" var="devType" itemLabel="#{devType.name}" itemValue="#{devType}"/>
 	    			</b:selectOneMenu>
-	    			<b:inputText class="ownerInputTextClass" value="#{createdevice.username}" label="Owned by:" onclick="$('.selectUserModal').modal();" placeholder="Enter the username of the owner"/>
+	    			<h:inputHidden class="ownerIdHiddenClass" value="#{createdevice.username}" />
+	    			<b:inputText class="ownerInputTextClass" label="Owned by:" placeholder="Select an owner" required="true" readonly="true">
+	    				<f:facet name="append">
+	    					<b:button value="Select" onclick="$('.selectUserModal').modal();" />
+	    				</f:facet>
+	    			</b:inputText>
 	    			<b:commandButton value="Create" look="primary" action="#{createdevice.create}"/> <b:button value="Cancel" outcome="alldevices.xhtml"/>
     			</b:form>
     		</mk:restricted>
