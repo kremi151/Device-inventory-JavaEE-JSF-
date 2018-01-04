@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.ejb.Singleton;
 import javax.faces.application.FacesMessage;
 
+import lu.mkremer.javaeega.beans.StartupBean;
 import lu.mkremer.javaeega.consumables.Consumable;
 import lu.mkremer.javaeega.consumables.ConsumableType;
 import lu.mkremer.javaeega.managers.MessageManager;
@@ -43,14 +44,19 @@ public class MessageManagerImpl implements MessageManager{
 	}
 
 	@Override
-	public List<Message> getMessagesForUser(User user) {//TODO: Filter messages for different user groups (permissions)
+	public List<Message> getMessagesForUser(User user) {
 		LinkedList<Message> res = new LinkedList<>();
+		if(StartupBean.INIT_DEFAULT_VALUES && user.hasPermission("messages.dev")) {
+			res.add(new MessageManager.Message("The current configuration is set up to automatically insert default values at the startup of the server. To modify this behaviour, please modify the INIT_DEFAULT_VALUES in the StartupBean Java class", FacesMessage.SEVERITY_WARN));
+		}
 		synchronized(consumableMessages) {
-			for(ConsumableStockMessage csm : consumableMessages) {
-				if(csm.device != null) {
-					res.add(new MessageManager.Message(String.format("Consumable stock of <strong>%s</strong> for device <strong>%s</strong> is at a critical level of <strong>%d</strong>", csm.name, csm.device, csm.stock), FacesMessage.SEVERITY_WARN));
-				}else {
-					res.add(new MessageManager.Message(String.format("General consumable stock of <strong>%s</strong> is at a critical level of <strong>%d</strong>", csm.name, csm.stock), FacesMessage.SEVERITY_WARN));
+			if(consumableMessages.size() > 0 && user.hasPermission("messages.consumables.stock")){
+				for(ConsumableStockMessage csm : consumableMessages) {
+					if(csm.device != null) {
+						res.add(new MessageManager.Message(String.format("Consumable stock of <strong>%s</strong> for device <strong>%s</strong> is at a critical level of <strong>%d</strong>", csm.name, csm.device, csm.stock), FacesMessage.SEVERITY_WARN));
+					}else {
+						res.add(new MessageManager.Message(String.format("General consumable stock of <strong>%s</strong> is at a critical level of <strong>%d</strong>", csm.name, csm.stock), FacesMessage.SEVERITY_WARN));
+					}
 				}
 			}
 		}
@@ -59,7 +65,8 @@ public class MessageManagerImpl implements MessageManager{
 
 	@Override
 	public int notificationCount(User user) {
-		return consumableMessages.size();
+		return (StartupBean.INIT_DEFAULT_VALUES && user.hasPermission("messages.dev") ? 1 : 0)
+				+ (consumableMessages.size() > 0 && user.hasPermission("messages.consumables.stock") ? consumableMessages.size() : 0);
 	}
 	
 	private static class ConsumableStockMessage{
